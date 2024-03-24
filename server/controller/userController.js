@@ -7,6 +7,14 @@ const home = async (req,res)=>{
     }
 }
 
+const login = async(req,res)=>{
+    try {
+        res.render('users/login.ejs')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 export {
-    home
+    home,login
 }
