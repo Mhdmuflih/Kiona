@@ -1,6 +1,6 @@
 const home = async (req,res)=>{
     try {
-        res.render('users/index.ejs')
+        res.render('users/login.ejs')
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Internal Server Error');
