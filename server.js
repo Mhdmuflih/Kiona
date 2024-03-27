@@ -1,14 +1,19 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import connectDB from "./server/database/connection.js";
 
 
 import userRoute from "./server/router/userRoute.js"
 
 // -----------------------------------------------------------------------
 
-
+//dotenv
 dotenv.config();
+
+// mongodb connection
+connectDB();
+
 
 const app = express();
 const __dirname = path.resolve();
@@ -22,6 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // -----------------------------------------------------------------------
 
+//route
 app.use('/',userRoute);
 
 // -----------------------------------------------------------------------
