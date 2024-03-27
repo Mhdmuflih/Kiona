@@ -1,4 +1,7 @@
-const home = async (req,res)=>{
+import bcrypt from "bcrypt";
+import User from "../model/userModel.js"
+
+const home = async (req, res) => {
     try {
         res.render('users/index.ejs')
     } catch (error) {
@@ -7,7 +10,7 @@ const home = async (req,res)=>{
     }
 }
 
-const login = async(req,res)=>{
+const login = async (req, res) => {
     try {
         res.render('users/login.ejs')
     } catch (error) {
@@ -15,6 +18,15 @@ const login = async(req,res)=>{
     }
 }
 
+const register = async (req, res) => {
+    try {
+        res.render('users/registration.ejs')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
 export {
-    home,login
+    home, login, register
 }
