@@ -5,6 +5,7 @@ import connectDB from "./server/database/connection.js";
 
 
 import userRoute from "./server/router/userRoute.js"
+import adminRoute from "./server/router/adminRoute.js"
 
 // -----------------------------------------------------------------------
 
@@ -27,8 +28,13 @@ app.set('views', path.join(__dirname, 'views'));
 
 // -----------------------------------------------------------------------
 
-//route
+//user route
 app.use('/',userRoute);
+
+// -----------------------------------------------------------------------
+
+// admin route
+app.use('/admin',adminRoute)
 
 // -----------------------------------------------------------------------
 
