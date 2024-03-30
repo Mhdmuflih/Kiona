@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+
+
 import connectDB from "./server/database/connection.js";
-
-
 import userRoute from "./server/router/userRoute.js"
 import adminRoute from "./server/router/adminRoute.js"
 

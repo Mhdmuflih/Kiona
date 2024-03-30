@@ -17,6 +17,10 @@ const userSchema = new mongoosh.Schema({
         type:String,
         required:true
     },
+    is_admin:{
+        type:Number,
+        required:true
+    },
     is_verified:{
         type:String,
         default:0

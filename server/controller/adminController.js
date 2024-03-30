@@ -8,7 +8,7 @@ const adminHome = async (req,res)=>{
 
 const userDetails = async (req,res)=>{
     try {
-        res.render('admin/userDetails.ejs')
+        res.render('admin/UserDetails/users.ejs')
     } catch (error) {
         console.log(error.message)
     }

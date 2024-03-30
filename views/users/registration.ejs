@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="_form_07_main">
-                        <form action="">
+                        <form action="" method="post" enctype="multipart/form-data" >
                             <div class="row">
                                 <div class="col-sm-6 ncv-kl-bn">
                                     <div class="_form_07_main_sub_01">
@@ -102,6 +102,7 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label>Enter your Password</label>
                                             <input type="password" name="password" class="form-control" type="text"
                                                 placeholder="Enter password" required="" aria-required="true">
                                         </div>
@@ -118,12 +119,20 @@
 
                                         <div class="form-group">
                                             <div class="_btn_04">
-                                                <a href="#">Register</a>
+                                                <button type="submit" class="form-control">Register</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </form>
+                        <%
+                        if(typeof message !== 'undefined'){
+                            %>
+                            <p><%= message %></p>
+                            <%
+                        }
+                        %>
                     </div>
                 </div>
             </div>
