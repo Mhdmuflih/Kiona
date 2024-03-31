@@ -1,14 +1,22 @@
 import express from "express";
-import multer from "multer";
-import path from "path"; // multer is using in take a image store
+import multer from "multer";// multer is using in take a image store
+import path from "path";
+import session from "express-session";
 
-import { home,login,register,insertUser,verifyLogin,loginHome } from "../controller/userController.js";
+import { home,login,register,insertUser,verifyLogin,loginHome,verifyMail } from "../controller/userController.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
 // ---------------------------
 
 const __dirname = path.resolve()  //to take the dirname(directery name) path in this new feature
+
+//session working code
+user_route.use(session({
+    secret:'allisWell',
+    resave:false,
+    saveUninitialized:false
+}))
 
 user_route.use(express.static('assets'))
 
@@ -34,6 +42,9 @@ user_route.get('/',home)
 // register route
 user_route.get('/register',register)
 user_route.post('/register',upload.single('image'),insertUser)
+
+// verifyMail route
+user_route.get('/verify',verifyMail)
 
 // login route
 user_route.get('/login',login)

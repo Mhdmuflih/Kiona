@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
-import User from "../model/userModel.js"
+import nodemailer from "nodemailer";
+import Mailgen from "mailgen";
+
+import User from "../model/userModel.js";
+import OTP from "../model/otpModel.js";
 
 // ----------------------------------------------
 
@@ -15,6 +19,73 @@ const securePassword = async (password)=>{
     }
 }
 
+const OtpGenerator = ()=>{
+    return Math.floor(1000 + Math.random() * 9000)
+}
+
+const sendOpt = async (req,res)=>{
+
+    let otp = OtpGenerator();
+    console.log(otp);
+
+    const transporter = nodemailer.createTransport({
+        service:"gmail",
+        auth:{
+            user:process.env.AUTH_EMAIL,
+            pass: process.env.AUTH_PASSWORD
+        }
+    })
+
+    
+
+    const MailGenerator = new Mailgen({
+        theme:"default",
+        product:{
+            name:"Kiona",
+            link:"http://mailgen.js/"
+        }
+    })
+
+    const response = {
+        body:{
+            name:req.session.email,
+            intro:'Your OTP for KIONA Verification is:',
+            table:{
+                data:[
+                    {
+                        OTP:otp
+                    }
+                ]
+            },
+            outro:"looking forward to doing more Business"
+        }
+    }
+
+    const mail = MailGenerator.generate(response)
+
+    const message = {
+        from:process.env.AUTH_EMAIL,
+        to:req.session.email,
+        subject:'KIONA otp Verification',
+        html:mail
+    }
+
+    try {
+        const newOtp = new OTP({
+            email:req.session.email,
+            OTP:otp,
+            createdAt:Date.now(),
+            expaireAt:Date.now() + 60000
+        })
+        const data = await newOtp.save()
+        req.session.otpId = data._id
+        await transporter.sendMail(message)
+    } catch (error) {
+        console.log(error.message,'asdfghjk')
+    }
+}
+
+
 // user registration page
 const register = async (req, res) => {
     try {
@@ -27,29 +98,62 @@ const register = async (req, res) => {
 // user input
 const insertUser = async (req,res)=>{
     try {
+
+        // if(req.body.email){
+        //     const existingUser = await User.findOne({email: req.body.email})
+        //     if(existingUser){
+        //         console.log("Email id already taken")
+        //     }
+        // }
+        req.session.email=req.body.email
+        console.log('fhgj');
+
         const password = req.body.password
         const sPassword = await securePassword(password)
         const user = new User({
             name:req.body.name,
             email:req.body.email,
             mobile:req.body.mobile,
-            image:req.file.filename,
-            password:sPassword,
+            image:req.body.filename,
+            password:sPassword ,
             is_admin:0
         })
 
-        const userData = user.save()
+        req.session.userData = user
+        console.log(req.session.userData)
 
-        if(userData){
-            res.render('users/registration',{message:"Your Registration has been Successful... verify your Email"});
-        }else{
-            res.render('users/registration',{message:"Your Registration has been Failed"})
-        }
+        await sendOpt(req,res)
+        return res.send('hiii')
+        // await sendOtpMail(req,res)
+
+
+        // const userData = user.save()
+
+        // if(userData){
+        //     // sendVerifyMail(req.body.name, req.body.email, userData._id);
+        //     res.render('users/registration',{message:"Your Registration has been Successful... verify your Email"});
+        // }else{
+        //     res.render('users/registration',{message:"Your Registration has been Failed"})
+        // }
 
     } catch (error) {
         console.log(error.message);
     }
 }
+
+// verifyMail
+const verifyMail = async (req,res)=>{
+    try {
+        
+        const updatedInfo = await User.updateOne({_id:req.body.id},{ $set:{is_verified: 1} })
+        console.log(updatedInfo)
+        res.render('users/email-verified.ejs')
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 
 // login user page
 const login = async (req, res) => {
@@ -119,5 +223,5 @@ const home = async (req, res) => {
 
 
 export {
-    home, login, register, insertUser, verifyLogin, loginHome
+    home, login, register, insertUser, verifyLogin, loginHome,verifyMail
 }
