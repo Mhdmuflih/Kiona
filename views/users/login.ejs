@@ -50,7 +50,7 @@
         <div class="row">
           <div class="col-12">
             <div class="_form_07_main">
-              <form action="">
+              <form action="" class="login-form" method="post" onsubmit="check(); return false">
               <div class="row">
                 <div class="col-sm-6 ncv-kl-bn">
                   <div class="_form_07_main_sub_01">
@@ -74,15 +74,20 @@
                   <div class="_pl_nb_df">
                     <div class="_bg_cs">
                       <h2>Sign into your account</h2>
+                      <% if(message){%>
+                        <p class="text-success" id="ok"> <%= message %> </p>
+                    <%  } %>
                     </div>
                     <div class="form-group">
                       <label>Enter Your Email</label>
-                      <input type="email" name="email" class="form-control" type="text" placeholder="Enter Email" required="" aria-required="true">
+                      <input type="email" name="email" id="email" class="form-control" type="text" placeholder="Enter Email" required="" aria-required="true">
+                      <p style="color: red;" id="emailErr"></p>
                     </div>
 
                     <div class="form-group">
                       <label>Enter Your Password</label>
-                      <input type="password" name="password" class="form-control" type="text" placeholder="Enter password" required="" aria-required="true">
+                      <input type="password" name="password" id="password" class="form-control" type="text" placeholder="Enter password" required="" aria-required="true">
+                      <p style="color: red;" id="passwordErr"></p>
                     </div>
 
                     <div class="checkbox form-group">
@@ -113,6 +118,113 @@
         </div>
       </div>
     </section>
+    <script>
+      setTimeout(() => {
+        document.getElementById("ok").style.display="none"
+      }, 3000);
+
+
+      // form Validation
+
+      function check() {
+        const form = document.querySelector(".login-form");
+        const email = document.getElementById("email").value;
+        const emailErr = document.getElementById("emailErr");
+        const password = document.getElementById("password").value;
+        const passwordErr = document.getElementById("passwordErr");
+        const emailErrMsg = [];
+        const passwordErrMsg = [];
+
+        if (email === '') {
+          emailErrMsg.push("Please enter Your Email.");
+        } else {
+          const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
+          if (!emailRegex.test(email)) {
+            emailErrMsg.push("Please enter Your Valid email Id.");
+          }
+        }
+
+        if (password === '') {
+          passwordErrMsg.push("Please enter Your Password");
+        } else {
+          const passwordRegex = [
+            { regex: /.{8,}/, message: "At least 8 Character" },
+            { regex: /\d/, message: "At least 1 digits" },
+            { regex: /[a-z]/, message: "At least 1 lowercase letter" },
+            { regex: /[!@#$%^&*]/, message: "At least 1 special character" },
+            { regex: /[A-Z]/, message: "At least 1 uppercase letter" }
+          ];
+
+          passwordRegex.forEach((rule) => {
+            if (!rule.regex.test(password)) {
+              passwordErrMsg.push(rule.message);
+            }
+          });
+        }
+
+        // display Error Message
+        emailErr.innerHTML = emailErrMsg.join("<br>");
+        passwordErr.innerHTML = passwordErrMsg.join("<br>");
+
+        // submit the form if all validation
+        if (emailErrMsg.length === 0 && passwordErrMsg.length === 0) {
+          form.submit();
+        }
+      }
+
+
+
+
+
+      // function check(){
+      //   const form = document.querySelector(".login-form");
+      //   const email = document.getElementById("email");
+      //   const emailErr = document.getElementById("emailErr");
+      //   const password = document.getElementById("password");
+      //   const passwordErr = document.getElementById("passwordErr");
+      // }
+
+      // const emailErrMsg = []
+      // const passwordErrMsg = []
+
+      // if(email === ''){
+      //   emailErrMsg.push("Please enter Your Email.");
+      // }else{
+      //   const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
+      //   if(!emailRegex.test(email)){
+      //     emailErrMsg.push("Please enter Your Valid email Id.")
+      //   }
+      // }
+
+      // if(password === ''){
+      //   passwordErrMsg.push("Please enter Your Password")
+      // }else{
+      //   const passwordRegex = [
+      //     { regex: /.{8.}/, index: 0, message: "At least 8 Character" },
+      //     { regex: /\d/, index: 1, message: "At least 1 digits" },
+      //     { regex: /[a-z]/, index:2, message: "At least 1 lowercase letter" },
+      //     { regex: /[!@#$%^&*]/, index:3, message: "At least 1 special character" },
+      //     { regex: /[A-Z]/, index:4, message:"At least 1 uppercase letter" }
+      //   ]
+      // }
+
+      // // password checking
+      // passwordRegex.forEach((rule)=>{
+      //   if(!rule.regex.test(password)){
+      //     passwordErrMsg.push(rule.message)
+      //   }
+      // })
+
+      // // display Error Message
+      // emailErr.innerHTML = emailErrMsg.join("<br>");
+      // passwordErr.innerHTML = passwordErrMsg.join("<br>")
+
+      // // submit the form if all validation
+      // if(emailErrMsg.length === 0 && passwordErrMsg.length === 0){
+      //   form.submit();
+      // }
+
+    </script>
     <%- include('../layouts/footer.ejs') %>
   </body>
 </html>

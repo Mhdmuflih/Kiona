@@ -1,13 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verified</title>
+    <title>OTP Verification Form</title>
+    <link rel="stylesheet" href="/css/otp.css">
 </head>
-<body>
-    
-    
 
+<body>
+    <div class="container">
+        <h4>Enter Your 4 Digits OTP</h4>
+        <form action="" method="post" class="form">
+            <div class="input_field_box">
+                <input type="number" name="otp1"/>
+                <input type="number" name="otp2" disabled>
+                <input type="number" name="otp3" disabled>
+                <input type="number" name="otp4" disabled>
+            </div>
+            <button type="submit" class="active">Verify OTP</button>
+            </form>
+    </div>
+
+    <script>
+        const OTPinputs = document.querySelectorAll("input");
+        const button = document.querySelector('button'); // Corrected button selector
+
+        window.addEventListener("load", () => OTPinputs[0].focus());
+
+        OTPinputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                const currentInput = input;
+                const nextInput = input.nextElementSibling;
+
+                if (currentInput.value.length > 1) {
+                    currentInput.value = currentInput.value[0]; // Keep only the first character
+                }
+
+                if (nextInput && currentInput.value) {
+                    nextInput.removeAttribute("disabled");
+                    nextInput.focus();
+                }
+
+                // Check if all inputs are filled
+                const allFilled = Array.from(OTPinputs).every(input => input.value);
+                button.disabled = !allFilled; // Enable button if all inputs are filled
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === "Backspace" && input.value === "" && index !== 0) {
+                    const previousInput = OTPinputs[index - 1];
+                    previousInput.value = ""; // Clear previous input value
+                    previousInput.removeAttribute("disabled");
+                    previousInput.focus();
+                }
+            });
+        });
+
+    </script>
 </body>
+
 </html>

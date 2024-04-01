@@ -81,7 +81,7 @@ const sendOpt = async (req,res)=>{
         req.session.otpId = data._id
         await transporter.sendMail(message)
     } catch (error) {
-        console.log(error.message,'asdfghjk')
+        console.log(error.message,)
     }
 }
 
@@ -99,14 +99,13 @@ const register = async (req, res) => {
 const insertUser = async (req,res)=>{
     try {
 
-        // if(req.body.email){
-        //     const existingUser = await User.findOne({email: req.body.email})
-        //     if(existingUser){
-        //         console.log("Email id already taken")
-        //     }
-        // }
+        if(req.body.email){
+            const existingUser = await User.findOne({email: req.body.email})
+            if(existingUser){
+                console.log("Email id already taken")
+            }
+        }
         req.session.email=req.body.email
-        console.log('fhgj');
 
         const password = req.body.password
         const sPassword = await securePassword(password)
@@ -116,6 +115,7 @@ const insertUser = async (req,res)=>{
             mobile:req.body.mobile,
             image:req.body.filename,
             password:sPassword ,
+            is_verified:1,
             is_admin:0
         })
 
@@ -123,7 +123,10 @@ const insertUser = async (req,res)=>{
         console.log(req.session.userData)
 
         await sendOpt(req,res)
-        return res.send('hiii')
+        res.redirect('/otp')
+
+
+
         // await sendOtpMail(req,res)
 
 
@@ -141,24 +144,45 @@ const insertUser = async (req,res)=>{
     }
 }
 
-// verifyMail
-const verifyMail = async (req,res)=>{
+// otp page
+const otp = async (req,res)=>{
     try {
-        
-        const updatedInfo = await User.updateOne({_id:req.body.id},{ $set:{is_verified: 1} })
-        console.log(updatedInfo)
-        res.render('users/email-verified.ejs')
-
+        res.render('users/otp-verification.ejs')
     } catch (error) {
         console.log(error.message)
     }
 }
 
+// verify Mail
+const verifyOtp = async(req,res)=>{
+    try {
+
+        const {otp1,otp2,otp3,otp4} = req.body
+        const otp = [otp1,otp2,otp3,otp4].join('')
+        console.log(otp)
+
+        const otpData = await OTP.findOne({email: req.session.email})
+        console.log(otpData)
+
+        console.log(typeof otp)
+        if(otpData.OTP == otp){
+            const userData = new User(req.session.userData)
+
+            await userData.save()
+
+            await OTP.deleteOne({email: req.session.email})
+            res.redirect("/login?message=verification is successfull")
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 // login user page
 const login = async (req, res) => {
     try {
-        res.render('users/login.ejs')
+        const message = req.query.message
+        res.render('users/login.ejs',{message})
     } catch (error) {
         console.log(error.message)
     }
@@ -173,9 +197,11 @@ const verifyLogin  = async (req,res)=>{
         const userData = await User.findOne({email:email})
 
         if(userData){
+            console.log(userData);
             const passwordMatch = await bcrypt.compare(password,userData.password)
+
             if(passwordMatch){
-                if(userData.is_verified === 0){
+                if(userData.is_verified == 0){
                     res.render('users/login.ejs');
                 }else{
                     req.session.user_id  = userData._id
@@ -223,5 +249,5 @@ const home = async (req, res) => {
 
 
 export {
-    home, login, register, insertUser, verifyLogin, loginHome,verifyMail
+    home, login, register, insertUser, verifyLogin, loginHome,otp,verifyOtp
 }

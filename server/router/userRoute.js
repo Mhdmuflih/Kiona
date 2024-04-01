@@ -3,7 +3,7 @@ import multer from "multer";// multer is using in take a image store
 import path from "path";
 import session from "express-session";
 
-import { home,login,register,insertUser,verifyLogin,loginHome,verifyMail } from "../controller/userController.js";
+import { home,login,register,insertUser,verifyLogin,loginHome,otp, verifyOtp } from "../controller/userController.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
@@ -44,7 +44,8 @@ user_route.get('/register',register)
 user_route.post('/register',upload.single('image'),insertUser)
 
 // verifyMail route
-user_route.get('/verify',verifyMail)
+user_route.get('/otp',otp)
+user_route.post('/otp',verifyOtp)
 
 // login route
 user_route.get('/login',login)

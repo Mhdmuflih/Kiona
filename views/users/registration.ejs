@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="_form_07_main">
-                        <form action="" method="post" enctype="multipart/form-data" >
+                        <form action="" class="login-form" method="post" enctype="multipart/form-data" onsubmit="check(); return false">
                             <div class="row">
                                 <div class="col-sm-6 ncv-kl-bn">
                                     <div class="_form_07_main_sub_01">
@@ -79,32 +79,37 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Enter Your Name</label>
-                                            <input type="text" name="name" class="form-control" type="text"
+                                            <input type="text" name="name" id="name" class="form-control" type="text"
                                                 placeholder="Enter Name" required="" aria-required="true">
+                                                <p style="color: red;" id="nameErr"></p>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Enter Your Email</label>
-                                            <input type="email" name="email" class="form-control" type="text"
+                                            <input type="email" name="email" id="email" class="form-control" type="text"
                                                 placeholder="Enter Email" required="" aria-required="true">
+                                                <p style="color: red;" id="emailErr"></p>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Enter Your Mobile</label>
-                                            <input type="text" name="mobile" class="form-control" type="text"
+                                            <input type="text" name="mobile" id="mobile" class="form-control" type="text"
                                                 placeholder="Enter Mobile" required="" aria-required="true">
+                                                <p style="color: red;" id="mobileErr"></p>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Upload your profile photo</label>
-                                            <input type="file" name="image" class="form-control" type="text"
+                                            <input type="file" name="image" id="image" class="form-control" type="text"
                                                 placeholder="Upload Image" required="" aria-required="true">
+                                                <p style="color: red;" id="imageErr"></p>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Enter your Password</label>
-                                            <input type="password" name="password" class="form-control" type="text"
+                                            <input type="password" name="password" id="password" class="form-control" type="text"
                                                 placeholder="Enter password" required="" aria-required="true">
+                                                <p style="color: red;" id="passwordErr"></p>
                                         </div>
 
                                         <div class="checkbox form-group">
@@ -139,6 +144,192 @@
         </div>
         </div>
     </section>
+
+
+
+    <script>
+
+        // form Validation
+
+        function check(){
+            const form  = document.querySelector(".login-form");
+            const name = document.getElementById("name").value.trim();
+            const nameErr = document.getElementById("nameErr");
+            const email = document.getElementById("email").value.trim();
+            const emailErr = document.getElementById("emailErr");
+            const mobile = document.getElementById("mobile").value.trim();
+            const mobileErr = document.getElementById("mobileErr");
+            const image = document.getElementById("image").files.length;
+            const imageErr = document.getElementById("imageErr");
+            const password = document.getElementById("password").value.trim();
+            const passwordErr = document.getElementById("passwordErr");
+
+            const nameErrMsg = []
+            const emailErrMsg = []
+            const mobileErrMsg = []
+            const imageErrMsg = []
+            const passwordErrMsg = []
+
+            if(name === ''){
+                nameErrMsg.push("Please enter Your Name.")
+            }else{
+                const nameRegex = /^[a-zA-Z\s]*$/;
+                if(!nameRegex.test(name)){
+                    nameErrMsg.push("Please enter valid name");
+                }
+            }
+            
+            if(email === ''){
+                emailErrMsg.push("Please enter Your Email.");
+            }else{
+                const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
+                if(!emailRegex.test(email)){
+                    emailErrMsg.push("Please enter Your Valid Email Id.")
+                }
+            }
+
+            if(mobile == ''){
+                mobileErrMsg.push("Please enter Your Mobile.");
+            }else{
+                mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
+                if(!mobileRegex.test(mobile)){
+                    mobileErrMsg.push("Please enter Your Valid Mobile Number.")
+                }
+            }
+
+            if(!image){
+                imageErrMsg.push("Please Select an Image")
+            }
+
+            if(password == ''){
+                passwordErrMsg.push("Please enter Your Password")
+            }else{
+                const passwordRegex = [
+                    { regex: /.{8,}/, index: 0, message: "At least 8 character" },
+                    { regex: /\d/, index: 1, message: "At least 1 digits" },
+                    { regex:/[a-z]/, index: 2, message: "At least 1 lowercase letter" },
+                    { regex:/[!@#$%^&*]/, index: 3, message: "At least 1 special character" },
+                    { regex:/[A-Z]/, index: 4, message: "At least 1 uppercase letter" }
+                ];
+
+                passwordRegex.forEach((rule)=>{
+                    if(!rule.regex.test(password)){
+                        passwordErrMsg.push(rule.message)
+                    }
+                })
+
+            }
+
+            // display Error Message
+            nameErr.innerHTML = nameErrMsg.join("<br>");
+            emailErr.innerHTML = emailErrMsg.join("<br>");
+            mobileErr.innerHTML = mobileErrMsg.join("<br>");
+            imageErr.innerHTML = imageErrMsg.join("<br>");
+            passwordErr.innerHTML = passwordErrMsg.join("<br>");
+
+            // submit the form if all validations pass
+            if(nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg.length === 0 && imageErrMsg.length === 0 && passwordErrMsg.length === 0){
+                form.submit();
+            }
+        }
+    </script>
+
+
+    // <script>
+
+    //     // form Validation
+
+    //     function check(){
+    //         const form  = document.querySelector(".login-form");
+    //         const name = document.getElementById("name").value.trim();
+    //         const nameErr = document.getElementById("nameErr");
+    //         const email = document.getElementById("email").value.trim();
+    //         const emailErr = document.getElementById("emailErr");
+    //         const mobile = document.getElementById("mobile").value.trim();
+    //         const mobileErr = document.getElementById("mobileErr");
+    //         const image = document.getElementById("image").files.length;
+    //         const imageErr = document.getElementById("imageErr");
+    //         const password = document.getElementById("password").value.trim();
+    //         const passwordErr = document.gerElementById("passwordErr");
+
+    //         const nameErrMsg = []
+    //         const emailErrMsg = []
+    //         const mobileErrMsg = []
+    //         const imageErrMsg = []
+    //         const passwordErrMsg = []
+
+    //         if(name === ''){
+    //             nameErrMsg.push("Please enter Your Name.")
+    //         }else{
+    //             const nameRegex = /^[a-zA-Z\s]*$/;
+    //             if(!nameRegex.test(name)){
+    //                 nameErrMsg.push("Please enter valid name");
+    //             }
+    //         }
+            
+    //         if(email === ''){
+    //             emailErrMsg.push("Please enter Your Email.");
+    //         }else{
+    //             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //             if(!emailRegex.test(email)){
+    //                 emailErrMsg.push("Please enter Your Valid Email Id.")
+    //             }
+    //         }
+
+    //         if(mobile == ''){
+    //             mobileErrMsg.push("Please enter Your Mobile.");
+    //         }else{
+    //             mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
+    //             if(!mobileRegexMsg.test(mobile)){
+    //                 mobileErrMsg.push("Please enter Your Valid Mobile Number.")
+    //             }
+    //         }
+
+    //         if(!image){
+    //             imageErrMsg.push("Please Select an Image")
+    //         }
+
+    //         if(password == ''){
+    //             passwordErrMsg.push("Please enter Your Password")
+    //         }else{
+    //             const passwordRegex = [
+    //                 { regex: /.{8,}/, index: 0, message: "At least 8 character" },
+    //                 { regex: /\d/, index: 1, message: "At least 1 digits" },
+    //                 { regex:/[a-z]/, index: 2, message: "At least 1 lowercase letter" },
+    //                 { regex:/[!@#$%^&*]/, index: 3, message: "At least 1 special character" },
+    //                 { regex:/[A-Z]/, index: 4, message: "At least 1 uppercasse letter" }
+    //             ];
+
+    //             passwordRegex.forEach((rule)=>{
+    //                 if(!rule.regex.test(password)){
+    //                     passwordErrMsg.push(rule.message)
+    //                 }
+    //             })
+
+    //         }
+
+    //     }
+
+    //     // display Error Message
+    //     nameErr.innerHTML = nameErrMsg.join("<br>");
+    //     emailErr.innerHTML = emailErrMsg.join("<br>");
+    //     mobileErr.innerHTML = mobileErrMsg.join("<br>");
+    //     imageErr.innerHTML = imageErrMsg.join("<br>");
+    //     passwordErr.innerHTML = passwordErrMsg.join("<br>");
+
+    //     // submit the all validation pass
+    //     if(nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg === 0 && imageErrMsg.length === 0 && passwordErrMsg.length === 0){
+    //         form.submit();
+    //     }
+
+    // </script>
+
+
+
+
+
+
+
     <%- include('../layouts/footer.ejs') %>
 </body>
 
