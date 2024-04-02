@@ -19,16 +19,18 @@ const securePassword = async (password)=>{
     }
 }
 
+// otp generator
 const OtpGenerator = ()=>{
     return Math.floor(1000 + Math.random() * 9000)
 }
 
+// otp send to mail
 const sendOpt = async (req,res)=>{
 
-    let otp = OtpGenerator();
+    let otp = OtpGenerator();    //otp taken
     console.log(otp);
 
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({     // transporter
         service:"gmail",
         auth:{
             user:process.env.AUTH_EMAIL,
@@ -46,7 +48,7 @@ const sendOpt = async (req,res)=>{
         }
     })
 
-    const response = {
+    const response = {                            // responce of mail
         body:{
             name:req.session.email,
             intro:'Your OTP for KIONA Verification is:',
@@ -63,14 +65,14 @@ const sendOpt = async (req,res)=>{
 
     const mail = MailGenerator.generate(response)
 
-    const message = {
+    const message = {                             // message sent in the email
         from:process.env.AUTH_EMAIL,
         to:req.session.email,
         subject:'KIONA otp Verification',
         html:mail
     }
 
-    try {
+    try {                      // otp save in db and send mail
         const newOtp = new OTP({
             email:req.session.email,
             OTP:otp,
@@ -113,8 +115,9 @@ const insertUser = async (req,res)=>{
             name:req.body.name,
             email:req.body.email,
             mobile:req.body.mobile,
-            image:req.body.filename,
-            password:sPassword ,
+            image:req.file.filename,
+            password:sPassword,
+            is_block:0,
             is_verified:1,
             is_admin:0
         })
@@ -125,19 +128,6 @@ const insertUser = async (req,res)=>{
         await sendOpt(req,res)
         res.redirect('/otp')
 
-
-
-        // await sendOtpMail(req,res)
-
-
-        // const userData = user.save()
-
-        // if(userData){
-        //     // sendVerifyMail(req.body.name, req.body.email, userData._id);
-        //     res.render('users/registration',{message:"Your Registration has been Successful... verify your Email"});
-        // }else{
-        //     res.render('users/registration',{message:"Your Registration has been Failed"})
-        // }
 
     } catch (error) {
         console.log(error.message);
@@ -230,11 +220,7 @@ const loginHome = async (req,res)=>{
     }
 }
 
-
-
-
-
-
+// user home page
 const home = async (req, res) => {
     try {
         res.render('users/index.ejs')

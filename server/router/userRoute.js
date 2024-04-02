@@ -3,7 +3,8 @@ import multer from "multer";// multer is using in take a image store
 import path from "path";
 import session from "express-session";
 
-import { home,login,register,insertUser,verifyLogin,loginHome,otp, verifyOtp } from "../controller/userController.js";
+import { isLogin,isLogout } from "../middleware/userAuth.js";
+import { home, login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp } from "../controller/userController.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
@@ -37,22 +38,22 @@ const upload = multer({storage:storage})
 // -----------------------------------------------------------------------
 
 // Route
-user_route.get('/',home)
+user_route.get('/',isLogout,home)
 
 // register route
-user_route.get('/register',register)
+user_route.get('/register',isLogout,register)
 user_route.post('/register',upload.single('image'),insertUser)
 
 // verifyMail route
-user_route.get('/otp',otp)
+user_route.get('/otp',isLogout,otp)
 user_route.post('/otp',verifyOtp)
 
 // login route
-user_route.get('/login',login)
+user_route.get('/login',isLogout,login)
 user_route.post('/login',verifyLogin)
 
 //login Home
-user_route.get('/home',loginHome)
+user_route.get('/home',isLogin,loginHome)
 
 
 export default user_route

@@ -9,6 +9,10 @@ const userSchema = new mongoosh.Schema({
         type:String,
         required:true
     },
+    image:{
+        type:String,
+        require:true
+    },
     mobile:{
         type:Number,
         required:true
@@ -16,6 +20,10 @@ const userSchema = new mongoosh.Schema({
     password:{
         type:String,
         required:true
+    },
+    is_block:{
+        type:Number,
+        require:true
     },
     is_admin:{
         type:Number,

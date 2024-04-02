@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="../../admin/css/style.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+
+
 </head>
 
 <body>
@@ -46,13 +48,13 @@
           </form>
         </div>
         <ul class="navbar-nav navbar-nav-right">
-          
+
           <li class="nav-item nav-logout d-none d-lg-block">
             <a class="nav-link" href="#">
               <i class="mdi mdi-power"></i>
             </a>
           </li>
-          
+
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
           data-toggle="offcanvas">
@@ -67,7 +69,7 @@
         <ul class="nav">
 
           <li class="nav-item">
-            <a class="nav-link" href="/admin">
+            <a class="nav-link" href="/admin/home">
               <span class="menu-title">Dashboard</span>
               <i class="mdi mdi-home menu-icon"></i>
             </a>
@@ -170,61 +172,70 @@
                   <div class="row icons-list">
 
                     <div class="main-panel w-100">
-                      
 
-                        <div class="row ">
 
-                          <div class="card">
-                            <div class="card-body">
-                              <h4 class="card-title">Customer's Details</h4>
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr>
-                                      <th> Name </th>
-                                      <th> Email </th>
-                                      <th> Mobil </th>
-                                      <th> Address </th>
-                                      <th> Status </th>
-                                      <th> Delete </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
+                      <div class="row ">
 
-                                    <% if(users.length>0){
-                                          for(let i=0 ; i<users.length ; i++){
-                                            %>
-                                            <tr>
-                                              <td>
-                                                <img src="/Photos/userImages/<%= users[i].image %>" class="mr-2" alt="<%= users[i].image %>"> <%= users[i].name %>
-                                              </td>
-                                              <td> <%= users[i].email %> </td>
-                                              <td> <%= users[i].mobile %> </td>
-                                              // <td>
-                                              //   <label class="badge badge-gradient-success">DONE</label>
-                                              // </td>
-                                              <td> <%= users[i].address %> </td>
-                                              <td> WD-12345 </td>
-                                            </tr>
-                                            <%
-                                          }
+                        <div class="card">
+                          <div class="card-body">
+                            <h4 class="card-title">Customer's Details</h4>
+                            <div class="table-responsive">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th> Name </th>
+                                    <th> Email </th>
+                                    <th> Mobil </th>
+                                    <th> Address </th>
+                                    <th> Status </th>
+                                    <th> Delete </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                  <%
+                                    if(users.length>0){
+                                      for(let i=0 ; i<users.length ; i++){
+                                        %>
+                                          <tr>
+                                            <td>
+                                              <img src="/Photos/userImages/<%= users[i].image %>" class="mr-2" alt="<%= users[i].image %>"> <%= users[i].name %>
+                                            </td>
+                                            <td>
+                                              <%= users[i].email %>
+                                            </td>
+                                            <td>
+                                              <%= users[i].mobile %>
+                                            </td>
+                                            <td>
+                                              <%= users[i].address %>
+                                            </td>
+                                            <td> <button onclick="blockUser('<%= users[i]._id %>')">Block</button> </td>
+                                          </tr>
+                                        <%
+                                      }
                                     }else{
-                                      %>
-                                        <tr>
-                                          <td colspan="6">User not fount</td>
-                                        </tr>
-                                    }
-                                  </tbody>
-                                </table>
-                              </div>
+                                        %>
+                                          <tr>
+                                            <td colspan="6">User not fount</td>
+                                          </tr>
+                                  <%  } %>
+                                </tbody>
+                              </table>
                             </div>
                           </div>
                         </div>
-
-                      
-
+                      </div>
                     </div>
                   </div>
+                  <div class="text-center pagination">
+                    <div class="pagination-container" style="display: flex; justify-content: center ;">
+                        <% for(let j=1 ; j<=totalPages ; j++){ %>
+                            <a href="?page=<%= j %>" class="btn btn-secondary"><%= j %></a>
+                        <% } %>
+                    </div>
+                    <br>
+                </div>
                 </div>
               </div>
             </div>
@@ -255,6 +266,30 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->
+
+
+
+
+
+     <!-- axios CDN -->
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+     <script>
+        async function blockUser(userId){
+          try {
+            const responce = await axios.post(`/admin/block_user?id=${userId}`);
+
+          } catch (error) {
+            
+          }
+        }
+     </script>
+
+
+
+
+
 </body>
 
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/icons/mdi.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->

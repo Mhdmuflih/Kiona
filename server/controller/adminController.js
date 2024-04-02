@@ -32,7 +32,7 @@ const insertAdmin = async(req,res)=>{
         console.log(admin)
 
         await admin.save();
-        res.redirect('/admin/login')
+        res.redirect('/admin')
 
 
     } catch (error) {
@@ -55,7 +55,7 @@ const verifyAdminLogin = async(req,res)=>{
             if(adminData.email === email && adminData.password === password){
                 req.session.admin_id = adminData._id
                 console.log(req.session.admin_id);
-                res.redirect('/admin')
+                res.redirect('/admin/home')
             }else{
                 console.log("ook da kuttu");
                 res.render('admin/login.ejs',{error : "invalid username and password"})
@@ -80,7 +80,7 @@ const adminHome = async (req,res)=>{
     }
 }
 
-//user handle page
+// user handle page
 const userDetails = async (req,res)=>{
     try {
 
@@ -127,6 +127,17 @@ const userDetails = async (req,res)=>{
     }
 }
 
+const userBlock = async (req,res)=>{
+    try {
+        const userId = req.query.id
+        console.log(userId);
+        const  block = await User.findByIdAndUpdate({_id:userId},{ $set: { is_block:1 } })
+      
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export {
-    adminHome, userDetails, adminLogin, adminRegister, insertAdmin, verifyAdminLogin
+    adminHome, userDetails, adminLogin, adminRegister, insertAdmin, verifyAdminLogin, userBlock
 }

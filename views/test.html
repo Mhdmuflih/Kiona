@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axios Example</title>
+</head>
+<body>
+
+  <h1> Axios Example </h1>
+  <div id="response"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // Make a GET request to a sample API
+    axios.get('https://jsonplaceholder.typicode.com/posts/1')
+      .then(function (response) {
+        // Handle successful response
+        console.log(response.data);
+        document.getElementById('response').innerHTML = `
+          <p>User ID: ${response.data.userId}</p>
+          <p>Title: ${response.data.title}</p>
+          <p>Body: ${response.data.body}</p>
+        `;
+      })
+      .catch(function (error) {
+        // Handle error
+        console.error('Error fetching data:', error);
+        document.getElementById('response').innerHTML = '<p>Error fetching data</p>';
+      });
+  </script>
+
+</body>
+</html>
