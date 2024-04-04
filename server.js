@@ -16,14 +16,14 @@ dotenv.config();
 connectDB();
 
 
-const app = express();
-const __dirname = path.resolve();
+const app = express();        //express adding
+const __dirname = path.resolve();       //pth setting
 
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.set('view engine','ejs')
+app.use(express.urlencoded({extended:true}))           //change the json format of url
+app.set('view engine','ejs')                        //page converting to dynamic or to take the ejs access
 
-app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.static(path.join(__dirname, 'assets')))         //assets is public field
 app.set('views', path.join(__dirname, 'views'));
 
 // -----------------------------------------------------------------------

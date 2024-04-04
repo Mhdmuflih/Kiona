@@ -1,5 +1,6 @@
 import Admin from "../model/adminModel.js";
 import User from "../model/userModel.js";
+import Product from "../model/productModel.js"
 // ----------------------------------------------
 
 //admin login page
@@ -45,13 +46,10 @@ const verifyAdminLogin = async(req,res)=>{
     try {
         
         const { email,password } = req.body
-        console.log(req.body);
 
         const adminData = await Admin.findOne({ email:email })
 
         if(adminData){
-            console.log("Admin data ok");
-            console.log(adminData);
             if(adminData.email === email && adminData.password === password){
                 req.session.admin_id = adminData._id
                 console.log(req.session.admin_id);
@@ -80,64 +78,14 @@ const adminHome = async (req,res)=>{
     }
 }
 
-// user handle page
-const userDetails = async (req,res)=>{
-    try {
+// -----------------------------------------------------------------------------------------------------------
 
-        var search = '';
-        if(req.query.search){
-            search = req.query.search;
-        }
-
-        var page = 1;
-        if(req.query.page){
-            page = req.query.page
-        }
-
-        const limit = 5
-
-        const userData = await User.find({
-            is_admin:0,
-            $or:[
-                { name:{ $regex: ".*" + search + ".*", $options: "i" } },
-                { email:{ $regex: ".*" + search + ".*", $options: "i" } }
-            ]
-        }).limit(limit*1)
-        .skip((page - 1)* limit)
-        .exec();
-
-        const count = await User.find({
-            is_admin:0,
-            $or:[
-                { name:{ $regex: ".*" + search + ".*", $options: "i" } },
-                { email:{ $regex : ".*" + search + ".*", $options: "i" } }
-            ]
-        }).countDocuments();
+// -----------------------------------------------------------------------------------------------------------
 
 
-        res.render('admin/UserDetails/users.ejs',{
-            users: userData,
-            totalPages: Math.ceil(count/limit),
-            currentPage: page
-        })
 
 
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-const userBlock = async (req,res)=>{
-    try {
-        const userId = req.query.id
-        console.log(userId);
-        const  block = await User.findByIdAndUpdate({_id:userId},{ $set: { is_block:1 } })
-      
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 export {
-    adminHome, userDetails, adminLogin, adminRegister, insertAdmin, verifyAdminLogin, userBlock
+    adminHome, adminLogin, adminRegister, insertAdmin, verifyAdminLogin
 }

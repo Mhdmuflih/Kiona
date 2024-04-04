@@ -3,11 +3,11 @@ import mongoosh from "mongoose"
 const userSchema = new mongoosh.Schema({
     name:{
         type:String,
-        required:true
+        require:true
     },
     email:{
         type:String,
-        required:true
+        require:true
     },
     image:{
         type:String,
@@ -19,7 +19,7 @@ const userSchema = new mongoosh.Schema({
     },
     password:{
         type:String,
-        required:true
+        require:true
     },
     is_block:{
         type:Number,
@@ -27,7 +27,7 @@ const userSchema = new mongoosh.Schema({
     },
     is_admin:{
         type:Number,
-        required:true
+        require:true
     },
     is_verified:{
         type:String,

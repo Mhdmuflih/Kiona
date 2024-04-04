@@ -115,7 +115,7 @@
                                         <div class="checkbox form-group">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="" id="">
-                                                <label class="form-check-label" for="">
+                                                <label class="form-check-label">
                                                     Remember me
                                                 </label>
                                             </div>
@@ -233,102 +233,6 @@
             }
         }
     </script>
-
-
-    // <script>
-
-    //     // form Validation
-
-    //     function check(){
-    //         const form  = document.querySelector(".login-form");
-    //         const name = document.getElementById("name").value.trim();
-    //         const nameErr = document.getElementById("nameErr");
-    //         const email = document.getElementById("email").value.trim();
-    //         const emailErr = document.getElementById("emailErr");
-    //         const mobile = document.getElementById("mobile").value.trim();
-    //         const mobileErr = document.getElementById("mobileErr");
-    //         const image = document.getElementById("image").files.length;
-    //         const imageErr = document.getElementById("imageErr");
-    //         const password = document.getElementById("password").value.trim();
-    //         const passwordErr = document.gerElementById("passwordErr");
-
-    //         const nameErrMsg = []
-    //         const emailErrMsg = []
-    //         const mobileErrMsg = []
-    //         const imageErrMsg = []
-    //         const passwordErrMsg = []
-
-    //         if(name === ''){
-    //             nameErrMsg.push("Please enter Your Name.")
-    //         }else{
-    //             const nameRegex = /^[a-zA-Z\s]*$/;
-    //             if(!nameRegex.test(name)){
-    //                 nameErrMsg.push("Please enter valid name");
-    //             }
-    //         }
-            
-    //         if(email === ''){
-    //             emailErrMsg.push("Please enter Your Email.");
-    //         }else{
-    //             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //             if(!emailRegex.test(email)){
-    //                 emailErrMsg.push("Please enter Your Valid Email Id.")
-    //             }
-    //         }
-
-    //         if(mobile == ''){
-    //             mobileErrMsg.push("Please enter Your Mobile.");
-    //         }else{
-    //             mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
-    //             if(!mobileRegexMsg.test(mobile)){
-    //                 mobileErrMsg.push("Please enter Your Valid Mobile Number.")
-    //             }
-    //         }
-
-    //         if(!image){
-    //             imageErrMsg.push("Please Select an Image")
-    //         }
-
-    //         if(password == ''){
-    //             passwordErrMsg.push("Please enter Your Password")
-    //         }else{
-    //             const passwordRegex = [
-    //                 { regex: /.{8,}/, index: 0, message: "At least 8 character" },
-    //                 { regex: /\d/, index: 1, message: "At least 1 digits" },
-    //                 { regex:/[a-z]/, index: 2, message: "At least 1 lowercase letter" },
-    //                 { regex:/[!@#$%^&*]/, index: 3, message: "At least 1 special character" },
-    //                 { regex:/[A-Z]/, index: 4, message: "At least 1 uppercasse letter" }
-    //             ];
-
-    //             passwordRegex.forEach((rule)=>{
-    //                 if(!rule.regex.test(password)){
-    //                     passwordErrMsg.push(rule.message)
-    //                 }
-    //             })
-
-    //         }
-
-    //     }
-
-    //     // display Error Message
-    //     nameErr.innerHTML = nameErrMsg.join("<br>");
-    //     emailErr.innerHTML = emailErrMsg.join("<br>");
-    //     mobileErr.innerHTML = mobileErrMsg.join("<br>");
-    //     imageErr.innerHTML = imageErrMsg.join("<br>");
-    //     passwordErr.innerHTML = passwordErrMsg.join("<br>");
-
-    //     // submit the all validation pass
-    //     if(nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg === 0 && imageErrMsg.length === 0 && passwordErrMsg.length === 0){
-    //         form.submit();
-    //     }
-
-    // </script>
-
-
-
-
-
-
 
     <%- include('../layouts/footer.ejs') %>
 </body>
