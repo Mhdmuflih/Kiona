@@ -60,7 +60,7 @@ const verifyAdminLogin = async(req,res)=>{
             }
         }else{
             console.log('no user data');
-            res.render('/admin/login.ejs');
+            res.render('admin/login.ejs');
         }
 
     } catch (error) {

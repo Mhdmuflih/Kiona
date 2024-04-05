@@ -4,6 +4,7 @@ import Mailgen from "mailgen";
 
 import User from "../model/userModel.js";
 import OTP from "../model/otpModel.js";
+import Product from "../model/productModel.js";
 
 // ----------------------------------------------
 
@@ -158,6 +159,7 @@ const verifyOtp = async(req,res)=>{
         if(otpData.OTP == otp){
             const userData = new User(req.session.userData)
 
+            console.log(userData);
             await userData.save()
 
             await OTP.deleteOne({email: req.session.email})
@@ -186,6 +188,13 @@ const verifyLogin  = async (req,res)=>{
         console.log(req.body)
         const userData = await User.findOne({email:email})
 
+        if (userData.is_block) {
+            return res.render('users/login.ejs', {
+                message: "User is blocked by Admin",
+                userBlocked: true
+            });
+        }
+        
         if(userData){
             console.log(userData);
             const passwordMatch = await bcrypt.compare(password,userData.password)
@@ -195,7 +204,7 @@ const verifyLogin  = async (req,res)=>{
                     res.render('users/login.ejs');
                 }else{
                     req.session.user_id  = userData._id
-                    res.redirect('/home')
+                    res.redirect('/')
                 }
             }else{
                 res.render('users/login.ejs',{message:"user email and password incorrect"})
@@ -214,26 +223,38 @@ const loginHome = async (req,res)=>{
     try {
         const id = req.session.user_id
         const userData = await User.findById(id)
-        res.render('users/index.ejs', {user:userData || 'muflih'})
+        const products = await Product.find({delete:false})
+        const user = req.session.user_id
+        console.log(user);
+        res.render('users/indexLogout.ejs', {user:userData || 'muflih', products, user})
     } catch (error) {
         console.log(error.message)
     }
 }
 
 // user home page
-const home = async (req, res) => {
-    try {
-        res.render('users/index.ejs')
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).send('Internal Server Error');
-    }
-}
+// const home = async (req, res) => {
+//     try {
+//         res.render('users/index.ejs')
+//     } catch (error) {
+//         console.log(error.message)
+//         res.status(500).send('Internal Server Error');
+//     }
+// }
 
-
+const userLogout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.log(err);
+            res.redirect('/'); // Redirect or handle the error as needed
+        } else {
+            res.redirect('/');
+        }
+    });
+};
 
 
 
 export {
-    home, login, register, insertUser, verifyLogin, loginHome,otp,verifyOtp
+     login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout
 }

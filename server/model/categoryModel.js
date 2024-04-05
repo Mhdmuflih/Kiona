@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema({
+    image:{
+        type:String,
+        require:true
+    },
     name: {
         type: String,
-        required: true,
+        require: true,
         unique: true
     },
     description: {

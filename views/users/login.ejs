@@ -100,6 +100,14 @@
                       <a href="#">Forgot Password</a>
                     </div>
 
+                    <% if (typeof userBlocked !== 'undefined' && userBlocked) { %>
+                      <script>
+                          alert("<%= message %>");
+                      </script>
+                      <% } %>
+                      
+                  
+
                     <div class="form-group">
                       <div class="_btn_04">
                         <button type="submit" class="login-button"> Login</button>
@@ -171,58 +179,6 @@
           form.submit();
         }
       }
-
-
-
-
-
-      // function check(){
-      //   const form = document.querySelector(".login-form");
-      //   const email = document.getElementById("email");
-      //   const emailErr = document.getElementById("emailErr");
-      //   const password = document.getElementById("password");
-      //   const passwordErr = document.getElementById("passwordErr");
-      // }
-
-      // const emailErrMsg = []
-      // const passwordErrMsg = []
-
-      // if(email === ''){
-      //   emailErrMsg.push("Please enter Your Email.");
-      // }else{
-      //   const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
-      //   if(!emailRegex.test(email)){
-      //     emailErrMsg.push("Please enter Your Valid email Id.")
-      //   }
-      // }
-
-      // if(password === ''){
-      //   passwordErrMsg.push("Please enter Your Password")
-      // }else{
-      //   const passwordRegex = [
-      //     { regex: /.{8.}/, index: 0, message: "At least 8 Character" },
-      //     { regex: /\d/, index: 1, message: "At least 1 digits" },
-      //     { regex: /[a-z]/, index:2, message: "At least 1 lowercase letter" },
-      //     { regex: /[!@#$%^&*]/, index:3, message: "At least 1 special character" },
-      //     { regex: /[A-Z]/, index:4, message:"At least 1 uppercase letter" }
-      //   ]
-      // }
-
-      // // password checking
-      // passwordRegex.forEach((rule)=>{
-      //   if(!rule.regex.test(password)){
-      //     passwordErrMsg.push(rule.message)
-      //   }
-      // })
-
-      // // display Error Message
-      // emailErr.innerHTML = emailErrMsg.join("<br>");
-      // passwordErr.innerHTML = passwordErrMsg.join("<br>")
-
-      // // submit the form if all validation
-      // if(emailErrMsg.length === 0 && passwordErrMsg.length === 0){
-      //   form.submit();
-      // }
 
     </script>
     <%- include('../layouts/footer.ejs') %>

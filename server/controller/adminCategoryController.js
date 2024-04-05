@@ -53,18 +53,24 @@ const addCategory = async (req,res)=>{
 
 const createCategory = async (req, res) => {
     try {
+
+
+        const image = req.file.filename
         const { categoryName, description } = req.body;
-        console.log(categoryName);
+    
+        console.log(categoryName,description,image);
         
-        if (!categoryName || !description) {
+        
+        if (!categoryName || !description || !image) {
             return res.status(400).json({ message: 'Name and description are required.' });
         }
 
         const category = new Category({
+            image:image,
             name: categoryName,
             description: description
         });
-
+        console.log(category,'kjhj');
         await category.save();
         res.status(201).json({ message: 'Category created successfully.' });
     } catch (error) {
@@ -72,16 +78,6 @@ const createCategory = async (req, res) => {
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
-
-// const listCategory = async(req,res)=>{
-//     try {
-//         const categories = await Category.find();
-//         res.status(200).json(categories)
-//     } catch (error) {
-//         res.status(404).json({message:error.message})
-//     }
-// }
-
 
 export {
     categoryPage, addCategory, createCategory

@@ -4,7 +4,7 @@ import path from "path";
 import session from "express-session";
 
 import { isLogin,isLogout } from "../middleware/userAuth.js";
-import { home, login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp } from "../controller/userController.js";
+import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout } from "../controller/userController.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
@@ -14,10 +14,10 @@ const __dirname = path.resolve()  //to take the dirname(directery name) path in 
 
 //session working code
 user_route.use(session({
-    secret:'allisWell',
-    resave:false,
-    saveUninitialized:false
-}))
+    secret: 'allisWell',
+    resave: false,
+    saveUninitialized: false
+}));
 
 user_route.use(express.static('assets'))
 
@@ -38,7 +38,7 @@ const upload = multer({storage:storage})
 // -----------------------------------------------------------------------
 
 // Route
-user_route.get('/',isLogout,home)
+// user_route.get('/',isLogout,home)
 
 // register route
 user_route.get('/register',isLogout,register)
@@ -53,7 +53,10 @@ user_route.get('/login',isLogout,login)
 user_route.post('/login',verifyLogin)
 
 //login Home
-user_route.get('/home',isLogin,loginHome)
+user_route.get('/',loginHome)
+
+//logout
+user_route.get('/logout',isLogin,userLogout)
 
 
 export default user_route

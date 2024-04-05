@@ -50,9 +50,16 @@ const userDetails = async (req,res)=>{
 //user block
 const userBlock = async (req,res)=>{
     try {
-        const userId = req.query.id
-        console.log(userId,'ivide korch preshnam ndd complete cheytheellaa... user block nnte ann');
-        const  block = await User.findByIdAndUpdate({_id:userId},{ $set: { is_block:1 } })
+        const {userId} = req.body;
+        const responce = await User.findOne({_id:userId} )
+        if(responce.is_block){
+            const unblocked = await User.updateOne({_id:userId},{ $set:{ is_block:false } });
+            return res.json({success:true,message:"User Unblocked"})
+        }else{
+            const block = await User.updateOne({_id:userId},{ $set:{ is_block:true } })
+            return res.json({success:true,message:"User Blocked"})
+        }
+
       
     } catch (error) {
         console.log(error.message);

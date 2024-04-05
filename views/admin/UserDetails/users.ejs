@@ -187,9 +187,9 @@
                                     <th> Name </th>
                                     <th> Email </th>
                                     <th> Mobil </th>
-                                    <th> Address </th>
+                                  
                                     <th> Status </th>
-                                    <th> Delete </th>
+                                    <th> Action </th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -208,10 +208,19 @@
                                             <td>
                                               <%= users[i].mobile %>
                                             </td>
+                                            <%if(users[i].is_block){%>
+                                           <td>bloked</td>
+                                           <%}else{%>
+                                            <td>Un bloked</td>
+                                            <%}%>
                                             <td>
-                                              <%= users[i].address %>
-                                            </td>
-                                            <td> <button onclick="blockUser('<%= users[i]._id %>')">Block</button> </td>
+                                            <% if(users[i].is_block){%>
+                                              <button class="btn btn-success" onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
+                                           <% }else{%>
+                                            <button class="btn btn-danger" onclick="blockUser('<%= users[i]._id %>')">Block</button> 
+                                          <% } %>
+                                        </td>
+                                      
                                           </tr>
                                         <%
                                       }
@@ -274,16 +283,30 @@
 
      <!-- axios CDN -->
      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 
 
      <script>
         async function blockUser(userId){
-          try {
-            const responce = await axios.post(`/admin/block_user?id=${userId}`);
+         
+            const responce = await axios.post('http://localhost:8000/admin/users/block',{userId});
+            if(responce.data.success){
+              await Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: responce.data.message
+              })
+              window.location.href = '/admin/users';
+            }else{
+              await Swal.fire({
+                icon: 'error',
+                title: 'error',
+                text: responce.data.message
+              })
+              window.location.href = '/admin/users';
+            }
 
-          } catch (error) {
-            
-          }
         }
      </script>
 

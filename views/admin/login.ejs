@@ -38,7 +38,11 @@
                   aria-describedby="basic-addon1">
               </div>
 
-
+              <% if(typeof message !='undefined' ){ %>
+                <p>
+                    <b><%= message %></b>
+                </p>
+                <% } %>
               <p>
 
                 forget password ?</p>

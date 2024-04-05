@@ -170,7 +170,15 @@
                   <div class="card-body">
                     <h4 class="card-title">Add Category form</h4>
                     <p class="card-description">  </p>
-                    <form class="forms-sample" method="post" id="categoryForm">
+                    <form class="forms-sample" method="post" id="categoryForm" enctype="multipart/form-data">
+                        <label>Product upload</label>
+                            <input type="file" name="image" id="image" class="file-upload-default">
+                            <div class="input-group col-xs-12">
+                                <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                <span class="input-group-append">
+                                    <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
+                                </span>
+                            </div>
                         <div class="form-group">
                             <label for="exampleInputUsername1">Category</label>
                             <input type="text"  name="name" class="form-control" id="category" placeholder="Category name">
@@ -221,34 +229,41 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
-        document.getElementById('categoryForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+       document.getElementById('categoryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            const categoryName = document.getElementById("category").value;
-            const description = document.getElementById("description").value
-           
-            const url = '/admin/add_category';
-            
-            axios.post(url,{categoryName,description})
-                .then(function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Category added successfully!'
-                    }).then(() => {
-                        // Optionally redirect to another page after success
-                        window.location.href = '/admin/category';
-                    });
-                })
-                .catch(function(error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Failed to add category.'
-                    });
-                    console.error(error);
-                });
+    const formData = new FormData();
+    const image = document.getElementById('image').files[0]; // Get the first file from the input
+    const categoryName = document.getElementById("category").value;
+    const description = document.getElementById("description").value;
+
+    formData.append('image', image); // Append the file to the FormData object
+    formData.append('categoryName', categoryName);
+    formData.append('description', description);
+
+    const url = '/admin/add_category';
+
+    axios.post(url, formData)
+        .then(function(response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Category added successfully!'
+            }).then(() => {
+                // Optionally redirect to another page after success
+                window.location.href = '/admin/category';
+            });
+        })
+        .catch(function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to add category.'
+            });
+            console.error(error);
         });
+});
+
     </script>
     
 

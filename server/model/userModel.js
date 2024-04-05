@@ -22,12 +22,13 @@ const userSchema = new mongoosh.Schema({
         require:true
     },
     is_block:{
-        type:Number,
-        require:true
+        type:Boolean,
+        require:true,
+        default:false
     },
     is_admin:{
         type:Number,
-        require:true
+        default:0,
     },
     is_verified:{
         type:String,

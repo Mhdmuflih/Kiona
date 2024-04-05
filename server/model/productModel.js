@@ -25,6 +25,10 @@ const productSchema = new mongoosh.Schema({
     quantity:{
         type:Number,
         require:true
+    },
+    delete:{
+        type:Boolean,
+        default:false
     }
 })
 
