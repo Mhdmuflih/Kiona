@@ -4,7 +4,7 @@ import path from "path";
 import session from "express-session";
 
 import { isLogin,isLogout } from "../middleware/userAuth.js";
-import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout } from "../controller/userController.js";
+import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage } from "../controller/userController.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
@@ -48,12 +48,17 @@ user_route.post('/register',upload.single('image'),insertUser)
 user_route.get('/otp',isLogout,otp)
 user_route.post('/otp',verifyOtp)
 
+user_route.post('/resend-otp', resendOTP, verifyOtp)
+
 // login route
 user_route.get('/login',isLogout,login)
 user_route.post('/login',verifyLogin)
 
 //login Home
 user_route.get('/',loginHome)
+
+//product show details
+user_route.get('/products',productPage)
 
 //logout
 user_route.get('/logout',isLogin,userLogout)

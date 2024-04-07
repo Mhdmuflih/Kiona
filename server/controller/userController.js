@@ -144,18 +144,90 @@ const otp = async (req,res)=>{
     }
 }
 
+//re - send OTP Generator
+// const reSendOTPGenerator = ()=>{
+//     return Math.floor(1000 + Math.random() * 9000)
+// }
+
+// re - send otp fucntion
+const resendOTP = async (req, res) => {
+    try {
+        let otp = OtpGenerator()
+        console.log(otp);
+
+        if (!req.session.email) {
+            throw new Error("Recipient email not found in session.");
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.AUTH_EMAIL,
+                pass: process.env.AUTH_PASSWORD
+            }
+        });
+
+        const MailGenerator = new Mailgen({
+            theme: "default",
+            product: {
+                name: "Kiona",
+                link: "http://mailgen.js/"
+            }
+        });
+
+        const response = {
+            body: {
+                name: req.session.email,
+                intro: 'Your OTP for KIONA Verification is:',
+                table: {
+                    data: [{
+                        OTP: otp
+                    }]
+                },
+                outro: "looking forward to doing more Business"
+            }
+        };
+
+        const mail = MailGenerator.generate(response);
+
+        const message = {
+            from: process.env.AUTH_EMAIL,
+            to: req.session.email, // Set recipient email
+            subject: 'KIONA re-send OTP Verification',
+            html: mail
+        };
+
+        await OTP.updateOne({
+            email:req.session.email
+        },{
+            $set:{ OTP:otp }
+        })
+        
+       
+        await transporter.sendMail(message);
+        
+        res.send({ success: true }); // Sending success response
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ success: false, error: error.message }); // Sending error response
+    }
+};
+
 // verify Mail
 const verifyOtp = async(req,res)=>{
     try {
 
         const {otp1,otp2,otp3,otp4} = req.body
         const otp = [otp1,otp2,otp3,otp4].join('')
-        console.log(otp)
+        console.log(otp,'djfhdh')
 
         const otpData = await OTP.findOne({email: req.session.email})
         console.log(otpData)
 
-        console.log(typeof otp)
+        if(!otpData){
+            return redirect('/otp')
+        }
+
         if(otpData.OTP == otp){
             const userData = new User(req.session.userData)
 
@@ -169,6 +241,7 @@ const verifyOtp = async(req,res)=>{
         console.log(error.message)
     }
 }
+
 
 // login user page
 const login = async (req, res) => {
@@ -225,22 +298,25 @@ const loginHome = async (req,res)=>{
         const userData = await User.findById(id)
         const products = await Product.find({delete:false})
         const user = req.session.user_id
-        console.log(user);
+
         res.render('users/indexLogout.ejs', {user:userData || 'muflih', products, user})
     } catch (error) {
         console.log(error.message)
     }
 }
 
-// user home page
-// const home = async (req, res) => {
-//     try {
-//         res.render('users/index.ejs')
-//     } catch (error) {
-//         console.log(error.message)
-//         res.status(500).send('Internal Server Error');
-//     }
-// }
+// user product details page
+const productPage = async(req,res)=>{
+    try {
+
+        const user = req.session.user_id;
+        const products = await Product.find({delete:false});
+
+        res.render('users/product.ejs', { user, products })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 const userLogout = (req, res) => {
     req.session.destroy((err) => {
@@ -256,5 +332,5 @@ const userLogout = (req, res) => {
 
 
 export {
-     login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout
+     login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage
 }

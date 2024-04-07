@@ -3,10 +3,9 @@ import multer from "multer";
 import path from "path";
 import session from "express-session";
 
-// import multer from "../service/prodectMulter.js";
 
 import { adminHome, adminLogin, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/adminController.js";
-import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage } from "../controller/adminProductController.js";
+import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage, deleted } from "../controller/adminProductController.js";
 import { userDetails, userBlock } from "../controller/adminUserController.js";
 import { addCategory, categoryPage, createCategory } from "../controller/adminCategoryController.js";
 
@@ -82,11 +81,13 @@ admin_route.get('/category',categoryPage)
 admin_route.get('/add_category',addCategory)
 admin_route.post('/add_category', uploadCategory.single('image'),createCategory)
 
-admin_route.post('/product/delete', deleteProduct)
 
 admin_route.get('/deletedProduct',deletedProductPage)
 
+admin_route.post('/product/delete', deleteProduct)
+
 admin_route.post('/product/restore',restoreProduct)
+admin_route.post('/product/deleted',deleted)
 
 admin_route.get('/editProduct',editProductPage)
 admin_route.post('/editProduct',upload,editProduct)

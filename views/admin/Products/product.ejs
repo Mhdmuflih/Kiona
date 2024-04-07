@@ -25,7 +25,7 @@
       <!-- partial:../../partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="../../index.html"><img class="h-50" src="../../admin/images/kiona-logo.png" alt="logo" /></a>
+          <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="../../admin/images/kiona-logo.png" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -188,7 +188,9 @@
                                     <tr>
                                       <th> Name </th>
                                       <th> price </th>
+                                      <th>Quantity</th>
                                       <th> category </th>
+                                      <th>Description</th>
                                       <th> edit </th>
                                       <th> Delete </th>
                                     </tr>
@@ -207,7 +209,13 @@
                                                 <%= product[i].price %>
                                               </td>
                                               <td>
+                                                <%= product[i].quantity %>
+                                              </td>
+                                              <td>
                                                 <%= product[i].category %>
+                                              </td>
+                                              <td>
+                                                <%= product[i].description %>
                                               </td>
                                               <td>
                                                 <button class="btn btn-info" onclick="editProduct('<%= product[i]._id %>')">Edit</button>

@@ -12,20 +12,26 @@
 <body>
     <div class="container">
         <h4>Enter Your 4 Digits OTP</h4>
-        <form action="" method="post" class="form">
+        <form action="/otp" method="post" class="form" id="otpForm">
             <div class="input_field_box">
-                <input type="number" name="otp1" />
-                <input type="number" name="otp2" disabled>
-                <input type="number" name="otp3" disabled>
-                <input type="number" name="otp4" disabled>
+                <input type="number" name="otp1" id="otp1" maxlength="1" min="0" max="9" required />
+                <input type="number" name="otp2" id="otp2" maxlength="1" min="0" max="9" required disabled>
+                <input type="number" name="otp3" id="otp3" maxlength="1" min="0" max="9" required disabled>
+                <input type="number" name="otp4" id="otp4" maxlength="1" min="0" max="9" required disabled>
             </div>
-            <button type="submit" class="active">Verify OTP</button>
-            </form>
+            <p id="otpMessage"></p>
+            <button type="submit" class="active" id="verify">Verify OTP</button>
+            <button type="button" class="active" id="resend" style="display:none;" onclick="resendOTP()">Resend OTP</button>
+            <p id="otpTimer"></p> <!-- Element to display the timer -->
+        </form>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const OTPinputs = document.querySelectorAll("input");
-        const button = document.querySelector('button'); // Corrected button selector
+        const button = document.querySelector('button#verify');
+        const resendButton = document.querySelector('button#resend');
+        const otpTimerElement = document.getElementById('otpTimer');
 
         window.addEventListener("load", () => OTPinputs[0].focus());
 
@@ -58,6 +64,90 @@
             });
         });
 
+        // OTP timer
+        let otpTimer;
+
+        function startOTPTimer() {
+            const otpValidityDuration = 1 * 60 * 1000; // 3 minutes
+            clearTimeout(otpTimer);
+            let remainingTime = otpValidityDuration;
+            otpTimer = setInterval(() => {
+                const minutes = Math.floor(remainingTime / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
+                otpTimerElement.textContent = `OTP expires in ${minutes} min ${seconds} sec`;
+                remainingTime -= 1000;
+                if (remainingTime < 0) {
+                    clearInterval(otpTimer);
+                    document.getElementById("otpMessage").innerText = "OTP expired. Please generate a new OTP.";
+                    resendButton.style.display = "inline"; // Show the resend button after timer expiry
+                }
+            }, 1000);
+        }
+
+        // Start OTP timer when the page is loaded
+        startOTPTimer();
+
+        // OTP validation and form submission
+        // document.getElementById('otpForm').addEventListener('submit', function(event) {
+        //     event.preventDefault(); // Prevent form submission
+
+        //     // Validate OTP
+        //     const otp1 = document.getElementById('otp1').value;
+        //     const otp2 = document.getElementById('otp2').value;
+        //     const otp3 = document.getElementById('otp3').value;
+        //     const otp4 = document.getElementById('otp4').value;
+
+        //     if (otp1.length === 1 && otp2.length === 1 && otp3.length === 1 && otp4.length === 1) {
+        //         // All OTP fields contain a single digit
+        //         document.getElementById('otpMessage').innerText = "OTP is Valid";
+
+        //         // Here you can perform any action upon successful OTP validation
+        //     } else {
+        //         document.getElementById('otpMessage').innerText = "Please enter all 4 digits of OTP.";
+        //     }
+        // });
+
+
+        function resendOTP() {
+    axios.post('/resend-otp')
+        .then(response => {
+            if (response.data.success) {
+                document.getElementById('otpMessage').innerText = "OTP resent successfully!";
+                startOTPTimer(); // Restart OTP timer after resending OTP
+                document.getElementById('resend').style.display = "none"; // Hide the resend button after sending OTP
+            } else {
+                document.getElementById('otpMessage').innerText = "Failed to resend OTP. Please try again.";
+            }
+        })
+        .catch(error => {
+            console.error('Error resending OTP:', error);
+            document.getElementById('otpMessage').innerText = "An error occurred while resending OTP.";
+        });
+}
+
+
+
+
+
+
+
+        // Function to resend OTP
+        function resendOTP() {
+            axios.post('/resend-otp')
+                .then(response => {
+                    if (response.data.success) {
+                        document.getElementById('otpMessage').innerText = "OTP resent successfully!";
+                        startOTPTimer(); // Restart OTP timer after resending OTP
+                        resendButton.style.display = "none"; // Hide the resend button after sending OTP
+                    } else {
+                        document.getElementById('otpMessage').innerText = "Failed to resend OTP. Please try again.";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error resending OTP:', error);
+                    document.getElementById('otpMessage').innerText = "An error occurred while resending OTP.";
+                });
+        }
     </script>
 </body>
 

@@ -50,7 +50,7 @@ const productAdd = async(req,res)=>{
     }
 }
 
-//delete product
+//soft delete product
 const deleteProduct = async (req,res)=>{
     try {
         const {id} = req.body
@@ -65,6 +65,7 @@ const deleteProduct = async (req,res)=>{
     }
 }
 
+//deleted product page
 const deletedProductPage = async(req,res)=>{
     try {
         const deletedProduct = await Product.find({delete:true})
@@ -74,9 +75,11 @@ const deletedProductPage = async(req,res)=>{
     }
 }
 
+//resote the product
 const restoreProduct = async(req,res)=>{
     try {
         const {id} = req.body
+        
         const restore = await Product.updateOne({_id:id},{ $set: { delete:false } })
         if(restore){
             res.json({success:true,message:"Restore success"})
@@ -88,11 +91,29 @@ const restoreProduct = async(req,res)=>{
     }
 }
 
+//product delete the db.
+const deleted = async(req,res)=>{
+
+    try {
+        const {id} = req.body
+
+        const response = await Product.deleteOne({_id: id})
+        if(response){
+            res.json({success:true,message:"Product Deleted Success"})
+        }else{
+            res.json({success:false,message:"Product Delete Failed"})
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//edit product page
 const editProductPage = async(req,res)=>{
     try {
         const id = req.query.id;
         const product = await Product.findOne({_id:id})
-        console.log(product);
+        
         res.render("admin/Products/editProduct.ejs",{product})
 
     } catch (error) {
@@ -100,17 +121,37 @@ const editProductPage = async(req,res)=>{
     }
 }
 
-const editProduct = async(req,res)=>{
+//edit Product
+const editProduct = async (req, res) => {
     try {
-        const id = req.query.id
-        console.log(id)
-        console.log(req.body);
+        const id = req.query.id;
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            { _id: id },
+            {
+                $set: {
+                    image: req.body.image,
+                    name: req.body.name,
+                    price: req.body.price,
+                    category: req.body.category,
+                    description: req.body.description
+                }
+            }
+        );
+
+        if (updatedProduct) {
+            res.json({ success: true, message: "Product Updated" });
+        } else {
+            res.status(400).json({ success: false, message: "Product not found or update failed" });
+        }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-}
+};
+
 
 
 export{
-    productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProductPage,editProduct
+    productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProductPage, editProduct, deleted
 }
