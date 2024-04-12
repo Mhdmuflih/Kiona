@@ -1,6 +1,6 @@
-import mongoosh from "mongoose"
+import mongoose from "mongoose"
 
-const otpSchema = new mongoosh.Schema({
+const otpSchema = new mongoose.Schema({
     OTP:{
         type:Number,
         require:true
@@ -20,4 +20,4 @@ const otpSchema = new mongoosh.Schema({
     }
 })
 
-export default mongoosh.model('OTP',otpSchema)
+export default mongoose.model('OTP',otpSchema)

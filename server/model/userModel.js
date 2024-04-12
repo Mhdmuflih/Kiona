@@ -1,6 +1,6 @@
-import mongoosh from "mongoose"
+import mongoose from "mongoose"
 
-const userSchema = new mongoosh.Schema({
+const userSchema = new mongoose.Schema({
     name:{
         type:String,
         require:true
@@ -36,4 +36,4 @@ const userSchema = new mongoosh.Schema({
     }
 })
 
-export default mongoosh.model('User', userSchema)
+export default mongoose.model('User', userSchema)

@@ -3,8 +3,9 @@ import multer from "multer";// multer is using in take a image store
 import path from "path";
 import session from "express-session";
 
-import { isLogin,isLogout } from "../middleware/userAuth.js";
-import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage } from "../controller/userController.js";
+import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
+import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails, cart } from "../controller/userController.js";
+// import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection
@@ -20,6 +21,9 @@ user_route.use(session({
 }));
 
 user_route.use(express.static('assets'))
+
+// no-cache  no Store
+user_route.use(Cache)                           //Cache - controller
 
 // -----------------------------------------------------------------------
 //photo storage in using multer
@@ -54,14 +58,25 @@ user_route.post('/resend-otp', resendOTP, verifyOtp)
 user_route.get('/login',isLogout,login)
 user_route.post('/login',verifyLogin)
 
+//forgot passeord
+// user_route.get('/forgot',forgot)
+// user_route.post('/forgot',forgotOTP)
+
 //login Home
 user_route.get('/',loginHome)
 
 //product show details
 user_route.get('/products',productPage)
+user_route.get('/productDetails',productDetails)
+
+//shoping carts
+user_route.get('/shoping-cart',cart)
 
 //logout
 user_route.get('/logout',isLogin,userLogout)
+
+
+
 
 
 export default user_route

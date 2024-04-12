@@ -65,7 +65,7 @@
                       <ol>
                         <li><a href="#"><i class="fa fa-google"></i></a></li>
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.instagram.com/kiona__store/"><i class="fa fa-instagram"></i></a></li>
 
                         <li><a href="#"><i class="fa fa-youtube"></i></a></li>
                         <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
@@ -77,11 +77,13 @@
                   <div class="_pl_nb_df">
                     <div class="_bg_cs">
                       <h2>Sign into your account</h2>
+
                       <% if(message){%>
-                        <p class="text-success" id="ok">
+                        <p class="text-danger" id="ok">
                           <%= message %>
                         </p>
                         <% } %>
+                        
                     </div>
 
                     <label>Enter Your Email</label>
@@ -109,7 +111,7 @@
                           Remember me
                         </label>
                       </div>
-                      <a href="#">Forgot Password</a>
+                      <a href="/forgot">Forgot Password</a>
                     </div>
 
                     <% if (typeof userBlocked !=='undefined' && userBlocked) { %>

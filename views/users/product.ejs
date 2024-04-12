@@ -611,8 +611,8 @@
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0">
-                            <img src="/Photos/product/<%= products[i].image[0] %>" alt="IMG-PRODUCT" style="width: 280px; height: 350px;">
-                            <a href="#" onclick="pr('<%= products[i]._id %>')" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                            <a href="/productDetails?productId=<%= products[i]._id %>"><img src="/Photos/product/<%= products[i].image[0] %>" alt="IMG-PRODUCT" style="width: 280px; height: 350px;"></a>
+                            <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                                 Quick View
                             </a>
                         </div>
@@ -831,7 +831,7 @@
 
 
 
-
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<!--===============================================================================================-->
 		<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
 		<!--===============================================================================================-->
@@ -930,6 +930,16 @@
 					ps.update();
 				})
 			});
+
+			function productDetails(id){
+				axios.get(`/productDetails?productId=${id}`)
+				.then((res)=>{
+					console.log('res',res)
+				})
+				.catch((err)=>{
+					console.log(err)
+				})
+			}
 		</script>
 		<!--===============================================================================================-->
 		<script src="js/main.js"></script>

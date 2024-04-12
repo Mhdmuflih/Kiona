@@ -49,7 +49,7 @@
 
 
                     <li class="nav-item nav-logout d-none d-lg-block">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/admin/logout">
                             <i class="mdi mdi-power"></i>
                         </a>
                     </li>
@@ -165,7 +165,7 @@
                         <h3 class="page-title"> Edit Product </h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/admin/editProduct?id=<%= product._id %>   ">Edit Product</a></li>
+                                <li class="breadcrumb-item"><a href="/admin/editProduct?id=<%= product._id %> ">Edit Product</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Products</li>
                             </ol>
                         </nav>
@@ -239,10 +239,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Categories</label>
-                                            <select class="form-control" name="category" id="exampleSelectGender">
-                                                <option value="Shirt">Shirt</option>
-                                                <option value="T-Shirt">T-Shirt</option>
-
+                                            <% for(let i=0; i<category.length; i++) { %>
+                                                <select class="form-control my-custom-dropdown" name="category">
+                                                    <option> <%= category[i].image %> </option>
+                                                    <!-- Add more <option> tags as needed -->
+                                                </select>
+                                            <% } %>
+                                            
+                                            
+                                            
                                             </select>
                                         </div>
 
@@ -270,11 +275,11 @@
                     <!-- partial:../../partials/_footer.html -->
                     <footer class="footer">
                         <div class="container-fluid clearfix">
-                            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
-                                bootstrapdash.com 2020</span>
-                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">kiona ©
+                                kiona.com 2020</span>
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> <a
                                     href="https://www.bootstrapdash.com/bootstrap-admin-template/"
-                                    target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+                                    target="_blank">kiona admin</a> from kiona.com</span>
                         </div>
                     </footer>
                     <!-- partial -->
@@ -299,6 +304,7 @@
         <!-- End custom js for this page -->
 
 
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 

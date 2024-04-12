@@ -22,6 +22,21 @@ const isLogout = async (req,res,next)=>{
     }
 }
 
+const Cache = async (req,res,next)=>{
+    try {
+        
+        res.header("Cache-Control",'private, no-cache, no-store, mus-revalidate');
+        res.header('Expire', '-1');
+        res.header('kiona', 'no-cache');
+        next();
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export{
-    isLogin,isLogout
+    isLogin,
+    isLogout,
+    Cache
 }

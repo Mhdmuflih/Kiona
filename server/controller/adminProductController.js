@@ -4,8 +4,47 @@ import Category from "../model/categoryModel.js";
 // product page
 const productPage = async (req,res)=>{
     try {
-        const product  = await Product.find({delete:false})
-        res.render('admin/Products/product.ejs',{product})
+        
+        var search = '';
+    if(req.query.search){
+        search = req.query.search;
+    }
+
+    var page = 1;
+    if(req.query.page){
+        page = req.query.page
+    }
+
+    const limit = 5
+
+    const productData = await Product.find({
+        $and: [
+            { delete: false },
+            { $or:[
+                { name: { $regex: ".*" + search + ".*", $options: "i" } },
+                { email: { $regex: ".*" + search + ".*", $options: "i" } }
+            ]}
+        ]
+    }).limit(limit*1)
+    .skip((page - 1) * limit)
+    .exec();
+
+    const count = await Product.find({
+        $and: [
+            { delete: false },
+            { $or:[
+                { name: { $regex: ".*" + search + ".*", $options: "i" } },
+                { email: { $regex: ".*" + search + ".*", $options: "i" } }
+            ]}
+        ]
+    }).countDocuments();
+
+    res.render('admin/Products/product.ejs', {
+        product: productData,
+        totalPages: Math.ceil(count/limit),
+        currentPage: page
+    });
+
     } catch (error) {
         console.log(error.message);
     }
@@ -113,8 +152,10 @@ const editProductPage = async(req,res)=>{
     try {
         const id = req.query.id;
         const product = await Product.findOne({_id:id})
+        const category = await Category.find();
+        console.log(category);
         
-        res.render("admin/Products/editProduct.ejs",{product})
+        res.render("admin/Products/editProduct.ejs",{product, category})
 
     } catch (error) {
         console.log(error.message);
@@ -126,13 +167,16 @@ const editProduct = async (req, res) => {
     try {
         const id = req.query.id;
 
+        const images = req.files.map((file)=>file.filename);
+
         const updatedProduct = await Product.findByIdAndUpdate(
             { _id: id },
             {
                 $set: {
-                    image: req.body.image,
+                    image: images,
                     name: req.body.name,
                     price: req.body.price,
+                    quantity:req.body.quantity,
                     category: req.body.category,
                     description: req.body.description
                 }
@@ -142,7 +186,7 @@ const editProduct = async (req, res) => {
         if (updatedProduct) {
             res.json({ success: true, message: "Product Updated" });
         } else {
-            res.status(400).json({ success: false, message: "Product not found or update failed" });
+            res.status(200 ).json({ success: false, message: "Product not found or update failed" });
         }
     } catch (error) {
         console.log(error.message);
@@ -153,5 +197,13 @@ const editProduct = async (req, res) => {
 
 
 export{
-    productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProductPage, editProduct, deleted
+    productPage,
+    addProduct,
+    productAdd,
+    deleteProduct,
+    deletedProductPage,
+    restoreProduct,
+    editProductPage,
+    editProduct,
+    deleted
 }

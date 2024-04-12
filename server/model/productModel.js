@@ -1,6 +1,6 @@
-import mongoosh from "mongoose";
+import mongoose from "mongoose";
 
-const productSchema = new mongoosh.Schema({
+const productSchema = new mongoose.Schema({
     name:{
         type:String,
         require:true
@@ -32,4 +32,4 @@ const productSchema = new mongoosh.Schema({
     }
 })
 
-export default mongoosh.model('Product', productSchema)
+export default mongoose.model('Product', productSchema)

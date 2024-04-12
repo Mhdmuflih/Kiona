@@ -50,7 +50,7 @@
         <ul class="navbar-nav navbar-nav-right">
 
           <li class="nav-item nav-logout d-none d-lg-block">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/admin/logout">
               <i class="mdi mdi-power"></i>
             </a>
           </li>
@@ -217,7 +217,7 @@
                                             <% if(users[i].is_block){%>
                                               <button class="btn btn-success" onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
                                            <% }else{%>
-                                            <button class="btn btn-danger" onclick="blockUser('<%= users[i]._id %>')">Block</button> 
+                                            <button class="btn btn-danger" onclick="blockUser('<%= users[i]._id %>')">Block</button>
                                           <% } %>
                                         </td>
                                       

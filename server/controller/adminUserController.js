@@ -67,5 +67,6 @@ const userBlock = async (req,res)=>{
 }
 
 export{
-    userDetails,userBlock
+    userDetails,
+    userBlock
 }

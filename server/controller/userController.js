@@ -9,7 +9,7 @@ import Product from "../model/productModel.js";
 // ----------------------------------------------
 
 // password secure
-const securePassword = async (password)=>{
+const securePassword = async (password) => {
     try {
         const passwordHarsh = await bcrypt.hash(password, 10);
         console.log(`Hash Password ${passwordHarsh}`)
@@ -21,64 +21,64 @@ const securePassword = async (password)=>{
 }
 
 // otp generator
-const OtpGenerator = ()=>{
+const OtpGenerator = () => {
     return Math.floor(1000 + Math.random() * 9000)
 }
 
 // otp send to mail
-const sendOpt = async (req,res)=>{
+const sendOpt = async (req, res) => {
 
     let otp = OtpGenerator();    //otp taken
     console.log(otp);
 
     const transporter = nodemailer.createTransport({     // transporter
-        service:"gmail",
-        auth:{
-            user:process.env.AUTH_EMAIL,
+        service: "gmail",
+        auth: {
+            user: process.env.AUTH_EMAIL,
             pass: process.env.AUTH_PASSWORD
         }
     })
 
-    
+
 
     const MailGenerator = new Mailgen({
-        theme:"default",
-        product:{
-            name:"Kiona",
-            link:"http://mailgen.js/"
+        theme: "default",
+        product: {
+            name: "Kiona",
+            link: "http://mailgen.js/"
         }
     })
 
     const response = {                            // responce of mail
-        body:{
-            name:req.session.email,
-            intro:'Your OTP for KIONA Verification is:',
-            table:{
-                data:[
+        body: {
+            name: req.session.email,
+            intro: 'Your OTP for KIONA Verification is:',
+            table: {
+                data: [
                     {
-                        OTP:otp
+                        OTP: otp
                     }
                 ]
             },
-            outro:"looking forward to doing more Business"
+            outro: "looking forward to doing more Business"
         }
     }
 
     const mail = MailGenerator.generate(response)
 
     const message = {                             // message sent in the email
-        from:process.env.AUTH_EMAIL,
-        to:req.session.email,
-        subject:'KIONA otp Verification',
-        html:mail
+        from: process.env.AUTH_EMAIL,
+        to: req.session.email,
+        subject: 'KIONA otp Verification',
+        html: mail
     }
 
     try {                      // otp save in db and send mail
         const newOtp = new OTP({
-            email:req.session.email,
-            OTP:otp,
-            createdAt:Date.now(),
-            expaireAt:Date.now() + 60000
+            email: req.session.email,
+            OTP: otp,
+            createdAt: Date.now(),
+            expaireAt: Date.now() + 60000
         })
         const data = await newOtp.save()
         req.session.otpId = data._id
@@ -99,34 +99,34 @@ const register = async (req, res) => {
 }
 
 // user input
-const insertUser = async (req,res)=>{
+const insertUser = async (req, res) => {
     try {
 
-        if(req.body.email){
-            const existingUser = await User.findOne({email: req.body.email})
-            if(existingUser){
+        if (req.body.email) {
+            const existingUser = await User.findOne({ email: req.body.email })
+            if (existingUser) {
                 console.log("Email id already taken")
             }
         }
-        req.session.email=req.body.email
+        req.session.email = req.body.email
 
         const password = req.body.password
         const sPassword = await securePassword(password)
         const user = new User({
-            name:req.body.name,
-            email:req.body.email,
-            mobile:req.body.mobile,
-            image:req.file.filename,
-            password:sPassword,
-            is_block:0,
-            is_verified:1,
-            is_admin:0
+            name: req.body.name,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            image: req.file.filename,
+            password: sPassword,
+            is_block: 0,
+            is_verified: 1,
+            is_admin: 0
         })
 
         req.session.userData = user
         console.log(req.session.userData)
 
-        await sendOpt(req,res)
+        await sendOpt(req, res)
         res.redirect('/otp')
 
 
@@ -136,7 +136,7 @@ const insertUser = async (req,res)=>{
 }
 
 // otp page
-const otp = async (req,res)=>{
+const otp = async (req, res) => {
     try {
         res.render('users/otp-verification.ejs')
     } catch (error) {
@@ -144,10 +144,7 @@ const otp = async (req,res)=>{
     }
 }
 
-//re - send OTP Generator
-// const reSendOTPGenerator = ()=>{
-//     return Math.floor(1000 + Math.random() * 9000)
-// }
+
 
 // re - send otp fucntion
 const resendOTP = async (req, res) => {
@@ -198,14 +195,14 @@ const resendOTP = async (req, res) => {
         };
 
         await OTP.updateOne({
-            email:req.session.email
-        },{
-            $set:{ OTP:otp }
+            email: req.session.email
+        }, {
+            $set: { OTP: otp }
         })
-        
-       
+
+
         await transporter.sendMail(message);
-        
+
         res.send({ success: true }); // Sending success response
     } catch (error) {
         console.error(error);
@@ -214,27 +211,27 @@ const resendOTP = async (req, res) => {
 };
 
 // verify Mail
-const verifyOtp = async(req,res)=>{
+const verifyOtp = async (req, res) => {
     try {
 
-        const {otp1,otp2,otp3,otp4} = req.body
-        const otp = [otp1,otp2,otp3,otp4].join('')
-        console.log(otp,'djfhdh')
+        const { otp1, otp2, otp3, otp4 } = req.body
+        const otp = [otp1, otp2, otp3, otp4].join('')
+        console.log(otp, 'djfhdh')
 
-        const otpData = await OTP.findOne({email: req.session.email})
+        const otpData = await OTP.findOne({ email: req.session.email })
         console.log(otpData)
 
-        if(!otpData){
+        if (!otpData) {
             return redirect('/otp')
         }
 
-        if(otpData.OTP == otp){
+        if (otpData.OTP == otp) {
             const userData = new User(req.session.userData)
 
             console.log(userData);
             await userData.save()
 
-            await OTP.deleteOne({email: req.session.email})
+            await OTP.deleteOne({ email: req.session.email })
             res.redirect("/login?message=verification is successfull")
         }
     } catch (error) {
@@ -247,19 +244,26 @@ const verifyOtp = async(req,res)=>{
 const login = async (req, res) => {
     try {
         const message = req.query.message
-        res.render('users/login.ejs',{message})
+        res.render('users/login.ejs', { message })
     } catch (error) {
         console.log(error.message)
     }
 }
 
 // verify login page
-const verifyLogin  = async (req,res)=>{
+const verifyLogin = async (req, res) => {
     try {
-        const email  = req.body.email
-        const password = req.body.password
+
+        const { email, password } = req.body
         console.log(req.body)
-        const userData = await User.findOne({email:email})
+        
+        const userData = await User.findOne({ email })
+
+        if(!userData){
+            res.render('users/login.ejs', {
+                message: "Email ID and Password incorrect"
+            })
+        }
 
         if (userData.is_block) {
             return res.render('users/login.ejs', {
@@ -267,24 +271,22 @@ const verifyLogin  = async (req,res)=>{
                 userBlocked: true
             });
         }
-        
-        if(userData){
-            console.log(userData);
-            const passwordMatch = await bcrypt.compare(password,userData.password)
 
-            if(passwordMatch){
-                if(userData.is_verified == 0){
-                    res.render('users/login.ejs');
-                }else{
-                    req.session.user_id  = userData._id
-                    res.redirect('/')
-                }
-            }else{
-                res.render('users/login.ejs',{message:"user email and password incorrect"})
-            }
-        }else{
-            res.render('users/login.ejs',{message:"user email and password incorrect"})
+        const passwordMatch = await bcrypt.compare(password, userData.password)
+        if(!passwordMatch){
+            return res.render('users/login.ejs', {
+                message: "user email id and password incorrect"
+            });
         }
+
+        if(userData.is_verified === 0){
+            return res.render('users/login.ejs', {
+                message:"Please verify Your email address to login."
+            })
+        }
+
+        req.session.user_id = userData._id;
+        res.redirect('/');
 
     } catch (error) {
         console.log(error.message)
@@ -292,25 +294,26 @@ const verifyLogin  = async (req,res)=>{
 }
 
 //login Home
-const loginHome = async (req,res)=>{
+const loginHome = async (req, res) => {
     try {
         const id = req.session.user_id
         const userData = await User.findById(id)
-        const products = await Product.find({delete:false})
+        const products = await Product.find({ delete: false })
         const user = req.session.user_id
 
-        res.render('users/indexLogout.ejs', {user:userData || 'muflih', products, user})
+        res.render('users/index.ejs', { user: userData || 'muflih', products, user })
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).send("Internal server error");
     }
 }
 
 // user product details page
-const productPage = async(req,res)=>{
+const productPage = async (req, res) => {
     try {
 
         const user = req.session.user_id;
-        const products = await Product.find({delete:false});
+        const products = await Product.find({ delete: false });
 
         res.render('users/product.ejs', { user, products })
     } catch (error) {
@@ -318,6 +321,43 @@ const productPage = async(req,res)=>{
     }
 }
 
+//user single product details page
+const productDetails = async(req,res)=>{
+    try {
+
+        const { productId } = req.query
+        const user = req.session.user_id
+
+        const product = await Product.findOne({ _id:productId})
+        console.log(product);
+
+        res.render('users/product-detail.ejs', { user, product })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//user shoping cat
+const cart = async (req,res)=>{
+    try {
+    
+        const user = req.session.user_id
+
+        if(!user){
+            console.log('hlo');
+            return res.redirect('/login')
+        }
+
+        res.render('users/shoping-cart.ejs', { user } )
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal server error')
+    }
+}
+
+//user logout
 const userLogout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -332,5 +372,16 @@ const userLogout = (req, res) => {
 
 
 export {
-     login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage
+    login,
+    register,
+    insertUser,
+    verifyLogin,
+    loginHome,
+    otp,
+    verifyOtp,
+    userLogout,
+    resendOTP,
+    productPage,
+    productDetails,
+    cart
 }

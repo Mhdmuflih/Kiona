@@ -1,6 +1,6 @@
-import mongoosh from "mongoose"
+import mongoose from "mongoose"
 
-const adminSchema = new mongoosh.Schema({
+const adminSchema = new mongoose.Schema({
     name:{
         type:String,
         require:true
@@ -15,4 +15,4 @@ const adminSchema = new mongoosh.Schema({
     }
 })
 
-export default mongoosh.model("Admin",adminSchema)
+export default mongoose.model("Admin",adminSchema)

@@ -1,6 +1,5 @@
 import Admin from "../model/adminModel.js";
-import User from "../model/userModel.js";
-import Product from "../model/productModel.js"
+
 // ----------------------------------------------
 
 //admin login page
@@ -78,6 +77,19 @@ const adminHome = async (req,res)=>{
     }
 }
 
+//admin Logout
+const adminLogout = async(req,res)=>{
+   req.session.destroy((err)=>{
+    if(err){
+        res. redirect('/admin/home')
+    }else{
+        res.redirect('/admin/logout')
+    }
+   })
+}
+
+
+
 // -----------------------------------------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------------------------------------
@@ -87,5 +99,10 @@ const adminHome = async (req,res)=>{
 
 
 export {
-    adminHome, adminLogin, adminRegister, insertAdmin, verifyAdminLogin
+    adminHome,
+    adminLogin,
+    adminRegister,
+    insertAdmin,
+    verifyAdminLogin,
+    adminLogout
 }
