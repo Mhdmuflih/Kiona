@@ -1,4 +1,5 @@
 import Category from "../model/categoryModel.js";
+import { resendOTP } from "./userController.js";
 
 // -----------------------------------------------------------------
 
@@ -90,14 +91,12 @@ const createCategory = async (req, res) => {
 const editCategoryPage = async (req,res)=>{
     try {
 
-        const { id } = req.query;
+        const id = req.query.id
+        const categoryId = await Category.findById(id)
 
-        console.log(id);
-        const category = await Category.findById({_id:id})
-        console.log(category);
-
-        if(category){
-            res.render("admin/Category/editCategory.ejs", { category:category })
+        if(categoryId){
+            console.log(categoryId);
+            res.render("admin/Category/editCategory.ejs", { category:categoryId })
         }else{
             res.redirect("/admin/category");
         }
@@ -110,16 +109,13 @@ const editCategoryPage = async (req,res)=>{
 const editCategory = async (req,res)=>{
     try {
 
-        const { id } = req.body
-        console.log(id,'kfdsghjfkdjhgkfjsdhgkjdfhs');
-
-        const response = await Category.findByIdAndUpdate({ _id:id }, { $set: { name: req.body.name, description: req.body.description } });
-
-        console.log(response);
-
-        if(response){
-            res.redirect('/admin/category')
+        if(req.file){
+            const categoryData = await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description, image:req.file.filename } });
+        }else{
+            const categoryData = await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description } });
         }
+
+        res.redirect("/admin/category")
 
     } catch (error) {
         console.log(error.message);

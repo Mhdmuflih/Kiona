@@ -100,7 +100,7 @@ admin_route.get('/add_category',isLogin,addCategory)                        //ad
 admin_route.post('/add_category', uploadCategory.single('image'),createCategory)
 
 admin_route.get('/edit_category',editCategoryPage)
-admin_route.post('/edit_category',editCategory)
+admin_route.post('/edit_category',uploadCategory.single('image'),editCategory)
 
 admin_route.get('/deleteCategory',deleteCategoryPage)
 admin_route.post('/category/delete',deleteCategory)
