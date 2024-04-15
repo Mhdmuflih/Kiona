@@ -3,11 +3,11 @@ import mongoose from "mongoose"
 const otpSchema = new mongoose.Schema({
     OTP:{
         type:Number,
-        require:true
+        required:true
     },
     email:{
         type:String,
-        require:true
+        required:true
     },
     createdAT:{
         type:Date,

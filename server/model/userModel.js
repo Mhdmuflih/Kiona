@@ -3,15 +3,15 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
-        require:true
+        required:true
     },
     email:{
         type:String,
-        require:true
+        required:true
     },
     image:{
         type:String,
-        require:true
+        required:true
     },
     mobile:{
         type:Number,
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        require:true
+        required:true
     },
     is_block:{
         type:Boolean,

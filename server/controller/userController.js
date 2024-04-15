@@ -216,7 +216,7 @@ const verifyOtp = async (req, res) => {
 
         const { otp1, otp2, otp3, otp4 } = req.body
         const otp = [otp1, otp2, otp3, otp4].join('')
-        console.log(otp, 'djfhdh')
+        console.log(otp)
 
         const otpData = await OTP.findOne({ email: req.session.email })
         console.log(otpData)

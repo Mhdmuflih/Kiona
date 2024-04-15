@@ -187,49 +187,48 @@
                                     <th> Name </th>
                                     <th> Email </th>
                                     <th> Mobil </th>
-                                  
+
                                     <th> Status </th>
                                     <th> Action </th>
                                   </tr>
                                 </thead>
                                 <tbody>
 
-                                  <%
-                                    if(users.length>0){
-                                      for(let i=0 ; i<users.length ; i++){
-                                        %>
-                                          <tr>
-                                            <td>
-                                              <img src="/Photos/userImages/<%= users[i].image %>" class="mr-2" alt="<%= users[i].image %>"> <%= users[i].name %>
-                                            </td>
-                                            <td>
-                                              <%= users[i].email %>
-                                            </td>
-                                            <td>
-                                              <%= users[i].mobile %>
-                                            </td>
-                                            <%if(users[i].is_block){%>
-                                           <td>bloked</td>
-                                           <%}else{%>
+                                  <% if(users.length>0){
+                                    for(let i=0 ; i<users.length ; i++){ %>
+                                      <tr>
+                                        <td>
+                                          <img src="/Photos/userImages/<%= users[i].image %>" class="mr-2"
+                                            alt="<%= users[i].image %>">
+                                          <%= users[i].name %>
+                                        </td>
+                                        <td>
+                                          <%= users[i].email %>
+                                        </td>
+                                        <td>
+                                          <%= users[i].mobile %>
+                                        </td>
+                                        <%if(users[i].is_block){%>
+                                          <td>bloked</td>
+                                          <%}else{%>
                                             <td>Un bloked</td>
                                             <%}%>
-                                            <td>
-                                            <% if(users[i].is_block){%>
-                                              <button class="btn btn-success" onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
-                                           <% }else{%>
-                                            <button class="btn btn-danger" onclick="blockUser('<%= users[i]._id %>')">Block</button>
-                                          <% } %>
-                                        </td>
-                                      
-                                          </tr>
-                                        <%
-                                      }
-                                    }else{
-                                        %>
-                                          <tr>
-                                            <td colspan="6">User not fount</td>
-                                          </tr>
-                                  <%  } %>
+                                              <td>
+                                                <% if(users[i].is_block){%>
+                                                  <button class="btn btn-success"
+                                                    onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
+                                                  <% }else{%>
+                                                    <button class="btn btn-danger"
+                                                      onclick="blockUser('<%= users[i]._id %>')">Block</button>
+                                                    <% } %>
+                                              </td>
+
+                                      </tr>
+                                      <% } }else{ %>
+                                        <tr>
+                                          <td colspan="6">User not fount</td>
+                                        </tr>
+                                        <% } %>
                                 </tbody>
                               </table>
                             </div>
@@ -239,76 +238,103 @@
                     </div>
                   </div>
                   <div class="text-center pagination">
-                    <div class="pagination-container" style="display: flex; justify-content: center ;">
-                        <% for(let j=1 ; j<=totalPages ; j++){ %>
-                            <a href="?page=<%= j %>" class="btn btn-secondary"><%= j %></a>
-                        <% } %>
+                      <div class="pagination-container" style="display: flex; justify-content: center ;">
+
+                      </div>
+                      <br>
+
+
+
+                      <div class="text-center pagination">
+                        <ul class="pagination">
+                          <% if (currentPage> 1) { %>
+                            <li class="page-item">
+                              <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+                          <% } %>
+                          <% for (let i=1; i <=totalPages; i++) { %>
+                            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>">
+                                  <%= i %>
+                                </a>
+                              </li>
+                          <% } %>
+                            <% if (currentPage < totalPages) { %>
+                              <li class="page-item">
+                                <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span>
+                                </a>
+                              </li>
+                            <% } %>
+                        </ul>
+                      </div>
+
                     </div>
-                    <br>
-                </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <!-- partial:../../partials/_footer.html -->
+            <footer class="footer">
+              <div class="container-fluid clearfix">
+                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
+                  bootstrapdash.com 2020</span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                    href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
+                    template</a> from Bootstrapdash.com</span>
+              </div>
+            </footer>
+            <!-- partial -->
           </div>
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="container-fluid clearfix">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
-                bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                  href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
-                  template</a> from Bootstrapdash.com</span>
-            </div>
-          </footer>
-          <!-- partial -->
         </div>
       </div>
-    </div>
-    <!-- plugins:js -->
-    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="../../admin/js/off-canvas.js"></script>
-    <script src="../../admin/js/hoverable-collapse.js"></script>
-    <script src="../../admin/js/misc.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <!-- End custom js for this page -->
+      <!-- plugins:js -->
+      <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+      <!-- endinject -->
+      <!-- Plugin js for this page -->
+      <!-- End plugin js for this page -->
+      <!-- inject:js -->
+      <script src="../../admin/js/off-canvas.js"></script>
+      <script src="../../admin/js/hoverable-collapse.js"></script>
+      <script src="../../admin/js/misc.js"></script>
+      <!-- endinject -->
+      <!-- Custom js for this page -->
+      <!-- End custom js for this page -->
 
 
 
 
 
-     <!-- axios CDN -->
-     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      <!-- axios CDN -->
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 
-     <script>
-        async function blockUser(userId){
-         
-            const responce = await axios.post('http://localhost:8000/admin/users/block',{userId});
-            if(responce.data.success){
-              await Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: responce.data.message
-              })
-              window.location.href = '/admin/users';
-            }else{
-              await Swal.fire({
-                icon: 'error',
-                title: 'error',
-                text: responce.data.message
-              })
-              window.location.href = '/admin/users';
-            }
+      <script>
+        async function blockUser(userId) {
+
+          const responce = await axios.post('http://localhost:8000/admin/users/block', { userId });
+          if (responce.data.success) {
+            await Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: responce.data.message
+            })
+            window.location.href = '/admin/users';
+          } else {
+            await Swal.fire({
+              icon: 'error',
+              title: 'error',
+              text: responce.data.message
+            })
+            window.location.href = '/admin/users';
+          }
 
         }
-     </script>
+      </script>
 
 
 

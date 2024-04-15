@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema({
     image:{
         type:String,
-        require:true
+        required:true
     },
     name: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     description: {
@@ -18,7 +18,7 @@ const categorySchema = new mongoose.Schema({
         type:Boolean,
         default:false
     }
-    
+
 }, { timestamps: true });
 
 export default mongoose.model('Category', categorySchema);

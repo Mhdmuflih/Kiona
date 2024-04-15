@@ -65,6 +65,8 @@ const addProduct = async(req,res)=>{
 const productAdd = async(req,res)=>{
     try {
 
+        const categoryData = await Category.find();
+
         const images = req.files.map((file)=>file.filename);
 
         const product = new Product({
@@ -76,15 +78,19 @@ const productAdd = async(req,res)=>{
             description:req.body.description
         })
         const productData = await product.save();
-    
+        console.log('hiii');
         if(productData){
-            res.render('admin/Products/addProduct.ejs',{message:"ok"})
+            console.log('hlo');
+            res.render('admin/Products/addProduct.ejs', { category: categoryData, message: 'Product added successfully.' });
+
         }else{
-            res.render('admin/Products/addProduct.ejs',{message:"no ok therth kalayum panniii"})
+            console.log('not kkkkk');
+            res.render('admin/Products/addProduct.ejs', { category: categoryData, error: 'Failed to add product. Please try again.' });
         }
     
-        
+        console.log('madaa kalikkalle yye nki dheshyam vern n');
     } catch (error) {
+        console.log('poda pottaa');
         console.log(error.message);
     }
 }
@@ -153,7 +159,6 @@ const editProductPage = async(req,res)=>{
         const id = req.query.id;
         const product = await Product.findOne({_id:id})
         const category = await Category.find();
-        console.log(category);
         
         res.render("admin/Products/editProduct.ejs",{product, category})
 
@@ -165,32 +170,52 @@ const editProductPage = async(req,res)=>{
 //edit Product
 const editProduct = async (req, res) => {
     try {
-        const id = req.query.id;
-
+        
         const images = req.files.map((file)=>file.filename);
+        console.log(images);
 
-        const updatedProduct = await Product.findByIdAndUpdate(
-            { _id: id },
-            {
-                $set: {
-                    image: images,
-                    name: req.body.name,
-                    price: req.body.price,
-                    quantity:req.body.quantity,
-                    category: req.body.category,
-                    description: req.body.description
+        if(req.file){
+            const updatedProduct = await Product.findByIdAndUpdate(
+                { _id: req.body.product_id },
+                {
+                    $set: {
+                        image: images,
+                        name: req.body.name,
+                        price: req.body.price,
+                        quantity:req.body.quantity,
+                        category: req.body.category,
+                        description: req.body.description
+                    }
                 }
-            }
-        );
+            );
+            console.log(updatedProduct,'hlooo');
 
-        if (updatedProduct) {
-            res.json({ success: true, message: "Product Updated" });
-        } else {
-            res.status(200 ).json({ success: false, message: "Product not found or update failed" });
+        }else{
+            const updatedProduct = await Product.findByIdAndUpdate(
+                { _id: req.body.product_id },
+                {
+                    $set: {
+                        name: req.body.name,
+                        price: req.body.price,
+                        quantity:req.body.quantity,
+                        category: req.body.category,
+                        description: req.body.description
+                    }
+                }
+            );
+
+            console.log(updatedProduct,'hiii');
         }
+
+        res.redirect('/admin/product')
+
+        // if (updatedProduct) {
+        //     res.json({ success: true, message: "Product Updated" });
+        // } else {
+        //     res.status(200 ).json({ success: false, message: "Product not found or update failed" });
+        // }
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 

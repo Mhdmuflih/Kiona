@@ -196,11 +196,15 @@
                         <label >Quantity</label>
                         <input type="number" name="quantity" class="form-control" id="exampleInputPassword4" placeholder="Quantity">
                       </div>
+
                       <div class="form-group">
-                        <label >Categories</label>
-                        <select class="form-control" name="category" id="exampleSelectGender">
-                            <option value="Shirt">Shirt</option>
-                            <option value="T-Shirt">T-Shirt</option>
+                        <label>Categories</label>
+                        <select class="form-control my-custom-dropdown" name="category">
+                          <% category.forEach(function(cat) { %>
+                            <option value="<%= cat.name %>"> <!-- Change value to category name -->
+                                <%= cat.name %>
+                            </option>
+                        <% }); %>
                         </select>
                       </div>
                       

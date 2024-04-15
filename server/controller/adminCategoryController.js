@@ -110,9 +110,9 @@ const editCategory = async (req,res)=>{
     try {
 
         if(req.file){
-            const categoryData = await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description, image:req.file.filename } });
+            await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description, image:req.file.filename } });
         }else{
-            const categoryData = await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description } });
+            await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description } });
         }
 
         res.redirect("/admin/category")
