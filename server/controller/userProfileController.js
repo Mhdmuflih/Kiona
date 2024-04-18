@@ -1,8 +1,9 @@
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
 
-import bcrypt, { compare } from "bcrypt";
+import bcrypt, { compare, compareSync } from "bcrypt";
 import axios from "axios";
+import { response } from "express";
 
 // ------------------------------------
 
@@ -37,20 +38,18 @@ const profilePage = async (req,res)=>{
 //user Profile Update
 const updateProfile = async(req,res)=>{
     try {
-        
-        const id = req.body.user_id
+        console.log('hlooo');
+        const id = req.session.user_id;
+        // const userData = await User.findById({ _id:id })
+        const {name, mobile} = req.body
+        console.log(req.body);
+        const response = await User.findByIdAndUpdate({ _id:id}, { $set: { name:name, mobile:mobile } })
 
-        await User.findByIdAndUpdate({ _id:id}, { $set: { name:req.body.name, email:req.body.email, mobile:req.body.mobile } })
-
-        const userData = await User.findById({ _id:id })
-
-        res.render('users/Profile/userProfile.ejs',{ user:userData, message:"Profile Updated" })
-
-        // if(response){
-        //     res.json({success:true, message:"User details Updated"})
-        // }else{
-        //     res.json({success:false, message:"Server Error"})
-        // }
+        if(response){
+            res.json({success:true, message:"Profile Updated"})
+        }else{
+            res.json({success:false, message:"Server Error"})
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -64,7 +63,7 @@ const passwordChangePage = async (req,res)=>{
         const id = req.session.user_id
         const user = await User.findOne({ _id:id })
     
-        res.render('users/Profile/userPasswordManagement.ejs',{user, message:req.query.message})
+        res.render('users/Profile/userPasswordManagement.ejs',{user})
         
     } catch (error) {
         console.log(error.message);
@@ -75,23 +74,22 @@ const passwordChangePage = async (req,res)=>{
 const updatePassword = async(req,res)=>{
     try {
 
-        const { id, password, password1, password2 } = req.body
-        const userData = await User.findOne({ _id:id })
-        const passwordMatch = await bcrypt.compare(password,userData.password)
+        const id = req.session.user_id;
+        const { password, password1, password2 } = req.body;
+        const userData = await User.findOne({ _id:id });
+        const passwordMatch = await bcrypt.compare(password,userData.password);
 
         if(!passwordMatch){
-            return res.render('users/Profile/userPasswordManagement.ejs', { user:userData,  message:"Your Password is not Match" })
+            return res.status(400).json({success:false, message:"Your Password is not Match"});
         }
         if(password1 !== password2){
-
-            return res.render('users/Profile/userPasswordManagement.ejs', { user:userData, message:"Your New Password is not Match" })
+            return res.status(400).json({success:false, message:"Your New Password is not Match"});
         }
-        
-        const sPassword = await securePassword(password1)
-        await User.updateOne({_id:id},{ $set: { password:sPassword } })
 
-        res.render('users/Profile/userPasswordManagement.ejs',{ user:userData, message:"Password Updated" })
-        
+        const sPassword = await securePassword(password1);
+        await User.updateOne({_id:id},{ $set: { password:sPassword } });
+        res.status(200).json({success:true, message:"Password Updated"});
+                
     } catch (error) {
         console.log(error.message);
     }
@@ -104,7 +102,12 @@ const addressPage = async(req,res)=>{
         const id = req.session.user_id
         const user = await User.findOne({ _id:id })
 
-        res.render('users/Profile/userAddressManagement.ejs',{ user })
+        let addressData = await Address.findOne({userId:id})
+        if(!addressData){
+            addressData =  { addresses: [] };
+        }
+
+        res.render('users/Profile/userAddressManagement.ejs',{ user, addressData })
 
     } catch (error) {
         console.log(error.message);
@@ -117,7 +120,6 @@ const addAddressPage = async(req,res)=>{
         
         const id = req.session.user_id
         const user = await User.findOne({ _id:id })
-
         res.render('users/Profile/addAddress.ejs',{ user })
 
     } catch (error) {
@@ -128,32 +130,44 @@ const addAddressPage = async(req,res)=>{
 //add address
 const addAddress = async(req,res)=>{
     try {
-        console.log('kooii kittnillee');
+
         const id = req.session.user_id;
-        console.log(id,'koooi');
+        const checkUser = await Address.findOne({ userId:id });
+        let address;
 
-        console.log(req.body);
+        if(!checkUser){
+            address = new Address({
+                userId:id,
+                addresses:[
+                    {
+                        name:req.body.name,
+                        mobile:req.body.mobile,
+                        pincode:req.body.pincode,
+                        locality:req.body.locality,
+                        address:req.body.address,
+                        city:req.body.city,
+                        state:req.body.state,
+                        defaultAddress: req.body.defaultAddress || true,
+                        addressType: req.body.addressType
+                    }
+                ]
+            })
+        }else{
+            checkUser.addresses.push({
+                name:req.body.name,
+                mobile:req.body.mobile,
+                pincode:req.body.pincode,
+                locality:req.body.locality,
+                address:req.body.address,
+                city:req.body.city,
+                state:req.body.state,
+                defaultAddress: req.body.defaultAddress || false,
+                addressType:req.body.addressType
+            })
+            address = checkUser
+        }
 
-        const address = new Address({
-            userId:id,
-            addresses:[
-                {
-                    name:req.body.name,
-                    mobile:req.body.mobile,
-                    pincode:req.body.pincode,
-                    locality:req.body.locality,
-                    address:req.body.address,
-                    city:req.body.city,
-                    state:req.body.state,
-                    defaultAddress: req.body.defaultAddress || false
-                }
-            ]
-        })
-        console.log(req.body);
-        console.log(address,'looo');
         const saveAddress = await address.save();
-        console.log(saveAddress);
-
         if(saveAddress){
             res.json({success:true, message:"Address Added "})
         }else{
@@ -165,10 +179,95 @@ const addAddress = async(req,res)=>{
     }
 }
 
+//edit Address Page
+const editAddresPage = async(req,res)=>{
+    try {
+        const id = req.session.user_id
+        const addressId = req.query.id
+
+        const user = await User.findOne({_id:id})
+        const addressData = await Address.findOne({"addresses._id":addressId})
+
+        let address = {}
+
+        addressData.addresses.forEach(element => {
+            if(addressId == element._id){
+                address = element
+            }
+        });
+
+
+        res.render("users/Profile/editAddress.ejs",{ user, address })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//edit Address
+const editAddress = async(req,res)=>{
+    try {
+
+        const { addressId } = req.query
+
+        const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
+
+        const update = {}
+
+        if(name) update["addresses.$.name"] = name
+        if(mobile) update["addresses.$.mobile"] = mobile
+        if(pincode) update["addresses.$.pincode"] = pincode
+        if (locality) update['addresses.$.locality'] = locality;
+        if(address) update["addresses.$.address"] = address
+        if(city) update["addresses.$.city"] = city
+        if(state) update["addresses.$.state"] = state
+        if(addressType) update["addresses.$.addressType"] = addressType
+ 
+        const addressData = await Address.findOneAndUpdate({"addresses._id":addressId},{$set:update})
+
+        if(addressData){
+            res.json({success:true,message:"Address Updated"})
+        }else{
+            res.json({success:false, message:"No address found with the given ID"})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//delete address
+const deleteAddress = async(req,res)=>{
+    try {
+        
+        const id  = req.body.id;
+
+        const response = await Address.updateOne(
+            { },
+            { $pull: { addresses: { _id: id } } }
+        );
+
+        if(response){
+            res.json({success:true, message: "Address deleted successfully"})
+        }else{
+            res.json({success:false, message: "Address not found or already deleted"})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 export {
     profilePage,
     passwordChangePage,
+
     addressPage,
+    deleteAddress,
+
+    editAddresPage,
+    editAddress,
 
     addAddressPage,
     addAddress,

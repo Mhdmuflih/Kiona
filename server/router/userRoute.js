@@ -1,11 +1,11 @@
 import express from "express";
-import multer from "multer";// multer is using in take a image store
+import multer from "multer";                // multer is using in take a image store
 import path from "path";
 import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails, cart } from "../controller/userController.js";
-import { addAddress, addAddressPage, addressPage, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
+import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -73,7 +73,7 @@ user_route.get('/productDetails',productDetails)
 
 //user Profile
 user_route.get('/userProfile',profilePage)
-user_route.post('/userProfile',updateProfile)
+user_route.put('/userProfile',updateProfile)
 
 
 user_route.get('/changePassword',passwordChangePage)
@@ -81,6 +81,10 @@ user_route.post('/changePassword',updatePassword)
 
 
 user_route.get('/address',addressPage)
+user_route.delete('/address/delete',deleteAddress)
+user_route.get('/address/editAddress',editAddresPage)
+user_route.post('/address/editAddress',editAddress)
+
 user_route.get('/addAddress',addAddressPage)
 user_route.post('/addAddress',addAddress)
 

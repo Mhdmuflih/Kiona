@@ -4,31 +4,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Axios Example</title>
+  <link rel="stylesheet" href="/views/test.css">
+<style>
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.image-container {
+    width: 30%;
+    margin: 5% 0 0 5%;
+}
+
+img {
+    max-width: 100%;
+}
+
+#overlay {
+    display: none;
+    position: absolute;
+    background: url(/assets/kiona-logo.png);
+    width: 35%;
+    height: 45%;
+    margin-top: -30%;
+    margin-left: 50%;
+    border: 1px solid #555;
+    z-index: 1000;
+    background-repeat: no-repeat;
+}
+
+#mouse-overlay {
+    cursor: zoom-in;
+    position: absolute;
+    width: 2rem;
+    height: 2em;
+    transform: translate(-50%, -50%);
+    background-color: rgba(245, 245, 245, 0.6);
+    border-radius: 50%;
+}
+
+@media only screen and (max-width: 768px) {
+    .image-container{
+        width: 55%;
+    }
+    #overlay{
+        margin-left: 70%;
+        width: 25%;
+        height: 15%;
+    }
+}
+</style>
 </head>
 <body>
 
-  <h1> Axios Example </h1>
-  <div id="response"></div>
+  <div class="image-container" id="image-container">
+    <img src="/assets/kiona-logo.png" alt="IMG-PRODUCT" id="product-image">
+    <div id="mouse-overlay"></div>
+    <div id="overlay"></div>
+  </div>
+ 
+	<script>
+		let imageContainer = document.getElementById("image-container");
+		let productImage = document.getElementById("product-image");
+		let overlay = document.getElementById("overlay");
+		let mouseOverlay = document.getElementById("mouse-overlay");
+		let events = {
+			mouse:{
+				move:"mousemove",
+			},
+			touch:{
+				move:"touchmove",
+			},
+		};
+		let deviceType = '';
+		function isTouchDevice(){
+			try {
+				deviceType = "touch";
+				document.createEvent("TouchEvent");
+				return true
+			} catch (error) {
+				deviceType = "mouse";
+				return false;
+			}
+		}
+		const hideElement = ()=>{
+			overlay.style.display = 'none';
+			mouseOverlay.style.display = "none"
+		};
+		isTouchDevice();
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    // Make a GET request to a sample API
-    axios.get('https://jsonplaceholder.typicode.com/posts/1')
-      .then(function (response) {
-        // Handle successful response
-        console.log(response.data);
-        document.getElementById('response').innerHTML = `
-          <p>User ID: ${response.data.userId}</p>
-          <p>Title: ${response.data.title}</p>
-          <p>Body: ${response.data.body}</p>
-        `;
-      })
-      .catch(function (error) {
-        // Handle error
-        console.error('Error fetching data:', error);
-        document.getElementById('response').innerHTML = '<p>Error fetching data</p>';
-      });
-  </script>
+		imageContainer.addEventListener(events[deviceType].move, (e)=>{
+			try {
+				let x = !isTouchDevice() ? e.pageX : e.touches[0].clientX;
+				let y = !isTouchDevice() ? e.pageY : e.touches[0].clientY;
+
+				let imageWidth = imageContainer.offsetWidth;
+				let imageHeight = imageContainer.offsetHeight;
+				if(
+					imageWidth - (x - imageContainer.offsetLeft) < 15 ||
+					x - imageContainer.offsetLeft < 15 ||
+					imageHeight - (y - imageContainer.offsetTop) < 15 ||
+					y - imageContainer.offsetTop < 15
+				) {
+					hideElement();
+				}else{
+					overlay.style.display = "block";
+					mouseOverlay.style.display = "inline-block";
+				}
+
+				let posX = ((x - imageContainer.offsetLeft) / imageWidth).toFixed(4)*100;
+				let posY = ((y - imageContainer.offsetTop) / imageHeight).toFixed(4)*100;
+				overlay.style.backgroundPosition = posX + "%" + posY + "%";
+
+				mouseOverlay.style.top = y + "px";
+				mouseOverlay.style.left = x + "px";
+			} catch (error) {
+				console.error("Error:", error);
+			}
+		});
+		
+	</script>
 
 </body>
 </html>

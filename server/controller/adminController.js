@@ -54,7 +54,6 @@ const verifyAdminLogin = async(req,res)=>{
                 console.log(req.session.admin_id);
                 res.redirect('/admin/home')
             }else{
-                console.log("ook da kuttu");
                 res.render('admin/login.ejs',{error : "invalid username and password"})
             }
         }else{

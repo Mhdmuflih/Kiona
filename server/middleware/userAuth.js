@@ -13,7 +13,7 @@ const isLogin = async (req,res,next)=>{
 const isLogout = async (req,res,next)=>{
     try {
         if(req.session.user_id){
-            res.redirect('/home');
+            res.redirect('/');
         }else{
             next();
         }
@@ -24,7 +24,7 @@ const isLogout = async (req,res,next)=>{
 
 const Cache = async (req,res,next)=>{
     try {
-        
+
         res.header("Cache-Control",'private, no-cache, no-store, mus-revalidate');
         res.header('Expire', '-1');
         res.header('kiona', 'no-cache');

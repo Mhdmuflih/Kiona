@@ -31,10 +31,18 @@ const addressSchema = new mongoose.Schema({
                 type:String,
                 required:true
             },
+            state:{
+                type:String,
+                required:true
+            },
             defaultAddress:{
                 type:Boolean,
                 required:true,
                 default:false
+            },
+            addressType:{
+                type:String,
+                required:true
             }
         }
     ]

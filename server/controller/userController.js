@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 
+// ----------------------------------------------
+
 import User from "../model/userModel.js";
 import OTP from "../model/otpModel.js";
 import Product from "../model/productModel.js";
@@ -138,7 +140,8 @@ const insertUser = async (req, res) => {
 // otp page
 const otp = async (req, res) => {
     try {
-        res.render('users/otp-verification.ejs')
+        const message = req.query.message
+        res.render('users/otp-verification.ejs',{ message })
     } catch (error) {
         console.log(error.message)
     }
@@ -232,7 +235,9 @@ const verifyOtp = async (req, res) => {
             await userData.save()
 
             await OTP.deleteOne({ email: req.session.email })
-            res.redirect("/login?message=verification is successfull")
+            res.redirect("/")
+        }else{
+            return res.redirect('/otp?message=invalid');
         }
     } catch (error) {
         console.log(error.message)
@@ -311,10 +316,9 @@ const loginHome = async (req, res) => {
 // user product details page
 const productPage = async (req, res) => {
     try {
-
         const user = req.session.user_id;
         const products = await Product.find({ delete: false });
-
+        
         res.render('users/product.ejs', { user, products })
     } catch (error) {
         console.log(error.message);
@@ -341,11 +345,8 @@ const productDetails = async(req,res)=>{
 //user shoping cat
 const cart = async (req,res)=>{
     try {
-    
         const user = req.session.user_id
-
         if(!user){
-            console.log('hlo');
             return res.redirect('/login')
         }
 

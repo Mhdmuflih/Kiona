@@ -1,85 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiona</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kiona</title>
+
+	<link rel="stylesheet" href="http://localhost:8000/css/userProfile.css">
 
 	<link rel="icon" type="image/png" href="/kiona-logo.png" />
 
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 
-    <link rel="stylesheet" type="text/css" href="/css/userProfile.css">
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css'>
+	<link rel="stylesheet" type="text/css" href="/css/userProfile.css">
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css'>
+
 
 
 
 </head>
+
 <body>
-    
-
-    <div class="top-bar">
-        <div class="content-topbar flex-sb-m h-full container">
-            <div class="left-top-bar">
-                Free shipping for standard order over $100
-            </div>
-
-            <div class="right-top-bar flex-w h-full">
-                <a href="#" class="flex-c-m trans-04 p-lr-25">
-                    Help & FAQs
-                </a>
 
 
-                
+	<div class="top-bar">
+		<div class="content-topbar flex-sb-m h-full container">
+			<div class="left-top-bar">
+				Free shipping for standard order over $100
+			</div>
 
-                
-                <% if(user){%>
+			<div class="right-top-bar flex-w h-full">
+				<a href="#" class="flex-c-m trans-04 p-lr-25">
+					Help & FAQs
+				</a>
+
+
+
+
+
+				<% if(user){%>
 
 					<a href="/" class="flex-c-m trans-04 p-lr-25">
 						Home
 					</a>
 
-                    <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
-                        My Account
-                    </a>
+					<a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
+						My Account
+					</a>
 
-                    <a href="/logout" class="flex-c-m trans-04 p-lr-25">
-                        Logout
-                    </a>
-
-                    
-
-                <%}else{%>
-                    <a href="/login" class="flex-c-m trans-04 p-lr-25">
-                        Login
-                    </a>
-                    <a href="/register" class="flex-c-m trans-04 p-lr-25">
-                        Sign Up
-                    </a>
-               <% } %>
-                
-            </div>
-        </div>
-    </div>
-
-	
-
-    <div><p></p></div>
-    <div><p></p></div>
- 
+					<a href="/logout" class="flex-c-m trans-04 p-lr-25">
+						Logout
+					</a>
 
 
-    <div class="container">
+
+					<%}else{%>
+						<a href="/login" class="flex-c-m trans-04 p-lr-25">
+							Login
+						</a>
+						<a href="/register" class="flex-c-m trans-04 p-lr-25">
+							Sign Up
+						</a>
+						<% } %>
+
+			</div>
+		</div>
+	</div>
+
+
+
+	<div>
+		<p></p>
+	</div>
+	<div>
+		<p></p>
+	</div>
+
+
+
+	<div class="container">
 		<div class="main-body">
 			<div class="row">
 				<div class="col-lg-4">
 					<div class="card">
 						<div class="card-body">
 							<div class="d-flex flex-column align-items-center text-center">
-								<img src="/Photos/userImages/<%= user.image %>" alt="" class="rounded-circle p-1 bg-primary" width="110">
+								<img src="/Photos/userImages/<%= user.image %>" alt=""
+									class="rounded-circle p-1 bg-primary" width="110">
 								<div class="mt-3">
-									<h4> <%= user.name %> </h4>
+									<h4>
+										<%= user.name %>
+									</h4>
 									<!-- <p class="text-secondary mb-1"></p>
 									<p class="text-muted font-size-sm"></p>
 									<button class="btn btn-primary">Follow</button>
@@ -88,122 +100,193 @@
 							</div>
 							<hr class="my-4">
 							<ul class="list-group list-group-flush">
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="width: 310px;">
-									<a href="/userProfile"> <button type="button" class="btn btn-info" style="width: 280px;">User Profile</button> </a>
+								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+									style="width: 310px;">
+									<a href="/userProfile"> <button type="button" class="btn btn-info"
+											style="width: 280px;">User Profile</button> </a>
 								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="width: 310px;">
-									<a href="/changePassword"> <button type="button" class="btn btn-outline-info" style="width: 280px;">Change Password</button> </a>
+								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+									style="width: 310px;">
+									<a href="/changePassword"> <button type="button" class="btn btn-outline-info"
+											style="width: 280px;">Change Password</button> </a>
 								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="width: 310px;">
-									<a href="/address"> <button type="button" class="btn btn-outline-info" style="width: 280px;">Address Management</button> </a>
+								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+									style="width: 310px;">
+									<a href="/address"> <button type="button" class="btn btn-outline-info"
+											style="width: 280px;">Address Management</button> </a>
 								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="width: 310px;">
-									<a href="/order"> <button type="button" class="btn btn-outline-info" style="width: 280px;">Order</button> </a>
+								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+									style="width: 310px;">
+									<a href="/order"> <button type="button" class="btn btn-outline-info"
+											style="width: 280px;">Order</button> </a>
 								</li>
-								
+
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-8">
 					<div class="card">
-						<form action="" method="post" class="form" onsubmit="check(); return false">
-						<div class="card-body">
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Full Name</h6>
+						<form action="" method="put" class="form">
+							<div class="card-body">
+								<div class="row mb-3">
+									<div class="col-sm-3">
+										<h6 class="mb-0">Full Name</h6>
+									</div>
+									<div class="col-sm-9 text-secondary">
+										<input type="text" name="name" id="name" class="form-control"
+											value="<%= user.name %>" required>
+										<p style="color: red;" id="nameErr"></p>
+									</div>
 								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="text" name="name" id="name" class="form-control" value="<%= user.name %>" required>
-									<p style="color: red;" id="nameErr"></p>
+								<div class="row mb-3">
+									<div class="col-sm-3">
+										<h6 class="mb-0">Email</h6>
+									</div>
+									<div class="col-sm-9 text-secondary">
+										<input type="email" name="email" id="email" class="form-control" readonly
+											value="<%= user.email %>" required>
+										<p style="color: red;" id="emailErr"></p>
+									</div>
 								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Email</h6>
+								<div class="row mb-3">
+									<div class="col-sm-3">
+										<h6 class="mb-0">Mobile</h6>
+									</div>
+									<div class="col-sm-9 text-secondary">
+										<input type="number" name="mobile" id="mobile" class="form-control"
+											value="<%= user.mobile %>" required>
+										<p style="color: red;" id="mobileErr"></p>
+									</div>
 								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="email" name="email" id="email" class="form-control" readonly value="<%= user.email %>" required>
-									<p style="color: red;" id="emailErr"></p>
-								</div>
-							</div>
-							<div class="row mb-3">
-								<div class="col-sm-3">
-									<h6 class="mb-0">Mobile</h6>
-								</div>
-								<div class="col-sm-9 text-secondary">
-									<input type="number" name="mobile" id="mobile" class="form-control" value="<%= user.mobile %>" required>
-									<p style="color: red;" id="mobileErr"></p>
-								</div>
-							</div>
 
-							<div class="form-group">
-								<input type="hidden" name="user_id" value="<%= user._id %>">
-							</div>
 
-							<% if(message){%>
-								<p class="text-danger" id="ok">
-								  <%= message %>
-								</p>
-							<% } %>
 
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9 text-secondary">
-									<input type="submit" class="btn btn-primary px-4" value="Save Changes">
+								<div class="row">
+									<div class="col-sm-3"></div>
+									<div class="col-sm-9 text-secondary">
+										<button type="button" class="btn btn-primary" onclick="updateUserData()"> Save
+											Changes </button>
+									</div>
 								</div>
-							</div>
 
-						</div>
+							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js'></script>
+
+	<script src="http://localhost:8000/js/jquery.min.js"></script>
+	<!-- Include Bootstrap JS -->
+	<script src="http://localhost:8000/js/bootstrap.bundle.min.js"></script>
+
+	<script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js'></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 	<script>
+		async function updateUserData() {
+			const name = document.getElementById('name').value.trim();
+			const nameErr = document.getElementById('nameErr');
+			const email = document.getElementById('email').value.trim();
+			const emailErr = document.getElementById('emailErr');
+			const mobile = document.getElementById("mobile").value.trim();
+			const mobileErr = document.getElementById("mobileErr");
 
-		// async function save(id){
+			const nameErrMsg = [];
+			const emailErrMsg = [];
+			const mobileErrMsg = [];
 
-		// 	// event.preventDefault();
-		// 	// let form = document.getElementById('update');
-		// 	// const formData = new FormData(form);
-		// 	// formData.append('id',id)
-		// 	// console.log(formData);
-		// 	// alert(formData)
-		// 	const response = await axios.post('http://localhost:8000/userProfile', { id })
-		// 	alert(response);
-		// 	if(response.data.success){
-		// 		await Swal.fire({
-		// 			icon:"success",
-		// 			title:"success",
-		// 			text:response.data.message
-		// 		})
-		// 		window.location.href="/userProfile";
-		// 	}else{
-		// 		await Swal.fire({
-		// 			icon:"error",
-		// 			title:"error",
-		// 			text:response.data.message
-		// 		})
-		// 		window.location.href="/userProfile";
-		// 	}
-		// }
+			if (name === '') {
+				nameErrMsg.push("Please enter your name.");
+			} else {
+				const nameRegex = /^[a-zA-Z\s]*$/;
+				if (!nameRegex.test(name)) {
+					nameErrMsg.push("Please enter a valid name.");
+				}
+			}
+
+			if (email === '') {
+				emailErrMsg.push("Please enter your email.");
+			} else {
+				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRegex.test(email)) {
+					emailErrMsg.push("Please enter a valid email address.");
+				}
+			}
+
+			if (mobile === '') {
+				mobileErrMsg.push("Please enter your mobile number.");
+			} else {
+				const mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
+				if (!mobileRegex.test(mobile)) {
+					mobileErrMsg.push("Please enter a valid mobile number.");
+				}
+			}
+
+			nameErr.innerHTML = nameErrMsg.join("<br>");
+			emailErr.innerHTML = emailErrMsg.join("<br>");
+			mobileErr.innerHTML = mobileErrMsg.join("<br>");
+
+			if (nameErrMsg.length > 0 || emailErrMsg.length > 0 || mobileErrMsg.length > 0) {
+				return;
+			}
+
+			const confirmation = await Swal.fire({
+				title: 'Are you sure?',
+				text: 'You won\'t be able to revert this!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, Update Profile!'
+			});
+
+			if (!confirmation.isConfirmed) {
+				return;
+			}
+
+			try {
+				const response = await axios.put('http://localhost:8000/userProfile', { name, email, mobile });
+				if (response.data.success) {
+					await Swal.fire({
+						icon: 'success',
+						title: 'Update Profile!',
+						text: response.data.message
+					}).then(() => {
+						window.location.href = '/userProfile';
+					});
+				} else {
+					await Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: response.data.message
+					});
+					window.location.href = '/userProfile';
+				}
+			} catch (error) {
+				console.error("Error updating profile: ", error.message);
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'There was an error updating the profile'
+				});
+			}
+		}
 
 	</script>
 
+
+
 	<!-- validation  -->
 
-	<script>
+	<!-- <script>
 
-		function check(){
+		function check() {
 			const form = document.querySelector('form');
 			const name = document.getElementById('name').value.trim();
 			const nameErr = document.getElementById('nameErr');
@@ -211,35 +294,35 @@
 			const emailErr = document.getElementById('emailErr');
 			const mobile = document.getElementById("mobile").value.trim();
 			const mobileErr = document.getElementById("emailErr");
-		
+
 
 			const nameErrMsg = [];
 			const emailErrMsg = [];
 			const mobileErrMsg = [];
 
-			if(name === ''){
-					nameErrMsg.push("Please enter Your Name.")
-			}else{
+			if (name === '') {
+				nameErrMsg.push("Please enter Your Name.")
+			} else {
 				const nameRegex = /^[a-zA-Z\s]*$/;
-				if(!nameRegex.test(name)){
+				if (!nameRegex.test(name)) {
 					nameErrMsg.push("Please enter valid name");
 				}
 			}
 
-			if(email === ''){
+			if (email === '') {
 				emailErrMsg.push("Please enter Your Email.");
-			}else{
+			} else {
 				const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
-				if(!emailRegex.test(email)){
+				if (!emailRegex.test(email)) {
 					emailErrMsg.push("Please enter Your Valid Email Id.")
 				}
 			}
 
-			if(mobile == ''){
+			if (mobile == '') {
 				mobileErrMsg.push("Please enter Your Mobile.");
-			}else{
+			} else {
 				mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
-				if(!mobileRegex.test(mobile)){
+				if (!mobileRegex.test(mobile)) {
 					mobileErrMsg.push("Please enter Your Valid Mobile Number.")
 				}
 			}
@@ -248,12 +331,12 @@
 			emailErr.innerHTML = emailErrMsg.join("<br>");
 			mobileErr.innerHTML = mobileErrMsg.join("<br>");
 
-			if(nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg.length === 0 ){
-                form.submit();
-            }
+			if (nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg.length === 0) {
+				form.submit();
+			}
 		}
 
-	</script>
+	</script> -->
 
 </body>
 

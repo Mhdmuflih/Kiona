@@ -56,14 +56,12 @@
 							Help & FAQs
 						</a>
 
-                        <a href="/" class="flex-c-m trans-04 p-lr-25">
+						<a href="/" class="flex-c-m trans-04 p-lr-25">
 							Home
 						</a>
-
-						
-
 						
                         <% if(user){%>
+							
 
                             <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
                                 My Account
@@ -107,8 +105,8 @@
 								<a href="/products">Shop</a>
 							</li>
 
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.html">Features</a>
+							<li>
+								<a href="/shoping-cart">Cart</a>
 							</li>
 
 							<li>
@@ -161,7 +159,7 @@
 
 				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart"
 					data-notify="2">
-					<i class="zmdi zmdi-shopping-cart"></i>
+					<a href="/shoping-cart"><i class="zmdi zmdi-shopping-cart"></i></a>
 				</div>
 
 				<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
@@ -177,8 +175,8 @@
 				</span>
 			</div>
 		</div>
-
-		<!-- Menu Mobile
+<!-- 
+		Menu Mobile
 		<div class="menu-mobile">
 			<ul class="topbar-mobile">
 				<li>
@@ -241,9 +239,9 @@
 					<a href="contact.html">Contact</a>
 				</li>
 			</ul>
-		</div>
+		</div> -->
 
-		 Modal Search
+		 <!-- Modal Search -->
 		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
 			<div class="container-search-header">
 				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
@@ -258,7 +256,7 @@
 				</form>
 			</div>
 		</div>
-	</header> -->
+	</header>
 
 
 
@@ -1068,6 +1066,30 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+
+<!-- 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const registrationSuccess = urlParams.get('registration');
+
+    if (registrationSuccess === 'success') {
+        Swal.fire({
+            title: 'Success!',
+            text: 'Registration successful!',
+            icon: 'success',
+            confirmButtonText: 'Great'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.history.replaceState(null, null, window.location.pathname);
+            }
+        });
+    }
+});
+</script>
+
+ -->
 	
 
 </body>

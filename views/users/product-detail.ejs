@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="images/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="/kiona-logo.png" />
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
@@ -54,18 +54,32 @@
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							Help & FAQs
 						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							My Account
+						<a href="/" class="flex-c-m trans-04 p-lr-25">
+							Home
 						</a>
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							EN
-						</a>
+						<% if(user){%>
+							
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							USD
-						</a>
+                            <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
+                                My Account
+                            </a>
+
+                            <a href="/logout" class="flex-c-m trans-04 p-lr-25">
+                                Logout
+                            </a>
+
+                            
+
+                        <%}else{%>
+                            <a href="/login" class="flex-c-m trans-04 p-lr-25">
+                                Login
+                            </a>
+                            <a href="/register" class="flex-c-m trans-04 p-lr-25">
+                                Sign Up
+                            </a>
+                       <% } %>
+						
 					</div>
 				</div>
 			</div>
@@ -90,8 +104,8 @@
 								<a href="/products">Shop</a>
 							</li>
 
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.html">Features</a>
+							<li>
+								<a href="/shoping-cart">Cart</a>
 							</li>
 
 							<li>
@@ -160,71 +174,6 @@
 			</div>
 		</div>
 
-
-		<!-- Menu Mobile -->
-		<div class="menu-mobile">
-			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
-
-				<li>
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							Help & FAQs
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							My Account
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							EN
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							USD
-						</a>
-					</div>
-				</li>
-			</ul>
-
-			<ul class="main-menu-m">
-				<li>
-					<a href="/">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="index.html">Homepage 1</a></li>
-						<li><a href="home-02.html">Homepage 2</a></li>
-						<li><a href="home-03.html">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
-				</li>
-
-				<li>
-					<a href="/prodcuts">Shop</a>
-				</li>
-
-				<li>
-					<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
-				</li>
-
-				<li>
-					<a href="blog.html">Blog</a>
-				</li>
-
-				<li>
-					<a href="about.html">About</a>
-				</li>
-
-				<li>
-					<a href="contact.html">Contact</a>
-				</li>
-			</ul>
-		</div>
 
 		<!-- Modal Search -->
 		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
@@ -364,8 +313,10 @@
 						
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" data-thumb="/Photos/product/<%= product.image[0] %>">
-									<div class="wrap-pic-w pos-relative">
-										<img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT">
+									<div class="wrap-pic-w pos-relative" id="image-container">
+										<img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT" id="product-image">
+										<div id="mouse-overlay" style="cursor: zoom-in; position:absolute; width: 2rem; height: 2em; transform: translate(-50%,-50%); background-color: rgba(245,245,245,0.6); border-radius: 50%;"></div>
+										<div id="overlay" style="display: none; position:absolute; width: 35%; height: 45%; margin-top: -30%; margin-left: 50%; border: 1px solid #555; z-index: 1000; background-repeat: no-repeat;"></div>
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 											href="/Photos/product/<%= product.image[0] %>">
@@ -1286,6 +1237,74 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+
+
+
+
+
+	<script>
+		let imageContainer = document.getElementById("image-container");
+		let productImage = document.getElementById("product-iamge");
+		let overlay = document.getElementById("overlay");
+		let mouseOverlay = document.getElementById("mouse-overlay");
+		let events = {
+			mouse:{
+				move:"mousemove",
+			},
+			touch:{
+				move:"touchmove",
+			},
+		};
+		let deviceType = '';
+		function isTouchDevice(){
+			try {
+				deviceType = "touch";
+				document.createEvent("TouchEvent");
+				return true
+			} catch (error) {
+				deviceType = "mouse";
+				return false;
+			}
+		}
+		const hideElement = ()=>{
+			overlay.style.display = 'none';
+			mouseOverlay.style.display = "none"
+		};
+		isTouchDevice();
+
+		imageContainer.addEventListener(events[deviceType].mouse, (e)=>{
+			try {
+				var x = !isTouchDevice() ? e.pageX : e.touches[0].pageX;
+				var y = !isTouchDevice() ? e.pageY : e.touches[0].pageY;
+			} catch (error) {
+				let imageWidth = imageContainer.offsetWidth;
+				let imageHeight = imageContainer.offsetHeight;
+				if(
+					imageWidth - (x - imageContainer.offsetLeft)<15 ||
+					x - imageContainer.offsetLeft < 15 ||
+					imageHeight - (y - imageContainer.offsetTop)<15 ||
+					y - imageContainer.offsetTop < 15
+				) {
+					hideElement();
+				}else{
+					overlay.style.display = "block";
+					mouseOverlay.style.display = "inline-block";
+				}
+
+				var posX = ((x - imageContainer.offsetLeft) / imageWidth).toFixed(4)*100;
+				var posY = ((y - imageContainer.offsetTop) / imageHeight).toFixed(4)*100;
+				overlay.style.backgroundPosition = posX + "%" + posY + "%";
+
+				mouseOverlay.style.top = y + "px";
+				mouseOverlay.style.left = x + "px"; 
+			}
+		})
+	</script>
+
+
+
+
+
 
 </body>
 

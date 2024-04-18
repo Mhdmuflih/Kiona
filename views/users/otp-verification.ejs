@@ -13,6 +13,11 @@
     <div class="container">
         <h4>Enter Your 4 Digits OTP</h4>
         <form action="/otp" method="post" class="form" id="otpForm">
+            <% if(message){%>
+                <p class="text-danger" id="ok" style="color: red;">
+                  <%= message %>
+                </p>
+            <% } %>
             <div class="input_field_box">
                 <input type="number" name="otp1" id="otp1" maxlength="1" min="0" max="9" required />
                 <input type="number" name="otp2" id="otp2" maxlength="1" min="0" max="9" required disabled>
@@ -26,129 +31,109 @@
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        const OTPinputs = document.querySelectorAll("input");
-        const button = document.querySelector('button#verify');
-        const resendButton = document.querySelector('button#resend');
-        const otpTimerElement = document.getElementById('otpTimer');
-
-        window.addEventListener("load", () => OTPinputs[0].focus());
-
-        OTPinputs.forEach((input, index) => {
-            input.addEventListener("input", () => {
-                const currentInput = input;
-                const nextInput = input.nextElementSibling;
-
-                if (currentInput.value.length > 1) {
-                    currentInput.value = currentInput.value[0]; // Keep only the first character
-                }
-
-                if (nextInput && currentInput.value) {
-                    nextInput.removeAttribute("disabled");
-                    nextInput.focus();
-                }
-
-                // Check if all inputs are filled
-                const allFilled = Array.from(OTPinputs).every(input => input.value);
-                button.disabled = !allFilled; // Enable button if all inputs are filled
-            });
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === "Backspace" && input.value === "" && index !== 0) {
-                    const previousInput = OTPinputs[index - 1];
-                    previousInput.value = ""; // Clear previous input value
-                    previousInput.removeAttribute("disabled");
-                    previousInput.focus();
-                }
-            });
-        });
-
-        // OTP timer
-        let otpTimer;
-
-        function startOTPTimer() {
-            const otpValidityDuration = 1 * 60 * 1000; // 3 minutes
-            clearTimeout(otpTimer);
-            let remainingTime = otpValidityDuration;
-            otpTimer = setInterval(() => {
-                const minutes = Math.floor(remainingTime / 60000);
-                const seconds = Math.floor((remainingTime % 60000) / 1000);
-                otpTimerElement.textContent = `OTP expires in ${minutes} min ${seconds} sec`;
-                remainingTime -= 1000;
-                if (remainingTime < 0) {
-                    clearInterval(otpTimer);
-                    document.getElementById("otpMessage").innerText = "OTP expired. Please generate a new OTP.";
-                    resendButton.style.display = "inline"; // Show the resend button after timer expiry
-                }
-            }, 1000);
-        }
-
-        // Start OTP timer when the page is loaded
-        startOTPTimer();
-
-        // OTP validation and form submission
-        // document.getElementById('otpForm').addEventListener('submit', function(event) {
-        //     event.preventDefault(); // Prevent form submission
-
-        //     // Validate OTP
-        //     const otp1 = document.getElementById('otp1').value;
-        //     const otp2 = document.getElementById('otp2').value;
-        //     const otp3 = document.getElementById('otp3').value;
-        //     const otp4 = document.getElementById('otp4').value;
-
-        //     if (otp1.length === 1 && otp2.length === 1 && otp3.length === 1 && otp4.length === 1) {
-        //         // All OTP fields contain a single digit
-        //         document.getElementById('otpMessage').innerText = "OTP is Valid";
-
-        //         // Here you can perform any action upon successful OTP validation
-        //     } else {
-        //         document.getElementById('otpMessage').innerText = "Please enter all 4 digits of OTP.";
-        //     }
-        // });
-
-
-        function resendOTP() {
-    axios.post('/resend-otp')
-        .then(response => {
-            if (response.data.success) {
-                document.getElementById('otpMessage').innerText = "OTP resent successfully!";
-                startOTPTimer(); // Restart OTP timer after resending OTP
-                document.getElementById('resend').style.display = "none"; // Hide the resend button after sending OTP
-            } else {
-                document.getElementById('otpMessage').innerText = "Failed to resend OTP. Please try again.";
-            }
-        })
-        .catch(error => {
-            console.error('Error resending OTP:', error);
-            document.getElementById('otpMessage').innerText = "An error occurred while resending OTP.";
-        });
-}
-
-
-
-
-
-
-
-        // Function to resend OTP
-        function resendOTP() {
-            axios.post('/resend-otp')
-                .then(response => {
-                    if (response.data.success) {
-                        document.getElementById('otpMessage').innerText = "OTP resent successfully!";
-                        startOTPTimer(); // Restart OTP timer after resending OTP
-                        resendButton.style.display = "none"; // Hide the resend button after sending OTP
-                    } else {
-                        document.getElementById('otpMessage').innerText = "Failed to resend OTP. Please try again.";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error resending OTP:', error);
-                    document.getElementById('otpMessage').innerText = "An error occurred while resending OTP.";
-                });
-        }
+        setTimeout(() => {
+            document.getElementById('ok').style.display="none"
+        }, 2000);
     </script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const OTPinputs = document.querySelectorAll("input");
+    const button = document.querySelector('button#verify');
+    const resendButton = document.querySelector('button#resend');
+    const otpTimerElement = document.getElementById('otpTimer');
+
+    window.addEventListener("load", () => OTPinputs[0].focus());
+
+    OTPinputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+            const currentInput = input;
+            const nextInput = input.nextElementSibling;
+
+            if (currentInput.value.length > 1) {
+                currentInput.value = currentInput.value[0]; // Keep only the first character
+            }
+
+            if (nextInput && currentInput.value) {
+                nextInput.removeAttribute("disabled");
+                nextInput.focus();
+            }
+
+            // Check if all inputs are filled
+            const allFilled = Array.from(OTPinputs).every(input => input.value);
+            button.disabled = !allFilled; // Enable button if all inputs are filled
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === "Backspace" && input.value === "" && index !== 0) {
+                const previousInput = OTPinputs[index - 1];
+                previousInput.value = ""; // Clear previous input value
+                previousInput.removeAttribute("disabled");
+                previousInput.focus();
+            }
+        });
+    });
+
+    // OTP timer
+    let otpTimer;
+
+    function startOTPTimer() {
+        const otpValidityDuration = 1 * 60 * 1000; // 3 minutes
+        clearTimeout(otpTimer);
+        let remainingTime = otpValidityDuration;
+        otpTimer = setInterval(() => {
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            otpTimerElement.textContent = `OTP expires in ${minutes} min ${seconds} sec`;
+            remainingTime -= 1000;
+            if (remainingTime < 0) {
+                clearInterval(otpTimer);
+                document.getElementById("otpMessage").innerText = "OTP expired. Please generate a new OTP.";
+                resendButton.style.display = "inline"; // Show the resend button after timer expiry
+            }
+        }, 1000);
+    }
+
+    // Start OTP timer when the page is loaded
+    startOTPTimer();
+
+    // Function to resend OTP
+    function resendOTP() {
+        axios.post('/resend-otp')
+            .then(response => {
+                if (response.data.success) {
+                    document.getElementById('otpMessage').innerText = "OTP resent successfully!";
+                    startOTPTimer(); // Restart OTP timer after resending OTP
+                    resendButton.style.display = "none"; // Hide the resend button after sending OTP
+                } else {
+                    document.getElementById('otpMessage').innerText = "Failed to resend OTP. Please try again.";
+                }
+            })
+            .catch(error => {
+                console.error('Error resending OTP:', error);
+                document.getElementById('otpMessage').innerText = "An error occurred while resending OTP.";
+            });
+    }
+
+    // Function to verify OTP
+    function verifyOTP() {
+        const otp = Array.from(OTPinputs).map(input => input.value).join('');
+        axios.post('/otp', { otp })
+            .then(response => {
+                if (response.data.success) {
+                    document.getElementById('otpMessage').innerText = "OTP verified successfully!";
+                    // Redirect or perform further actions upon successful OTP verification
+                } else {
+                    document.getElementById('otpMessage').innerText = "Invalid OTP. Please try again.";
+                }
+            })
+            .catch(error => {
+                console.error('Error verifying OTP:', error);
+                document.getElementById('otpMessage').innerText = "An error occurred while verifying OTP.";
+            });
+    }
+</script>
 </body>
 
 </html>
