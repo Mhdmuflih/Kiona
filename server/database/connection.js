@@ -5,7 +5,7 @@ mongoose.set('strictQuery', true);
 const connectDB = async () => {
     try {
         // mongoDB connection string
-        const con = await mongoose.connect("mongodb://127.0.0.1:27017/KIONA", {
+        const con = await mongoose.connect(process.env.mongoUrl, {
         });
         console.log(`MongoDB connected :${con.connection.host}`);
     } catch (err) {

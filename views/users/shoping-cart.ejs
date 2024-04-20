@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="images/icons/favicon.png" />
+	<link rel="icon" type="image/png" href="/kiona-logo.png" />
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
@@ -84,7 +84,7 @@
 
 					<!-- Logo desktop -->
 					<a href="#" class="logo">
-						<img src="images/icons/logo-01.png" alt="IMG-LOGO">
+						<img src="/kiona-high-resolution-logo-transparent.png" alt="IMG-LOGO">
 					</a>
 
 					<!-- Menu desktop -->
@@ -246,7 +246,7 @@
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-			<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+			<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
 				Home
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
@@ -274,55 +274,40 @@
 									<th class="column-5">Total</th>
 								</tr>
 
-								<tr class="table_row">
-									<td class="column-1">
-										<div class="how-itemcart1">
-											<img src="images/item-cart-04.jpg" alt="IMG">
-										</div>
-									</td>
-									<td class="column-2">Fresh Strawberries</td>
-									<td class="column-3">$ 36.00</td>
-									<td class="column-4">
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-minus"></i>
-											</div>
-
-											<input class="mtext-104 cl3 txt-center num-product" type="number"
-												name="num-product1" value="1">
-
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-plus"></i>
-											</div>
-										</div>
-									</td>
-									<td class="column-5">$ 36.00</td>
-								</tr>
+								<% for(let i=0 ; i<cartProduct.length ; i++){ %>
 
 								<tr class="table_row">
 									<td class="column-1">
-										<div class="how-itemcart1">
-											<img src="images/item-cart-05.jpg" alt="IMG">
-										</div>
-									</td>
-									<td class="column-2">Lightweight Jacket</td>
-									<td class="column-3">$ 16.00</td>
-									<td class="column-4">
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-minus"></i>
+											<div class="how-itemcart1">
+												<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
 											</div>
+												</td>
+												<td class="column-2"> <%= cartProduct[i].productDetails[0].name %> </td>
+												<td class="column-3">$ <%= cartProduct[i].productDetails[0].price  %> </td>
+												<td class="column-4">
+													<div class="wrap-num-product flex-w m-l-auto m-r-0">
+														<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="decrement('<%= cartProduct[i].cartItems._id %>')">
+															<i class="fs-16 zmdi zmdi-minus"></i>
+														</div>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number"
-												name="num-product2" value="1">
+														<!-- <input type="number" min="1" value="" > -->
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-plus"></i>
-											</div>
-										</div>
-									</td>
-									<td class="column-5">$ 16.00</td>
-								</tr>
+														<input class="mtext-104 cl3 txt-center num-product" 
+														type="number"
+														name="num-product1" 
+														value="<%= cartProduct[i].cartItems.quantity %>" 
+														min="1">
+												 
+
+														<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="increment('<%= cartProduct[i].cartItems._id %>')">
+															<i class="fs-16 zmdi zmdi-plus"></i>
+														</div>
+													</div>
+												</td>
+												<td class="column-5">$ <%= cartProduct[i].productDetails[0].price %></td>
+											</tr>
+										<% } %>
+							
 							</table>
 						</div>
 
@@ -487,6 +472,28 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+	<script>
+		async function increment(cartItemsId){
+			try {
+				await axios.post('/shoping-cart/increment',{ cartItemsId })
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+
+		async function decrement(cartItemsId){
+			try {
+				await axios.post('/shoping-cart/decrement', { cartItemsId })
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+
+	</script>
 
 </body>
 

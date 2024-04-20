@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import morgan from "morgan";
 
 // -----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ connectDB();
 const app = express();                                          //express adding
 const __dirname = path.resolve();                               //pth setting
 
+// app.use(morgan('dev')); // log all req
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))                    //change the json format of url
 app.set('view engine','ejs')                                    //page converting to dynamic or to take the ejs access
