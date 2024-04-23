@@ -273,6 +273,7 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
+								<% let totalAmout = 0 %>
 
 								<% for(let i=0 ; i<cartProduct.length ; i++){ %>
 
@@ -286,26 +287,22 @@
 												<td class="column-3">$ <%= cartProduct[i].productDetails[0].price  %> </td>
 												<td class="column-4">
 													<div class="wrap-num-product flex-w m-l-auto m-r-0">
-														<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="decrement('<%= cartProduct[i].cartItems._id %>')">
+														<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="decrement('<%= cartProduct[i].cartItems._id %>','<%= cartProduct[i].productDetails[0].price %>','<%= i %>')">
 															<i class="fs-16 zmdi zmdi-minus"></i>
 														</div>
 
-														<!-- <input type="number" min="1" value="" > -->
-
-														<input class="mtext-104 cl3 txt-center num-product" 
-														type="number"
-														name="num-product1" 
-														value="<%= cartProduct[i].cartItems.quantity %>" 
-														min="1">
+														<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" id="quantity<%= i %>" value="<%= cartProduct[i].cartItems.quantity %>"
+														min="1" max="5">
 												 
 
-														<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="increment('<%= cartProduct[i].cartItems._id %>')">
+														<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="increment('<%= cartProduct[i].cartItems._id %>','<%= cartProduct[i].productDetails[0].price %>','<%= i %>')">
 															<i class="fs-16 zmdi zmdi-plus"></i>
 														</div>
 													</div>
 												</td>
-												<td class="column-5">$ <%= cartProduct[i].productDetails[0].price %></td>
+												<td class="column-5" id="total<%= i %>" >$ <%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %></td>
 											</tr>
+											<% totalAmout += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
 										<% } %>
 							
 							</table>
@@ -344,8 +341,8 @@
 							</div>
 
 							<div class="size-209">
-								<span class="mtext-110 cl2">
-									$79.65
+								<span class="mtext-110 cl2" id="totalAmout" >
+									$<%= totalAmout %>
 								</span>
 							</div>
 						</div>
@@ -406,8 +403,8 @@
 							</div>
 
 							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2">
-									$79.65
+								<span class="mtext-110 cl2" id="totalAmout" >
+									$<%= totalAmout %>
 								</span>
 							</div>
 						</div>
@@ -474,19 +471,31 @@
 	<script src="js/main.js"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 	<script>
-		async function increment(cartItemsId){
+		async function increment(cartItemsId, price, index){
 			try {
+				const total = document.getElementById(`total${index}`)
+				const quantity = document.getElementById(`quantity${index}`).value
+				const totalAmout = (Number(quantity)+1)*price
+				total.innerHTML = totalAmout
 				await axios.post('/shoping-cart/increment',{ cartItemsId })
 			} catch (error) {
 				console.log(error.message);
 			}
 		}
 
-		async function decrement(cartItemsId){
+		async function decrement(cartItemsId, price, index){
 			try {
+				const total = document.getElementById(`total${index}`);
+				const quantity = document.getElementById(`quantity${index}`).value
+				if(quantity>1){
+					const totalAmout = (Number(quantity)-1)*price
+				total.innerHTML = totalAmout
+				}
 				await axios.post('/shoping-cart/decrement', { cartItemsId })
 			} catch (error) {
 				console.log(error.message);

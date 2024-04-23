@@ -65,9 +65,6 @@ const createCategory = async (req, res) => {
 
         const image = req.file.filename
         const { categoryName, description } = req.body;
-    
-        console.log(categoryName,description,image);
-        
         
         if (!categoryName || !description || !image) {
             return res.status(400).json({ message: 'Name and description are required.' });
@@ -91,8 +88,9 @@ const createCategory = async (req, res) => {
 const editCategoryPage = async (req,res)=>{
     try {
 
-        const id = req.query.id
-        const categoryId = await Category.findById(id)
+        const { id } = req.query
+
+        const categoryId = await Category.findById({ _id:id })
 
         if(categoryId){
             console.log(categoryId);
@@ -109,13 +107,21 @@ const editCategoryPage = async (req,res)=>{
 const editCategory = async (req,res)=>{
     try {
 
+        const existingCategory = await Category.findOne({ name:req.body.name });
+
+        if(existingCategory && existingCategory._id && existingCategory._id.toString() !== req.body.category_id){
+            return res.json({success:false, message:"Category Name Already exists."})
+        }
+
         if(req.file){
             await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description, image:req.file.filename } });
         }else{
             await Category.findByIdAndUpdate({ _id:req.body.category_id }, { $set:{ name:req.body.name, description:req.body.description } });
         }
 
-        res.redirect("/admin/category")
+        res.json({success:true, message:"Category Updated Succedfully."})
+
+        // res.redirect("/admin/category")
 
     } catch (error) {
         console.log(error.message);

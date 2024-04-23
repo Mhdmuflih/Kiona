@@ -1,15 +1,12 @@
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
-import mongoose from "mongoose";
 
 // ----------------------------------------------
 
 import User from "../model/userModel.js";
 import OTP from "../model/otpModel.js";
 import Product from "../model/productModel.js";
-import Cart from "../model/cartModel.js";
-
 // ----------------------------------------------
 
 // password secure
@@ -344,106 +341,15 @@ const productDetails = async(req,res)=>{
     }
 }
 
-//user shoping cat
-const cart = async (req, res) => {
-    try {
-        const user = req.session.user_id;
-        console.log(user);
-        if (!user) {
-            return res.redirect('/login');
-        }
-
-        let cartProduct = await Cart.aggregate([
-            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
-            { $unwind:"$cartItems" },
-            { $lookup:{
-                from:"products",
-                localField:"cartItems.productId",
-                foreignField:"_id",
-                as:"productDetails"
-            } }
-        ])
-
-        console.log('muflih',cartProduct);
-        res.render('users/shoping-cart.ejs', { user, cartProduct });
-        
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Internal server error');
-    }
-}
-
-//cart prodcut quantity increment.
-const incrementQuantity = async(req,res)=>{
-    try {
-        
-        const { cartItemsId } = req.body;
-
-        await Cart.findOneAndUpdate({"cartItems._id":cartItemsId},{$inc:{"cartItems.$.quantity":1}})
-
-        res.json({success:true})
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-//cart Product Quantity decrement
-const decrementQuantity = async (req,res)=>{
-    try {
-     
-        const { cartItemsId } = req.body;
-
-        await Cart.findOneAndUpdate({ "cartItems._id":cartItemsId },{ $inc:{ "cartItems.$.quantity":-1 } })
-
-        res.json({success:true})
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-//add to cart in product details page
-const addToCart = async (req,res)=>{
-    try {
-
-        const userId = req.session.user_id
-        const { productId } = req.body;
-
-
-        if (!userId || !productId) {
-            return res.status(400).json({ success: false, message: "Missing user ID or product ID" });
-        }
-
-        const existingCartItem = await Cart.findOne({ userId:userId, "cartItems.productId":productId })
-
-        if(existingCartItem){
-            return res.json({success:false, message:"Product already exists in the cart"})
-        }
-
-       await Cart.updateOne(
-            { userId: userId },
-            { $push: { cartItems: { productId: productId } } },
-            { upsert: true }      // Create the cart if it doesn't exist
-        );
-
-        
-        res.json({ success: true, message: "Added to Cart" });
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 //404 page
-const notPage = async(req,res)=>{
-    try {
-        res.render('users/404.ejs');
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+// const notPage = async(req,res)=>{
+//     try {
+//         res.render('users/404.ejs');
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
 
 
 //user logout
@@ -473,11 +379,7 @@ export {
     productPage,
     productDetails,
 
-    cart,
-    incrementQuantity,
-    decrementQuantity,
-    addToCart,
 
-    notPage
+    // notPage
 
 }

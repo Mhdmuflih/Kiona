@@ -4,8 +4,9 @@ import path from "path";
 import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
-import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails, cart, addToCart, notPage, incrementQuantity, decrementQuantity } from "../controller/userController.js";
+import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
 import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
+import { addToCart, cart, decrementQuantity, incrementQuantity } from "../controller/userCartController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -98,7 +99,7 @@ user_route.post('/shoping-cart/decrement',decrementQuantity)
 //logout
 user_route.get('/logout',isLogin,userLogout)
 
-user_route.get('/*',notPage)
+// user_route.get('/*',notPage)
 
 
 

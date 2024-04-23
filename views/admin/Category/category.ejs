@@ -225,7 +225,8 @@
                                               </td>
                                               <td></td>
                                               <td>
-                                                <a href="/admin/edit_category?id=<%= category[i]._id %>"> <button class="btn btn-info" >Edit</button> </a>
+                                                <button type="button" class="btn btn-info" onclick="editCategory('<%= category[i]._id %>')" > Edit </button>
+
                                               </td>
                                               <td></td>
                                               <td>
@@ -326,6 +327,11 @@
 
 
     <script>
+
+      async function editCategory(categoryID) {
+    window.location.href = `/admin/edit_category?id=${categoryID}`;
+}
+
 
      
       async function deleteCategory(id){

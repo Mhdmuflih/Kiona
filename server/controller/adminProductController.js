@@ -1,6 +1,8 @@
 import Product from "../model/productModel.js";
 import Category from "../model/categoryModel.js";
 
+import fs from "fs";
+
 // product page
 const productPage = async (req,res)=>{
     try {
@@ -170,16 +172,23 @@ const editProductPage = async(req,res)=>{
 //edit Product
 const editProduct = async (req, res) => {
     try {
-        
-        const images = req.files.map((file)=>file.filename);
-        console.log(images);
 
-        if(req.file){
-            const updatedProduct = await Product.findByIdAndUpdate(
+        let updatedProduct ;
+        
+        if (req.files && req.files.length > 0) {
+            const newImages = req.files.map((file) => file.filename); // Extract filenames from uploaded files
+            console.log(newImages);
+
+            const existingProduct = await Product.findById(req.body.product_id);
+            const existingImages = existingProduct.image || [];
+
+            const mergedImages = [...existingImages, ...newImages]
+
+            updatedProduct = await Product.findByIdAndUpdate(
                 { _id: req.body.product_id },
                 {
                     $set: {
-                        image: images,
+                        image: mergedImages,
                         name: req.body.name,
                         price: req.body.price,
                         quantity:req.body.quantity,
@@ -191,7 +200,7 @@ const editProduct = async (req, res) => {
             console.log(updatedProduct,'hlooo');
 
         }else{
-            const updatedProduct = await Product.findByIdAndUpdate(
+            updatedProduct = await Product.findByIdAndUpdate(
                 { _id: req.body.product_id },
                 {
                     $set: {
@@ -207,18 +216,15 @@ const editProduct = async (req, res) => {
             console.log(updatedProduct,'hiii');
         }
 
-        res.redirect('/admin/product')
-
-        // if (updatedProduct) {
-        //     res.json({ success: true, message: "Product Updated" });
-        // } else {
-        //     res.status(200 ).json({ success: false, message: "Product not found or update failed" });
-        // }
+        if (updatedProduct) {
+            res.json({ success: true, message: "Product Updated" });
+        } else {
+            res.status(200 ).json({ success: false, message: "Product not found or update failed" });
+        }
     } catch (error) {
         console.log(error.message);
     }
 };
-
 
 
 export{
