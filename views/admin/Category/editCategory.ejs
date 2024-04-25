@@ -189,6 +189,7 @@
                           <span class="input-group-append">
                             <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
                           </span>
+                          <p style="color: red;" id="imageErr"></p>
                         </div>
 
                         <!-- its very importent in this code cant sleeping me  !!!! -->
@@ -201,20 +202,22 @@
                           <label for="exampleInputUsername1">Category</label>
                           <input type="text" name="name" class="form-control" id="category" value="<%= category.name %>"
                             required></input>
+                          <p style="color: red;" id="categoryErr"></p>
                         </div>
                         <div class="form-group">
                           <label>Description</label>
                           <input class="form-control" name="description" id="description" rows="4"
                             value="<%= category.description %>" required></input>
+                          <p style="color: red;" id="descriptionErr"></p>
                         </div>
 
 
-                          <div class="d-flex">
-                            <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                            <div style="width: 20px;"></div>
-                            <a href="/admin/category"> <button type="submit"
-                                class="btn btn-gradient-info mr-2">Cancel</button> </a>
-                          </div>
+                        <div class="d-flex">
+                          <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+                          <div style="width: 20px;"></div>
+                          <a href="/admin/category"> <button type="submit"
+                              class="btn btn-gradient-info mr-2">Cancel</button> </a>
+                        </div>
 
                       </form>
                     </div>
@@ -262,30 +265,77 @@
 
       document.getElementById("form").addEventListener("submit", async (e) => {
         e.preventDefault();
+        check();
+      });
 
-        const formElement = document.getElementById("form");
-        const formData = new FormData(formElement);
+      const check = () => {
+        const image = document.getElementById("image").files[0];
+        const imageErr = document.getElementById("imageErr");
+        const category = document.getElementById("category").value.trim();
+        const categoryErr = document.getElementById("categoryErr");
+        const description = document.getElementById("description").value.trim();
+        const descriptionErr = document.getElementById("descriptionErr");
 
-        const categoryId = formData.get('category_id')
+        let isValid = true;
 
-        const confirmation = await Swal.fire({
-          title: 'Are you sure?',
-          text: 'You won\'t be able to revert this!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, Update Category!'
-        });
+        imageErr.innerHTML = "";
+        categoryErr.innerHTML = "";
+        descriptionErr.innerHTML = "";
 
-        if (!confirmation.isConfirmed) {
-          return;
+        if (!image) {
+          imageErr.innerHTML = "Please Select an Image.";
+          isValid = false;
+        } else {
+          if (!/\.(jpg|jpeg|png)$/i.test(image.name)) {
+            imageErr.innerHTML = "Only JPG files are allowed.";
+            isValid = false;
+          }
+
+          if (image.size > 5242880) { // 5 * 1024 * 1024
+            imageErr.innerHTML += "<br>File size must not exceed 5MB.";
+            isValid = false;
+          }
         }
 
+        if (category === '') {
+          categoryErr.innerHTML = "Please Enter the Category Name.";
+          isValid = false;
+        } else {
+          const categoryRegex = /^[a-zA-Z\s]*$/;
+          if (!categoryRegex.test(category)) {
+            categoryErr.innerHTML = "Please Enter a Valid Category.";
+            isValid = false;
+          }
+        }
+
+        if (description === '') {
+          descriptionErr.innerHTML = "Please Enter Description.";
+          isValid = false;
+        }
+
+        if (isValid) {
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Update Category!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const formElement = document.getElementById("form");
+              const formData = new FormData(formElement);
+              const categoryId = formData.get('category_id');
+              submitForm(formData, categoryId);
+            }
+          });
+        }
+      };
+
+      const submitForm = async (formData, categoryId) => {
         try {
-
-          const response = await axios.post(`/admin/edit_category?id=${categoryId}`, formData)
-
+          const response = await axios.post(`/admin/edit_category?id=${categoryId}`, formData);
           if (response.data.success) {
             await Swal.fire({
               icon: 'success',
@@ -310,9 +360,7 @@
             text: 'There was an error updating the Category'
           });
         }
-
-
-      })
+      };
 
     </script>
 

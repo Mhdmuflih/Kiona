@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Shoping Cart</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/kiona-logo.png" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7Yk4nWXwLMUAmxZf3oL8f1cP9J4nHuir0N2bCJ6RJrxCYp7oI7fp2Lm" crossorigin="anonymous">
+	<!--===============================================================================================-->
+</head>
+
+<body class="animsition">
+
+	<!-- Header -->
+	<header class="header-v4">
+		<!-- Header desktop -->
+		<div class="container-menu-desktop">
+			<!-- Topbar -->
+			<div class="top-bar">
+				<div class="content-topbar flex-sb-m h-full container">
+					<div class="left-top-bar">
+						Free shipping for standard order over $100
+					</div>
+
+					<div class="right-top-bar flex-w h-full">
+						<a href="#" class="flex-c-m trans-04 p-lr-25">
+							Help & FAQs
+						</a>
+
+						<a href="/" class="flex-c-m trans-04 p-lr-25">
+							Home
+						</a>
+
+						<% if(user){%>
+
+                            <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
+                                My Account
+                            </a>
+
+                            <a href="/logout" class="flex-c-m trans-04 p-lr-25">
+                                Logout
+                            </a>
+
+                            
+
+                        <%}else{%>
+                            <a href="/login" class="flex-c-m trans-04 p-lr-25">
+                                Login
+                            </a>
+                            <a href="/register" class="flex-c-m trans-04 p-lr-25">
+                                Sign Up
+                            </a>
+                       <% } %>
+
+						
+					</div>
+				</div>
+			</div>
+
+	<!-- breadcrumb -->
+	<div class="container">
+		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+			<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+				Home
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+			<a href="/shoping-cart" class="stext-109 cl8 hov-cl1 trans-04">
+				Shoping Cart
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+            <a href="/shoping-cart/selectAddress" class="stext-109 cl8 hov-cl1 trans-04">
+				Select Address
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+            <span class="stext-109 cl4">
+				Add Address
+			</span>
+
+		</div>
+	</div>
+
+
+	<!-- Shoping Cart -->
+	<div class="bg0 p-t-30 p-b-85">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+					<div class="m-l-25 m-r--38 m-lr-0-xl">
+						<div class="wrap-table-shopping-cart">
+							<div class="container">
+									<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13  p-lr-15 trans-04 m-tb-10">
+										Add Address
+									</div>
+
+                                    <form id="form">
+
+
+                                        <!-- Form Row-->
+                                        <div class="row gx-3 mb-3">
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="name">Name</label>
+                                                <input class="form-control" id="name" name="name" type="text" value=" <%= address.name %>">
+                                            </div>
+            
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="mobile">Mobile Number</label>
+                                                <input class="form-control" id="mobile" name="mobile" type="number"
+                                                    value="<%= address.mobile %>">
+                                            </div>
+                                        </div>
+            
+                                        <!-- Form Row        -->
+                                        <div class="row gx-3 mb-3">
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputOrgName"> Pincode </label>
+                                                <input class="form-control" id="pincode" name="pincode" type="number"
+                                                    value="<%= address.pincode %>">
+                                            </div>
+            
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputLocation">Locality</label>
+                                                <input class="form-control" id="locality" name="locality" type="text"
+                                                    value="<%= address.locality %>">
+                                            </div>
+                                        </div>
+            
+                                        <div class="mb-3">
+                                            <label class="small mb-1" for="inputEmailAddress">Address</label>
+                                            <textarea class="form-control" name="address" id="address" rows="4" tabindex="5" required="" autocomplete="street-address" style="width: 100%;"><%= address.address %></textarea>
+                                        </div>
+                                        
+                                        
+                                        <!-- Form Row-->
+                                        <div class="row gx-3 mb-3">
+            
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputPhone">City/District</label>
+                                                <input class="form-control" id="city" name="city" type="text"
+                                                    value="<%= address.city %>">
+                                            </div>
+            
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="inputBirthday">States</label>
+                                                <input class="form-control" id="state" type="text" name="state"
+                                                    value="<%= address.state %>">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3 container">
+                                            <label class="small mb-1" for="inputAddressType">Address Type</label>
+                                                <div class="col-md-6">
+                                                    <input class="form-check-input" type="radio" id="home" name="addressType" value="Home">
+                                                    <label class="form-check-label" for="home">Home</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input class="form-check-input" type="radio" id="work" name="addressType" value="Work">
+                                                    <label class="form-check-label" for="work">Work</label>
+                                                </div>
+                                        </div>
+
+                                        <input type="text" name="" id="addressId" value="<%= address._id %>" hidden>
+
+                                        <a href="/shoping-cart/selectAddress"> <button class="btn btn-danger" type="button">Back</button> </a>
+                                        <a href=""> <button class="btn btn-primary" type="submit">Save Address</button> </a>
+                                    </form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<%- include('../../layouts/footer.ejs') %>
+
+	
+
+	<!-- Back to top -->
+	<div class="btn-back-to-top" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="zmdi zmdi-chevron-up"></i>
+		</span>
+	</div>
+
+	<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function () {
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+	<!--===============================================================================================-->
+	<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function () {
+			$(this).css('position', 'relative');
+			$(this).css('overflow', 'hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function () {
+				ps.update();
+			})
+		});
+	</script>
+	<!--===============================================================================================-->
+	<script src="/js/main.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQ2t8wPd4NzzBqxREyZK8XvCqaEiPTzUMHPO+sB4QQyebJgZDedQ1IKfHAj62N2F" crossorigin="anonymous"></script>
+
+
+    <script>
+        
+        document.getElementById("form").addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formElement = document.getElementById('form');
+            const addressId = document.getElementById('addressId').value;
+            const formData = new FormData(formElement);
+
+            let formValues = {}
+
+            for (const entry of formData.entries()) {
+                const [key, value] = entry;
+                formValues[key] = value;
+            }
+
+            const confirmation = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Update Address!'
+            });
+
+            if (!confirmation.isConfirmed) {
+                return;
+            }
+
+            try {
+
+                const response = await axios.post(`/shoping-cart/selectAddress/editAddress?addressId=${addressId}`, formValues);
+
+                if (response.data.success) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Update Address!',
+                        text: response.data.message
+                    }).then(() => {
+                        window.location.href = `/shoping-cart/selectAddress`;
+                    });
+                } else {
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.data.message
+                    });
+                    window.location.href = `/shoping-cart/selectAddress/editAddress?addressId=${addressId}`;
+                }
+            } catch (error) {
+                console.error("Error updating Address: ", error.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error updating the profile'
+                });
+            }
+
+        })
+
+    </script>
+    
+
+    </script>
+
+
+</body>
+
+</html>

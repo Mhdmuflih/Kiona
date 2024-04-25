@@ -126,13 +126,18 @@
 
 						<div class="container">
 							<div class="card">
-								<div class="card-header"> <a href="/addAddress"> <button class="btn btn-success w-100" >Add Address</button> </a> </div>
+								<div class="card-header">
+									<a href="/addAddress">
+										<button class="btn btn-success w-100" >
+											Add Address
+										</button>
+									</a>
+								</div>
 								<% if (addressData.addresses && addressData.addresses.length > 0) { %>
 
 									<% for(let i=0 ; i<addressData.addresses.length ; i++){ %>
 
 										<div class="card-body">
-											<!-- <input type="radio"> -->
 											<h5 class="card-title">
 												<%= addressData.addresses[i].addressType %>
 											</h5>
@@ -141,16 +146,19 @@
 														<span style="margin-right: 15px; font-weight: bold;" > <%= addressData.addresses[i].name %> </span>
 														<span style="font-weight: bold;" > <%= addressData.addresses[i].mobile %> </span>
 													</p>
-													<%= addressData.addresses[i].address %>
-													<%= addressData.addresses[i].locality %>
-													<%= addressData.addresses[i].city %>
-													<%= addressData.addresses[i].state %>
-													<%= addressData.addresses[i].pincode %>
+													<%= addressData.addresses[i].address %>,
+													<%= addressData.addresses[i].locality %>,
+													<%= addressData.addresses[i].city %>,
+													<p>
+														<%= addressData.addresses[i].state %> -
+														<%= addressData.addresses[i].pincode %>
+													</p>
+													
 											</p>
 											<button type="button" class="btn btn-info" onclick="editAddress('<%= addressData.addresses[i]._id %>')" > Edit </button>
 											<button type="button" class="btn btn-danger" onclick="deleteAddress('<%= addressData.addresses[i]._id %>')" > Delete </button>
 										</div>
-										<hr>
+										
 
 									<%	} %>
 								<% } else { %>

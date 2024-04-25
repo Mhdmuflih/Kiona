@@ -1,9 +1,8 @@
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
 
-import bcrypt, { compare, compareSync } from "bcrypt";
-import axios from "axios";
-import { response } from "express";
+import bcrypt from "bcrypt";
+
 
 // ------------------------------------
 

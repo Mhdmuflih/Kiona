@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 
 import Cart from "../model/cartModel.js";
 import Product from "../model/productModel.js";
+import User from "../model/userModel.js";
+import Address from "../model/addressModel.js";
 
 // ----------------------------------------------
 
@@ -65,7 +67,7 @@ const decrementQuantity = async (req,res)=>{
      
         const { cartItemsId } = req.body;
 
-        console.log(cartItemsId);
+        // console.log(cartItemsId);
 
         // const checkQuantity = await Cart.findOne({"cartItems._id":cartItemsId})
 
@@ -111,7 +113,7 @@ const addToCart = async (req,res)=>{
        await Cart.updateOne(
             { userId: userId },
             { $push: { cartItems: { productId: productId } } },
-            { upsert: true }      // Create the cart if it doesn't exist
+            { upsert: true }
         );
 
         
@@ -122,9 +124,191 @@ const addToCart = async (req,res)=>{
     }
 }
 
+//remove cart products
+const removeCart = async(req,res)=>{
+    try {
+        
+        console.log('kkkk');
+        const { id } = req.body;
+        const userId = req.session.user_id
+        console.log(id,"product");
+
+        const removedCartItem = await Cart.findOneAndUpdate(
+            { userId: userId },
+            { $pull: { cartItems: { productId: id } } },
+            { new: true }
+        );
+            console.log('ok removed');
+        if (removedCartItem) {
+            res.json({ success: true, message: "Cart item removed successfully" });
+        } else {
+            res.json({ success: false, message: "Failed to remove cart item" });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//checkout address showing page
+const selectAddress = async(req,res)=>{
+    try {
+
+        const id = req.session.user_id;
+        const user = await User.findOne({_id:id})
+
+        let addressData = await Address.findOne({userId:id})
+        if(!addressData){
+            addressData =  { addresses: [] };
+        }
+
+        res.render('users/checkoutAddress/showAddress.ejs',{ user, addressData })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout add address page
+const checkoutAddAddressPage = async(req,res)=>{
+    try {
+        
+        const id = req.session.user_id
+        const user = await User.findOne({ _id:id })
+
+        res.render("users/checkoutAddress/checkoutAddAddress.ejs", { user })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout add Address
+const checkoutAddAddress = async(req,res)=>{
+    try {
+
+        const id = req.session.user_id;
+        const checkUser = await Address.findOne({ userId:id });
+        let address;
+
+        if(!checkUser){
+            address = new Address({
+                userId:id,
+                addresses:[
+                    {
+                        name:req.body.name,
+                        mobile:req.body.mobile,
+                        pincode:req.body.pincode,
+                        locality:req.body.locality,
+                        address:req.body.address,
+                        city:req.body.city,
+                        state:req.body.state,
+                        defaultAddress: req.body.defaultAddress || true,
+                        addressType: req.body.addressType
+                    }
+                ]
+            })
+        }else{
+            checkUser.addresses.push({
+                name:req.body.name,
+                mobile:req.body.mobile,
+                pincode:req.body.pincode,
+                locality:req.body.locality,
+                address:req.body.address,
+                city:req.body.city,
+                state:req.body.state,
+                defaultAddress: req.body.defaultAddress || false,
+                addressType:req.body.addressType
+            })
+            address = checkUser
+        }
+
+        const saveAddress = await address.save();
+        if(saveAddress){
+            res.json({success:true, message:"Address Added "})
+        }else{
+            res.json({success:false, message:"Add Address Failed"})
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout Address edit
+const checkoutEditAddressPage = async(req,res)=>{
+    try {
+
+        const id = req.session.user_id
+        const addressId = req.query.id
+ 
+
+        const user = await User.findOne({_id:id});
+        const addressData = await Address.findOne({"addresses._id":addressId})
+
+        let address = {}
+
+        addressData.addresses.forEach(element=>{
+            if(addressId == element._id){
+                address = element
+            }
+        })
+
+        res.render('users/checkoutAddress/checkoutEditAddress', { user,address })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout edit address
+const checkoutEditAddress = async(req,res)=>{
+    try {
+        console.log('hlo');
+        const { addressId } = req.query
+        console.log(addressId,'addressid');
+
+        const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
+
+        const update = {}
+
+        if(name) update["addresses.$.name"] = name
+        if(mobile) update["addresses.$.mobile"] = mobile
+        if(pincode) update["addresses.$.pincode"] = pincode
+        if (locality) update['addresses.$.locality'] = locality;
+        if(address) update["addresses.$.address"] = address
+        if(city) update["addresses.$.city"] = city
+        if(state) update["addresses.$.state"] = state
+        if(addressType) update["addresses.$.addressType"] = addressType
+ 
+        const addressData = await Address.findOneAndUpdate({"addresses._id":addressId},{$set:update})
+        console.log(addressData,'okkkkk');
+        console.log(update,'update');
+
+        if(addressData){
+            res.json({success:true,message:"Address Updated"})
+        }else{
+            res.json({success:false, message:"No address found with the given ID"})
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 export{
     cart,
     addToCart,
     incrementQuantity,
-    decrementQuantity
+    decrementQuantity,
+    removeCart,
+
+    selectAddress,
+    checkoutAddAddressPage,
+    checkoutAddAddress,
+    checkoutEditAddressPage,
+    checkoutEditAddress
+
 }

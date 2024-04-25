@@ -93,7 +93,6 @@ const editCategoryPage = async (req,res)=>{
         const categoryId = await Category.findById({ _id:id })
 
         if(categoryId){
-            console.log(categoryId);
             res.render("admin/Category/editCategory.ejs", { category:categoryId })
         }else{
             res.redirect("/admin/category");
@@ -120,8 +119,6 @@ const editCategory = async (req,res)=>{
         }
 
         res.json({success:true, message:"Category Updated Succedfully."})
-
-        // res.redirect("/admin/category")
 
     } catch (error) {
         console.log(error.message);

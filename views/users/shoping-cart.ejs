@@ -49,13 +49,13 @@
 							Help & FAQs
 						</a>
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							EN
+						<a href="/" class="flex-c-m trans-04 p-lr-25">
+							Home
 						</a>
 
 						<% if(user){%>
 
-                            <a href="#" class="flex-c-m trans-04 p-lr-25">
+                            <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
                                 My Account
                             </a>
 
@@ -83,7 +83,7 @@
 				<nav class="limiter-menu-desktop container">
 
 					<!-- Logo desktop -->
-					<a href="#" class="logo">
+					<a href="/" class="logo">
 						<img src="/kiona-high-resolution-logo-transparent.png" alt="IMG-LOGO">
 					</a>
 
@@ -259,14 +259,14 @@
 
 
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85">
+	<div class="bg0 p-t-75 p-b-85" >
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
 					<div class="m-l-25 m-r--38 m-lr-0-xl">
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
-								<tr class="table_head">
+								<tr class="table_head" >
 									<th class="column-1">Product</th>
 									<th class="column-2"></th>
 									<th class="column-3">Price</th>
@@ -279,7 +279,7 @@
 
 								<tr class="table_row">
 									<td class="column-1">
-											<div class="how-itemcart1">
+											<div class="how-itemcart1" onclick="deleteCartProduct('<%= cartProduct[i].productDetails[0]._id %>')">
 												<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
 											</div>
 												</td>
@@ -300,8 +300,9 @@
 														</div>
 													</div>
 												</td>
+												
 												<td class="column-5" id="total<%= i %>" >$ <%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %></td>
-											</tr>
+											</tr> </a>
 											<% totalAmout += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
 										<% } %>
 							
@@ -409,14 +410,14 @@
 							</div>
 						</div>
 
-						<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-							Proceed to Checkout
-						</button>
+						<a href="/shoping-cart/selectAddress"> <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+							PLACE ORDER
+						</button> </a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
+	</div>
 
 
 
@@ -500,6 +501,48 @@
 			} catch (error) {
 				console.log(error.message);
 			}
+		}
+
+		async function deleteCartProduct(id){
+			const confirmation = await Swal.fire({
+				title: 'Are you sure?',
+				text: 'You won\'t be able to revert this!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			});
+
+			if(confirmation.isConfirmed){
+				try {
+					const response = await axios.delete("/shoping-cart/remove", { data: { id } });
+					if(response.data.success){
+						await Swal.fire({
+							icon: 'success',
+							title: 'Deleted!',
+							text: response.data.message
+						}).then(() => {
+							window.location.href = '/shoping-cart';
+						});
+					}else{
+						await Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: response.data.message
+						});
+						window.location.href = '/address';
+					}
+				} catch (error) {
+					console.log(error.message);
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'There was an error deleting the address'
+					});
+				}
+			}
+
 		}
 
 	</script>

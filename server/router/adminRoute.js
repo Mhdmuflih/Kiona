@@ -68,7 +68,7 @@ admin_route.post('/',verifyAdminLogin)
 
 //admin register
 admin_route.get('/register',isLogout,adminRegister)                         //admin register page
-admin_route.post('/register',insertAdmin)
+admin_route.post('/register',insertAdmin)                                   //insert Admin
 
 //admin home page
 admin_route.get('/home',isLogin,adminHome)                                  //admin home page
@@ -98,15 +98,15 @@ admin_route.post('/editProduct',upload,editProduct)                         //ed
 //category management
 admin_route.get('/category',isLogin,categoryPage)                           //category page
 admin_route.get('/add_category',isLogin,addCategory)                        //add category page
-admin_route.post('/add_category', uploadCategory.single('image'),createCategory)
+admin_route.post('/add_category', uploadCategory.single('image'),createCategory)  //add Category
 
-admin_route.get('/edit_category',editCategoryPage)
-admin_route.post('/edit_category',uploadCategory.single('image'),editCategory)
+admin_route.get('/edit_category',editCategoryPage)                          //edit Category page
+admin_route.post('/edit_category',uploadCategory.single('image'),editCategory)  //edit category
 
-admin_route.get('/deleteCategory',deleteCategoryPage)
-admin_route.post('/category/delete',deleteCategory)
-admin_route.post('/category/restore',restoreCategory)
-admin_route.post('/category/deleted',categoryDeleted)
+admin_route.get('/deleteCategory',deleteCategoryPage)                       //soft delete category page
+admin_route.post('/category/delete',deleteCategory)                         //delete main page
+admin_route.post('/category/restore',restoreCategory)                       //restore the soft delete page to main page
+admin_route.post('/category/deleted',categoryDeleted)                       //delete in db
 
 
 
