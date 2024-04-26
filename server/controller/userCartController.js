@@ -128,17 +128,15 @@ const addToCart = async (req,res)=>{
 const removeCart = async(req,res)=>{
     try {
         
-        console.log('kkkk');
         const { id } = req.body;
         const userId = req.session.user_id
-        console.log(id,"product");
 
         const removedCartItem = await Cart.findOneAndUpdate(
             { userId: userId },
             { $pull: { cartItems: { productId: id } } },
             { new: true }
         );
-            console.log('ok removed');
+        
         if (removedCartItem) {
             res.json({ success: true, message: "Cart item removed successfully" });
         } else {
@@ -163,7 +161,7 @@ const selectAddress = async(req,res)=>{
             addressData =  { addresses: [] };
         }
 
-        res.render('users/checkoutAddress/showAddress.ejs',{ user, addressData })
+        res.render('users/checkout/showAddress.ejs',{ user, addressData })
 
     } catch (error) {
         console.log(error.message);
@@ -177,7 +175,7 @@ const checkoutAddAddressPage = async(req,res)=>{
         const id = req.session.user_id
         const user = await User.findOne({ _id:id })
 
-        res.render("users/checkoutAddress/checkoutAddAddress.ejs", { user })
+        res.render("users/checkout/checkoutAddAddress.ejs", { user })
 
     } catch (error) {
         console.log(error.message);
@@ -255,7 +253,7 @@ const checkoutEditAddressPage = async(req,res)=>{
             }
         })
 
-        res.render('users/checkoutAddress/checkoutEditAddress', { user,address })
+        res.render('users/checkout/checkoutEditAddress', { user,address })
 
     } catch (error) {
         console.log(error.message);
@@ -265,12 +263,9 @@ const checkoutEditAddressPage = async(req,res)=>{
 //checkout edit address
 const checkoutEditAddress = async(req,res)=>{
     try {
-        console.log('hlo');
+
         const { addressId } = req.query
-        console.log(addressId,'addressid');
-
         const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
-
         const update = {}
 
         if(name) update["addresses.$.name"] = name
@@ -283,8 +278,6 @@ const checkoutEditAddress = async(req,res)=>{
         if(addressType) update["addresses.$.addressType"] = addressType
  
         const addressData = await Address.findOneAndUpdate({"addresses._id":addressId},{$set:update})
-        console.log(addressData,'okkkkk');
-        console.log(update,'update');
 
         if(addressData){
             res.json({success:true,message:"Address Updated"})
@@ -292,6 +285,41 @@ const checkoutEditAddress = async(req,res)=>{
             res.json({success:false, message:"No address found with the given ID"})
         }
         
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout Delete Address
+const checkoutDeleteAddress = async(req,res)=>{
+    try {
+
+        const { id } = req.body
+
+        const response = await Address.updateOne(
+            { },
+            { $pull: { addresses: { _id: id } } }
+        );
+
+        if(response){
+            res.json({success:true, message: "Address deleted successfully"})
+        }else{
+            res.json({success:false, message: "Address not found or already deleted"})
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//checkout Summary
+const summary = async(req,res)=>{
+    try {
+
+        const user = req.session.user_id
+        
+        res.render('users/checkout/checkoutSummary.ejs',{ user })
+
     } catch (error) {
         console.log(error.message);
     }
@@ -306,9 +334,15 @@ export{
     removeCart,
 
     selectAddress,
+    checkoutDeleteAddress,
+    
     checkoutAddAddressPage,
     checkoutAddAddress,
+
     checkoutEditAddressPage,
-    checkoutEditAddress
+    checkoutEditAddress,
+
+    summary
+
 
 }

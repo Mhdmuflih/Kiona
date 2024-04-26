@@ -42,41 +42,10 @@
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Free shipping for standard order over $100
+						KIONA
 					</div>
 
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Help & FAQs
-						</a>
-
-						<a href="/" class="flex-c-m trans-04 p-lr-25">
-							Home
-						</a>
-
-						<% if(user){%>
-
-                            <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">
-                                My Account
-                            </a>
-
-                            <a href="/logout" class="flex-c-m trans-04 p-lr-25">
-                                Logout
-                            </a>
-
-                            
-
-                        <%}else{%>
-                            <a href="/login" class="flex-c-m trans-04 p-lr-25">
-                                Login
-                            </a>
-                            <a href="/register" class="flex-c-m trans-04 p-lr-25">
-                                Sign Up
-                            </a>
-                       <% } %>
-
-						
-					</div>
+				
 				</div>
 			</div>
 
@@ -99,7 +68,7 @@
 			</a>
 
             <span class="stext-109 cl4">
-				Add Address
+				Order Summary
 			</span>
 
 		</div>
@@ -115,79 +84,21 @@
 						<div class="wrap-table-shopping-cart">
 							<div class="container">
 									<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13  p-lr-15 trans-04 m-tb-10">
-										Add Address
+										Order Summary
 									</div>
 
                                     <form id="form">
 
 
-                                        <!-- Form Row-->
-                                        <div class="row gx-3 mb-3">
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="name">Name</label>
-                                                <input class="form-control" id="name" name="name" type="text" value=" <%= address.name %>">
-                                            </div>
-            
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="mobile">Mobile Number</label>
-                                                <input class="form-control" id="mobile" name="mobile" type="number"
-                                                    value="<%= address.mobile %>">
-                                            </div>
-                                        </div>
-            
-                                        <!-- Form Row        -->
-                                        <div class="row gx-3 mb-3">
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="inputOrgName"> Pincode </label>
-                                                <input class="form-control" id="pincode" name="pincode" type="number"
-                                                    value="<%= address.pincode %>">
-                                            </div>
-            
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="inputLocation">Locality</label>
-                                                <input class="form-control" id="locality" name="locality" type="text"
-                                                    value="<%= address.locality %>">
-                                            </div>
-                                        </div>
-            
-                                        <div class="mb-3">
-                                            <label class="small mb-1" for="inputEmailAddress">Address</label>
-                                            <textarea class="form-control" name="address" id="address" rows="4" tabindex="5" required="" autocomplete="street-address" style="width: 100%;"><%= address.address %></textarea>
-                                        </div>
-                                        
-                                        
-                                        <!-- Form Row-->
-                                        <div class="row gx-3 mb-3">
-            
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="inputPhone">City/District</label>
-                                                <input class="form-control" id="city" name="city" type="text"
-                                                    value="<%= address.city %>">
-                                            </div>
-            
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="inputBirthday">States</label>
-                                                <input class="form-control" id="state" type="text" name="state"
-                                                    value="<%= address.state %>">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-3 container">
-                                            <label class="small mb-1" for="inputAddressType">Address Type</label>
-                                                <div class="col-md-6">
-                                                    <input class="form-check-input" type="radio" id="home" name="addressType" value="Home">
-                                                    <label class="form-check-label" for="home">Home</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input class="form-check-input" type="radio" id="work" name="addressType" value="Work">
-                                                    <label class="form-check-label" for="work">Work</label>
-                                                </div>
-                                        </div>
 
-                                        <input type="text" name="" id="addressId" value="<%= address._id %>" hidden>
+                                   
 
-                                        <a href="/shoping-cart/selectAddress"> <button class="btn btn-danger" type="button">Back</button> </a>
-                                        <a href=""> <button class="btn btn-primary" type="submit">Save Address</button> </a>
+                                        <!-- <a href="/shoping-cart/selectAddress"> <button class="btn btn-danger" type="button">Back</button> </a> -->
+
+										<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+											continue
+										</button>
+
                                     </form>
 							</div>
 						</div>

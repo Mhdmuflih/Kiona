@@ -1,12 +1,14 @@
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
+import mongoose from "mongoose";
 
 // ----------------------------------------------
 
 import User from "../model/userModel.js";
 import OTP from "../model/otpModel.js";
 import Product from "../model/productModel.js";
+import Cart from "../model/cartModel.js";
 // ----------------------------------------------
 
 // password secure
@@ -305,7 +307,18 @@ const loginHome = async (req, res) => {
         const products = await Product.find({ delete: false })
         const user = req.session.user_id
 
-        res.render('users/index.ejs', { user: userData || 'muflih', products, user })
+        let cartProduct = await Cart.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
+            { $unwind:"$cartItems" },
+            { $lookup:{
+                from:"products",
+                localField:"cartItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        res.render('users/index.ejs', { user: userData || 'muflih', products, user, cartProduct })
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server error");
@@ -317,8 +330,19 @@ const productPage = async (req, res) => {
     try {
         const user = req.session.user_id;
         const products = await Product.find({ delete: false });
+
+        let cartProduct = await Cart.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
+            { $unwind:"$cartItems" },
+            { $lookup:{
+                from:"products",
+                localField:"cartItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
         
-        res.render('users/product.ejs', { user, products })
+        res.render('users/product.ejs', { user, products, cartProduct })
     } catch (error) {
         console.log(error.message);
     }
@@ -332,9 +356,19 @@ const productDetails = async(req,res)=>{
         const user = req.session.user_id
 
         const product = await Product.findOne({ _id:productId})
-        console.log(product);
 
-        res.render('users/product-detail.ejs', { user, product })
+        let cartProduct = await Cart.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
+            { $unwind:"$cartItems" },
+            { $lookup:{
+                from:"products",
+                localField:"cartItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        res.render('users/product-detail.ejs', { user, product, cartProduct })
 
     } catch (error) {
         console.log(error.message);

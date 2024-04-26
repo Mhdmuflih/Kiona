@@ -42,7 +42,7 @@
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Free shipping for standard order over $100
+						KIONA
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
@@ -99,7 +99,7 @@
 			</a>
 
             <span class="stext-109 cl4">
-				Add Address
+				Edit Address
 			</span>
 
 		</div>
@@ -115,7 +115,7 @@
 						<div class="wrap-table-shopping-cart">
 							<div class="container">
 									<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13  p-lr-15 trans-04 m-tb-10">
-										Add Address
+										Edit Address
 									</div>
 
                                     <form id="form">
@@ -125,13 +125,13 @@
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="name">Name</label>
-                                                <input class="form-control" id="name" name="name" type="text" placeholder=" Name">
+                                                <input class="form-control" id="name" name="name" type="text" value=" <%= address.name %>">
                                             </div>
             
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="mobile">Mobile Number</label>
                                                 <input class="form-control" id="mobile" name="mobile" type="number"
-                                                    placeholder="10-digits Mobile No">
+                                                    value="<%= address.mobile %>">
                                             </div>
                                         </div>
             
@@ -140,19 +140,19 @@
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="inputOrgName"> Pincode </label>
                                                 <input class="form-control" id="pincode" name="pincode" type="number"
-                                                    placeholder="Pincode">
+                                                    value="<%= address.pincode %>">
                                             </div>
             
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="inputLocation">Locality</label>
                                                 <input class="form-control" id="locality" name="locality" type="text"
-                                                    placeholder="Locality">
+                                                    value="<%= address.locality %>">
                                             </div>
                                         </div>
             
                                         <div class="mb-3">
                                             <label class="small mb-1" for="inputEmailAddress">Address</label>
-                                            <textarea class="form-control" name="address" id="address" rows="4" tabindex="5" required="" autocomplete="street-address" style="width: 100%;"></textarea>
+                                            <textarea class="form-control" name="address" id="address" rows="4" tabindex="5" required="" autocomplete="street-address" style="width: 100%;"><%= address.address %></textarea>
                                         </div>
                                         
                                         
@@ -162,16 +162,15 @@
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="inputPhone">City/District</label>
                                                 <input class="form-control" id="city" name="city" type="text"
-                                                    placeholder="City/District">
+                                                    value="<%= address.city %>">
                                             </div>
             
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="inputBirthday">States</label>
                                                 <input class="form-control" id="state" type="text" name="state"
-                                                    placeholder="States">
+                                                    value="<%= address.state %>">
                                             </div>
                                         </div>
-            
                                         
                                         <div class="mb-3 container">
                                             <label class="small mb-1" for="inputAddressType">Address Type</label>
@@ -184,6 +183,9 @@
                                                     <label class="form-check-label" for="work">Work</label>
                                                 </div>
                                         </div>
+
+                                        <input type="text" name="" id="addressId" value="<%= address._id %>" hidden>
+
                                         <a href="/shoping-cart/selectAddress"> <button class="btn btn-danger" type="button">Back</button> </a>
                                         <a href=""> <button class="btn btn-primary" type="submit">Save Address</button> </a>
                                     </form>
@@ -253,52 +255,71 @@
 
 
     <script>
-        const formElement = document.getElementById("form");
-        formElement.addEventListener("submit", async (e) => {
+        
+        document.getElementById("form").addEventListener('submit', async (e) => {
             e.preventDefault();
-    
+
+            const formElement = document.getElementById('form');
+            const addressId = document.getElementById('addressId').value;
             const formData = new FormData(formElement);
-    
-            const formValue = {};
-    
+
+            let formValues = {}
+
             for (const entry of formData.entries()) {
                 const [key, value] = entry;
-                formValue[key] = value;
+                formValues[key] = value;
             }
-    
+
+            const confirmation = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Update Address!'
+            });
+
+            if (!confirmation.isConfirmed) {
+                return;
+            }
+
             try {
-                const response = await axios.post('/shoping-cart/selectAddress/addAddress', formValue);
-                
+
+                const response = await axios.post(`/shoping-cart/selectAddress/editAddress?addressId=${addressId}`, formValues);
+
                 if (response.data.success) {
-                    Swal.fire({
-                        title: "Success",
-                        icon: "success",
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Update Address!',
                         text: response.data.message
                     }).then(() => {
-                        window.location.href = '/shoping-cart/selectAddress'; // Redirect if successful
+                        window.location.href = `/shoping-cart/selectAddress`;
                     });
                 } else {
-                    Swal.fire({
-                        title: "Error",
-                        icon: "error",
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
                         text: response.data.message
                     });
+                    window.location.href = `/shoping-cart/selectAddress/editAddress?addressId=${addressId}`;
                 }
-                
             } catch (error) {
-                console.error("Error submitting form: ", error.message);
+                console.error("Error updating Address: ", error.message);
                 Swal.fire({
-                    title: "Error",
-                    icon: "error",
-                    text: "There was an error submitting your form"
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error updating the profile'
                 });
             }
-        });
+
+        })
+
     </script>
     
 
     </script>
-		
+
 
 </body>
 

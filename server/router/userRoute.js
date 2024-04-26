@@ -6,7 +6,7 @@ import session from "express-session";
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
 import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutEditAddress, checkoutEditAddressPage, decrementQuantity, incrementQuantity, removeCart, selectAddress } from "../controller/userCartController.js";
+import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -44,9 +44,6 @@ const storage = multer.diskStorage({
 const upload = multer({storage:storage})
 // -----------------------------------------------------------------------
 
-// Route
-// user_route.get('/',isLogout,home)
-
 // register route
 user_route.get('/register',isLogout,register)                           //registion page
 user_route.post('/register',upload.single('image'),insertUser)          //insert user
@@ -83,6 +80,7 @@ user_route.post('/changePassword',updatePassword)                       //change
 
 user_route.get('/address',addressPage)                                  //user address page
 user_route.delete('/address/delete',deleteAddress)                      //delete user address
+
 user_route.get('/address/editAddress',editAddresPage)                   //edit user address page
 user_route.post('/address/editAddress',editAddress)                     //edit user address
 
@@ -99,10 +97,16 @@ user_route.delete('/shoping-cart/remove',removeCart)                    //remove
 
 //select Address in order
 user_route.get('/shoping-cart/selectAddress',selectAddress)             //checkout address select page
+user_route.delete('/shoping-cart/selectAddress/delete',checkoutDeleteAddress)
+
 user_route.get('/shoping-cart/selectAddress/addAddress',checkoutAddAddressPage)     //checkout Add address page
 user_route.post('/shoping-cart/selectAddress/addAddress',checkoutAddAddress)        //checkoout add address
+
 user_route.get('/shoping-cart/selectAddress/editAddress',checkoutEditAddressPage)       //checkout edit address page
 user_route.post('/shoping-cart/selectAddress/editAddress',checkoutEditAddress)          //checkout Edit address
+
+user_route.get('/shoping-cart/checkout_summary',summary)
+
 
 //logout
 user_route.get('/logout',isLogin,userLogout)                            //logout user

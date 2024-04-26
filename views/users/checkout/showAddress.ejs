@@ -42,7 +42,7 @@
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Free shipping for standard order over $100
+						KIONA
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
@@ -110,8 +110,8 @@
 						<div class="wrap-table-shopping-cart">
 							<div class="container">
 								<a href="/shoping-cart/selectAddress/addAddress">
-									<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-										<button>Add Address</button>
+									<div class="flex-c-m stext-101 cl2 size-119 btn-success bor13 p-lr-15 trans-04 pointer m-tb-10">
+										<button style="color: aliceblue;" >Add Address</button>
 									</div>
 								</a>
 								<% if (addressData.addresses && addressData.addresses.length > 0) { %>
@@ -119,7 +119,7 @@
 										<div class="card-body">
 											<h5 class="card-title">
 												<p class="card-text">
-													<input type="radio" name="addresses" id="<%= addressData.addresses[i]._id %>">
+													<input type="radio" name="addresses" value="<%= addressData.addresses[i]._id %>" onchange="selectAddress()">
 													<span style="margin-right: 15px; font-weight: bold;"> <%= addressData.addresses[i].name %> </span>
 													<span class="address-type-style" style="  border: 1px solid #ddd; padding: 2px 5px; border-radius: 4px; display: inline-block; background-color: antiquewhite; " > <%= addressData.addresses[i].addressType %> </span>
 													<span style="font-weight: bold; margin-left: 15px"> <%= addressData.addresses[i].mobile %> </span>
@@ -195,9 +195,11 @@
 								</span>
 							</div>
 						</div>
-						<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-							Proceed to Checkout
-						</button>
+						<a href="/shoping-cart/checkout_summary">
+							<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+								Delivery Here
+							</button>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -265,6 +267,48 @@
 		async function editAddress(addressId){
 			window.location.href = `/shoping-cart/selectAddress/editAddress?id=${addressId}`
 		}
+
+		async function deleteAddress(id) {
+			const confirmation = await Swal.fire({
+				title: 'Are you sure?',
+				text: 'You won\'t be able to revert this!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			});
+
+			if (confirmation.isConfirmed) {
+				try {
+					const response = await axios.delete('/shoping-cart/selectAddress/delete', { data: { id } });
+					if (response.data.success) {
+						await Swal.fire({
+							icon: 'success',
+							title: 'Deleted!',
+							text: response.data.message
+						}).then(() => {
+							window.location.href = '/shoping-cart/selectAddress';
+						});
+					} else {
+						await Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: response.data.message
+						});
+						window.location.href = '/shoping-cart/selectAddress';
+					}
+				} catch (error) {
+					console.error("Error deleting address: ", error.message);
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'There was an error deleting the address'
+					});
+				}
+			}
+		}
+
 
 	</script>
 

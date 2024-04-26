@@ -37,11 +37,10 @@ const profilePage = async (req,res)=>{
 //user Profile Update
 const updateProfile = async(req,res)=>{
     try {
-        console.log('hlooo');
+
         const id = req.session.user_id;
-        // const userData = await User.findById({ _id:id })
         const {name, mobile} = req.body
-        console.log(req.body);
+
         const response = await User.findByIdAndUpdate({ _id:id}, { $set: { name:name, mobile:mobile } })
 
         if(response){
