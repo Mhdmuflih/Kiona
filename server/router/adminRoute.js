@@ -9,6 +9,7 @@ import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage,
 import { userDetails, userBlock } from "../controller/adminUserController.js";
 import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/adminCategoryController.js";
 import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
+import { orderPage } from "../controller/adminOrderController.js";
 
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -108,6 +109,7 @@ admin_route.post('/category/delete',deleteCategory)                         //de
 admin_route.post('/category/restore',restoreCategory)                       //restore the soft delete page to main page
 admin_route.post('/category/deleted',categoryDeleted)                       //delete in db
 
+admin_route.get('/order',orderPage)
 
 
 export default admin_route;

@@ -290,6 +290,13 @@
 													<i class="fs-16 zmdi zmdi-plus"></i>
 												</div>
 											</div>
+											
+											<% if (cartProduct[i].cartItems.quantity >= 5) { %>
+												<p class="text-danger">Minimum quantity reached.</p>
+											<% } else if (!cartProduct[i].productDetails[0].quantity) { %>
+												<p class="text-danger">Product is out of stock.</p>
+											<% } %>
+
 										</td>
 
 										<td class="column-5" id="total<%= i %>">$ <%=
@@ -335,7 +342,7 @@
 							</div>
 
 							<div class="size-209">
-								<span class="mtext-110 cl2" id="totalAmout">
+								<span class="mtext-110 cl2" id="grandTotal">
 									$<%= totalAmout %>
 								</span>
 							</div>
@@ -397,7 +404,7 @@
 							</div>
 
 							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2" id="totalAmount">
+								<span class="mtext-110 cl2" id="grandTotal">
 									$<%= totalAmout %>
 								</span>
 							</div>
@@ -473,26 +480,67 @@
 		<script>
 			async function increment(cartItemsId, price, index) {
 				try {
-					const total = document.getElementById(`total${index}`)
-					const quantity = document.getElementById(`quantity${index}`).value
-					const totalAmoutElement = document.getElementById("totalAmout")
+					const total = document.getElementById(`total${index}`);
+					const quantity = document.getElementById(`quantity${index}`).value;
+					// const totalAmoutElement = document.getElementById("totalAmout");
 
+					if (quantity >= 5) {
+						// Display message for minimum quantity constraint
+						await Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Maximum quantity reached.'
+						});
+						window.location.href='/shoping-cart'
+					}
 					const totalAmout = (Number(quantity) + 1) * price
 					total.textContent = `$${totalAmout}`
 					
-					totalAmoutElement.textContent = `$${totalAmout}`
+					// totalAmoutElement.textContent = `$${totalAmout}`
 
-					await axios.post('/shoping-cart/increment', { cartItemsId })
+					const response = await axios.post('/shoping-cart/increment', { cartItemsId })
+
+					if (response.data.success === false) {
+						await Swal.fire({
+							icon: 'error',
+							title: 'Failed',
+							text: response.data.message || 'Unable to increment quantity.'
+						});
+						window.location.href='/shoping-cart'
+					}
+
+					if(!response){
+						await Swal.fire({
+							icon: 'error',
+							title: 'Failed',
+							text: response.data.message || 'Unable to increment quantity.'
+						});
+					}
+
 				} catch (error) {
 					console.log(error.message);
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Something went wrong!'
+					});
 				}
 			}
 
 			async function decrement(cartItemsId, price, index) {
 				try {
 					const total = document.getElementById(`total${index}`);
-					const quantity = document.getElementById(`quantity${index}`).value
-					if (quantity > 1) {
+					const quantity = document.getElementById(`quantity${index}`).value;
+
+					if (quantity <= 1) {
+						// Prevent quantity from going below 1
+						await Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Maximum quantity reached.'
+						});
+						window.location.href='/shoping-cart'
+					}else{
 						const totalAmout = (Number(quantity) - 1) * price
 						total.textContent = `$${totalAmout}`
 					}

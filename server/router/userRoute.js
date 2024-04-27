@@ -6,7 +6,7 @@ import session from "express-session";
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
 import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
+import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, cod, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -105,7 +105,10 @@ user_route.post('/shoping-cart/selectAddress/addAddress',checkoutAddAddress)    
 user_route.get('/shoping-cart/selectAddress/editAddress',checkoutEditAddressPage)       //checkout edit address page
 user_route.post('/shoping-cart/selectAddress/editAddress',checkoutEditAddress)          //checkout Edit address
 
-user_route.get('/shoping-cart/checkout_summary',summary)
+user_route.get('/shoping-cart/checkout_summary',summary)                //summay of order
+
+user_route.get('/checkout',checkoutPage)                                //checkout page
+user_route.post('/checkout/cod',cod)
 
 
 //logout

@@ -29,7 +29,9 @@ const cart = async (req, res) => {
             } }
         ])
 
-        res.render('users/shoping-cart.ejs', { user, cartProduct });
+        let message;
+
+        res.render('users/shoping-cart.ejs', { user, cartProduct, message:message });
         
     } catch (error) {
         console.log(error.message);
@@ -42,19 +44,18 @@ const incrementQuantity = async(req,res)=>{
     try {
         
         const { cartItemsId } = req.body;
-
         const cartId = await Cart.findOne({"cartItems._id":cartItemsId})
         
         const items = cartId.cartItems
-
         const item = items.find(item => item._id == cartItemsId);
 
-       const product = await Product.findOne({_id:item.productId})
-
-       if(product.quantity>item.quantity){
-        await Cart.findOneAndUpdate({"cartItems._id":cartItemsId},{$inc:{"cartItems.$.quantity":1}})
-        return res.json({success:true})
-       }
+        const product = await Product.findOne({_id:item.productId})
+        
+            if(product.quantity>item.quantity && item.quantity < 5 ){
+               await Cart.findOneAndUpdate({"cartItems._id":cartItemsId},{$inc:{"cartItems.$.quantity":1}})
+            }else{
+                res.json({success:false, message:"Product quantity is not sufficient to add to the cart."})
+            }
 
     } catch (error) {
         console.log(error.message);
@@ -264,7 +265,10 @@ const checkoutEditAddressPage = async(req,res)=>{
 const checkoutEditAddress = async(req,res)=>{
     try {
 
+        console.log(req.query);
+
         const { addressId } = req.query
+        console.log(addressId);
         const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
         const update = {}
 
@@ -316,15 +320,60 @@ const checkoutDeleteAddress = async(req,res)=>{
 const summary = async(req,res)=>{
     try {
 
+        const addressId = req.query.id
         const user = req.session.user_id
+
+        let cartProduct = await Cart.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
+            { $unwind:"$cartItems" },
+            { $lookup:{
+                from:"products",
+                localField:"cartItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        const addressData = await Address.findOne({"addresses._id":addressId})
+
+        let address = {}
+
+        addressData.addresses.forEach(element=>{
+            if(addressId == element._id){
+                address = element
+            }
+        })
+
+
         
-        res.render('users/checkout/checkoutSummary.ejs',{ user })
+        res.render('users/checkout/checkoutSummary.ejs',{ user, cartProduct, address })
 
     } catch (error) {
         console.log(error.message);
     }
 }
 
+//checkout page
+const checkoutPage = async(req,res)=>{
+    try {
+        
+        const user = req.session.user_id;
+
+        res.render("users/checkout/checkout.ejs", { user })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//cod
+const cod = async (req,res)=>{
+    try {
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export{
     cart,
@@ -342,7 +391,10 @@ export{
     checkoutEditAddressPage,
     checkoutEditAddress,
 
-    summary
+    summary,
+
+    checkoutPage,
+    cod
 
 
 }

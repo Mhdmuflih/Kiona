@@ -29,7 +29,7 @@
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="../../admin/images/kiona-logo.png"
+        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="/kiona-high-resolution-logo-transparent.png"
             alt="logo" /></a>
         <!-- <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../admin/images/logo-mini.svg" alt="logo" /></a> -->
       </div>
@@ -44,8 +44,8 @@
                 <i class="input-group-text border-0 mdi mdi-magnify"></i>
               </div>
               <input type="text" class="form-control" placeholder="Search User name,email" name="search">
-              <input type="submit" class="btn btn-primary" value="Search">
-              </div>
+              <button type="submit" class="btn btn-inverse-dark btn-fw">Search</button>
+            </div>
           </form>
         </div>
         <ul class="navbar-nav navbar-nav-right">
@@ -69,92 +69,72 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
 
-          <li class="nav-item">
+          <li class="mt-4">
             <a class="nav-link" href="/admin/home">
-              <span class="menu-title">Dashboard</span>
-              <i class="mdi mdi-home menu-icon"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard  <i class="mdi mdi-home menu-icon"></i>
+              </button>
             </a>
           </li>
-
-          <li class="nav-item">
+          <li >
             <a class="nav-link" href="/admin/users">
-              <span class="menu-title">Users</span>
-              <i class="mdi mdi-contacts menu-icon"></i>
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
+              </button>
             </a>
           </li>
-          <li class="nav-item">
+         
+          <li>
             <a class="nav-link" href="/admin/product">
-              <span class="menu-title">Products</span>
-              <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-              <i class="mdi mdi-format-list-bulleted mdi-shopping"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Products <i class="mdi mdi-tshirt-crew "></i> </button>
             </a>
           </li>
-          <li class="nav-item">
+          <li>
             <a class="nav-link" href="/admin/category">
-              <span class="menu-title">Category</span>
-              <i class="mdi mdi-chart-bar menu-icon"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Category <i class="mdi mdi-cards"></i> </button>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../tables/basic-table.html">
-              <span class="menu-title">Order</span>
-              <i class="mdi mdi-table-large menu-icon"></i>
+          <li>
+            <a class="nav-link" href="/admin/order">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
-              aria-controls="general-pages">
-              <span class="menu-title">Sales</span>
+          <li >
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
               <i class="menu-arrow"></i>
-              <i class="mdi mdi-medical-bag menu-icon"></i>
             </a>
             <div class="collapse" id="general-pages">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../samples/blank-page.html"> Blank Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../samples/register.html"> Register </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../samples/error-500.html"> 500 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          <li>
             <a class="nav-link" href="pages/tables/basic-table.html">
-              <span class="menu-title">Offer</span>
-              <i class="mdi mdi-table-large menu-icon"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
             </a>
           </li>
-          <li class="nav-item">
+          <li>
             <a class="nav-link" href="pages/tables/basic-table.html">
-              <span class="menu-title">Coupons</span>
-              <i class="mdi mdi-table-large menu-icon"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i> </button>
             </a>
           </li>
-          <li class="nav-item">
+          <li>
             <a class="nav-link" href="pages/tables/basic-table.html">
-              <span class="menu-title">Banners</span>
-              <i class="mdi mdi-table-large menu-icon"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
             </a>
-          </li>
-          <li class="nav-item sidebar-actions">
-            <span class="nav-link">
-              <div class="border-bottom">
-                <h6 class="font-weight-normal mb-3">Projects</h6>
-              </div>
-              <button class="btn btn-block btn-lg btn-gradient-primary mt-4">+ Add a project</button>
-              <div class="mt-4">
-                <div class="border-bottom">
-                  <p class="text-secondary">Categories</p>
-                </div>
-                <ul class="gradient-bullet-list mt-4">
-                  <li>Free</li>
-                  <li>Pro</li>
-                </ul>
-              </div>
-            </span>
           </li>
         </ul>
       </nav>
+
+
+
+
+
+
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
@@ -162,180 +142,168 @@
             <h3 class="page-title"> User Details </h3>
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">users</a></li>
+                <li class="breadcrumb-item"><a href="/admin/users">users</a></li>
                 <li class="breadcrumb-item active" aria-current="page">User Details</li>
               </ol>
             </nav>
           </div>
-          <div class="row">
-            <div class="col-lg-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row icons-list">
-
-                    <div class="main-panel w-100">
-
-
-                      <div class="row ">
-
-                        <div class="card">
-                          <div class="card-body">
-                            <h4 class="card-title">Customer's Details</h4>
-                            <div class="table-responsive">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th> Name </th>
-                                    <th> Email </th>
-                                    <th> Mobil </th>
-
-                                    <th> Status </th>
-                                    <th> Action </th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-
-                                  <% if(users.length>0){
-                                    for(let i=0 ; i<users.length ; i++){ %>
-                                      <tr>
-                                        <td>
-                                          <img src="/Photos/userImages/<%= users[i].image %>" class="mr-2"
-                                            alt="<%= users[i].image %>">
-                                          <%= users[i].name %>
-                                        </td>
-                                        <td>
-                                          <%= users[i].email %>
-                                        </td>
-                                        <td>
-                                          <%= users[i].mobile %>
-                                        </td>
-                                        <%if(users[i].is_block){%>
-                                          <td>bloked</td>
-                                          <%}else{%>
-                                            <td>Un bloked</td>
-                                            <%}%>
-                                              <td>
-                                                <% if(users[i].is_block){%>
-                                                  <button class="btn btn-success"
-                                                    onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
-                                                  <% }else{%>
-                                                    <button class="btn btn-danger"
-                                                      onclick="blockUser('<%= users[i]._id %>')">Block</button>
-                                                    <% } %>
-                                              </td>
-
-                                      </tr>
-                                      <% } }else{ %>
-                                        <tr>
-                                          <td colspan="6">User not fount</td>
-                                        </tr>
-                                        <% } %>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="text-center pagination">
-                      <div class="pagination-container" style="display: flex; justify-content: center ;">
-
-                      </div>
-                      <br>
 
 
 
-                      <div class="text-center pagination">
-                        <ul class="pagination">
-                          <% if (currentPage> 1) { %>
-                            <li class="page-item">
-                              <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                              </a>
-                            </li>
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Customser's Details</h4>
+                <p class="card-description"> <code>Kiona customsers</code>
+                </p>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th> User </th>
+                      <th> Email </th>
+                      <th> Mobile </th>
+                      <th></th>
+                      <th> Status </th>
+                      <th> Action </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <% if(users.length>0){
+                      for(let i=0 ; i<users.length ; i++){ %>
+
+                        <tr>
+                          <td class="py-1">
+                            <img src="/Photos/userImages/<%= users[i].image %>" alt="<%= users[i].image %>"
+                              class="mr-3">
+                            <%= users[i].name %>
+                          </td>
+
+                          <td>
+                            <%= users[i].email %>
+                          </td>
+                          <td>
+                            <%= users[i].mobile %>
+                          </td>
+                          <td>
+                            <%if(users[i].is_block){%>
+                          <td>bloked</td>
+                          <%}else{%>
+                            <td>Un bloked</td>
+                            <%}%>
+                              </td>
+                              <td>
+                                <% if(users[i].is_block){%>
+                                  <button class="btn btn-success btn-sm"
+                                    onclick="blockUser('<%= users[i]._id %>')">Un-Block</button>
+                                  <% } else { %>
+                                    <button class="btn btn-danger btn-sm"
+                                      onclick="blockUser('<%= users[i]._id %>')">Block</button>
+                                    <% } %>
+                              </td>
+
+                        </tr>
+
+
+                        <% } }else{ %>
+                          <tr>
+                            <td colspan="6">User not fount</td>
+                          </tr>
                           <% } %>
-                          <% for (let i=1; i <=totalPages; i++) { %>
-                            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-                                <a class="page-link" href="?page=<%= i %>">
-                                  <%= i %>
-                                </a>
-                              </li>
-                          <% } %>
-                            <% if (currentPage < totalPages) { %>
-                              <li class="page-item">
-                                <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>" aria-label="Next">
-                                  <span aria-hidden="true">&raquo;</span>
-                                </a>
-                              </li>
-                            <% } %>
-                        </ul>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <!-- partial:../../partials/_footer.html -->
-            <footer class="footer">
-              <div class="container-fluid clearfix">
-                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
-                  bootstrapdash.com 2020</span>
-                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                    href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
-                    template</a> from Bootstrapdash.com</span>
-              </div>
-            </footer>
-            <!-- partial -->
+
           </div>
+          <div class="text-center pagination">
+            <ul class="pagination">
+              <% if (currentPage> 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <% } %>
+                  <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                      <a class="page-link" href="?page=<%= i %>">
+                        <%= i %>
+                      </a>
+                    </li>
+                    <% } %>
+                      <% if (currentPage < totalPages) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                        <% } %>
+            </ul>
+          </div>
+
+
+
+
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
+                bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                  href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
+                  template</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
         </div>
       </div>
-      <!-- plugins:js -->
-      <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
-      <!-- endinject -->
-      <!-- Plugin js for this page -->
-      <!-- End plugin js for this page -->
-      <!-- inject:js -->
-      <script src="../../admin/js/off-canvas.js"></script>
-      <script src="../../admin/js/hoverable-collapse.js"></script>
-      <script src="../../admin/js/misc.js"></script>
-      <!-- endinject -->
-      <!-- Custom js for this page -->
-      <!-- End custom js for this page -->
+    </div>
+    <!-- plugins:js -->
+    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../admin/js/off-canvas.js"></script>
+    <script src="../../admin/js/hoverable-collapse.js"></script>
+    <script src="../../admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
 
 
 
 
 
-      <!-- axios CDN -->
-      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 
-      <script>
-        async function blockUser(userId) {
+    <script>
+      async function blockUser(userId) {
 
-          const responce = await axios.post('http://localhost:8000/admin/users/block', { userId });
-          if (responce.data.success) {
-            await Swal.fire({
-              icon: 'success',
-              title: 'Success',
-              text: responce.data.message
-            })
-            window.location.href = '/admin/users';
-          } else {
-            await Swal.fire({
-              icon: 'error',
-              title: 'error',
-              text: responce.data.message
-            })
-            window.location.href = '/admin/users';
-          }
-
+        const responce = await axios.post('http://localhost:8000/admin/users/block', { userId });
+        if (responce.data.success) {
+          await Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: responce.data.message
+          })
+          window.location.href = '/admin/users';
+        } else {
+          await Swal.fire({
+            icon: 'error',
+            title: 'error',
+            text: responce.data.message
+          })
+          window.location.href = '/admin/users';
         }
-      </script>
+
+      }
+    </script>
 
 
 
