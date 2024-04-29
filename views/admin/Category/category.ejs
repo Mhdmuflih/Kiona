@@ -1,273 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->
+
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End Plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="../../admin/css/style.css">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
-  </head>
-  <body>
-    <div class="container-scroller">
-      <!-- partial:../../partials/_navbar.html -->
-      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>
-          <!-- <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../admin/images/logo-mini.svg" alt="logo" /></a> -->
-        </div>
-        <div class="navbar-menu-wrapper d-flex align-items-stretch">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
-          </button>
-          <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" action="#">
-              <div class="input-group">
-                <div class="input-group-prepend bg-transparent">
-                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                </div>
-                <input type="text" class="form-control" placeholder="Search User name,email" name="search">
-                <button type="submit" class="btn btn-inverse-dark btn-fw">Search</button>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Purple Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End Plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="../../admin/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50"
+            src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>
+        <!-- <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../admin/images/logo-mini.svg" alt="logo" /></a> -->
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="input-group">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
               </div>
-            </form>
-          </div>
-          <ul class="navbar-nav navbar-nav-right">
-  
-            <li class="nav-item nav-logout d-none d-lg-block">
-              <a class="nav-link" href="/admin/logout">
-                <i class="mdi mdi-power"></i>
-              </a>
-            </li>
-  
-          </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-            data-toggle="offcanvas">
-            <span class="mdi mdi-menu"></span>
-          </button>
+              <input type="text" class="form-control" placeholder="Search User name,email" name="search">
+              <button type="submit" class="btn btn-inverse-dark btn-fw">Search</button>
+            </div>
+          </form>
         </div>
+        <ul class="navbar-nav navbar-nav-right">
+
+          <li class="nav-item nav-logout d-none d-lg-block">
+            <a class="nav-link" href="/admin/logout">
+              <i class="mdi mdi-power"></i>
+            </a>
+          </li>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="mt-4">
+            <a class="nav-link" href="/admin/home">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i
+                  class="mdi mdi-home menu-icon"></i>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/users">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i
+                  class="mdi mdi-contacts menu-icon"></i>
+              </button>
+            </a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="/admin/product">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i
+                  class="mdi mdi-tshirt-crew "></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/category">
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i
+                  class="mdi mdi-cards"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/order">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i
+                  class="mdi mdi-shopping"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
+              aria-controls="general-pages">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i>
+              </button>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i
+                  class="mdi mdi-percent"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i
+                  class="mdi mdi-ticket"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i
+                  class="mdi mdi-clipboard-outline"></i> </button>
+            </a>
+          </li>
+        </ul>
       </nav>
       <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="mt-4">
-              <a class="nav-link" href="/admin/home">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i class="mdi mdi-home menu-icon"></i>
-                </button>
-              </a>
-            </li>
-            <li >
-              <a class="nav-link" href="/admin/users">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
-                </button>
-              </a>
-            </li>
-           
-            <li>
-              <a class="nav-link" href="/admin/product">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i class="mdi mdi-tshirt-crew "></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="/admin/category">
-                <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i class="mdi mdi-cards"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="/admin/order">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
-              </a>
-            </li>
-            <li >
-              <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="general-pages">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> All Categories   </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="/admin/category">Categories</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">All Categories</li>
-                </ol>
-              </nav>
-            </div>
-            
-            <div class="d-flex ">
-              <a href="/admin/add_category"><button type="button" class="btn btn-success">Add Categories</button></a>
-              <div style="width: 20px;"></div>
-              <a href="/admin/deleteCategory"><button type="button" class="btn btn-danger">Deleted</button></a>
-            </div>
-
-            <p></p>
-            
-            <div class="row">
-              <div class="col-lg-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row icons-list">
-  
-                      <div class="main-panel w-100">
-  
-  
-                        <div class="row ">
-  
-                          <div class="card">
-                            <div class="card-body">
-                              <h4 class="card-title">Customer's Details</h4>
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr style="text-align: center;">
-                                      <th>Image</th>
-                                      <th>  </th>
-                                      <th>  </th>
-                                      <th>Category Name</th>
-                                      <th>  </th>
-                                      <th>  </th>
-                                      <th> Description </th>
-                                      <th></th>
-                                      <th>Edit</th>
-                                      <th></th>
-                                      <th>Delete</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-  
-                                    <%
-                                      if(category.length>0){
-                                        for(let i=0 ; i<category.length ; i++){
-                                          %>
-                                            <tr>
-                                              
-                                              
-                                              <td>
-                                                <img src="Photos/category/<%= category[i].image %>" class="mr-2" alt="<%= category[i].image %>"> </td>
-                                              <td></td>
-                                              <td></td>
-                                              <td>
-                                                <%= category[i].name %>
-                                              </td>
-                                              <td></td>
-                                              <td></td>
-                                              <td>
-                                                <%= category[i].description %>
-                                              </td>
-                                              <td></td>
-                                              <td>
-                                                <button type="button" class="btn btn-gradient-dark btn-icon-text" onclick="editCategory('<%= category[i]._id %>')" > Edit <i class="mdi mdi-file-check"></i>
-                                              </td>
-                                              <td></td>
-                                              <td>
-                                                <button type="button" class="btn btn-danger" onclick="deleteCategory('<%= category[i]._id %>')">Delete</button>
-                                              </td>
-                                      </tr>
-                                              
-                                            </tr>
-                                          
-                                       <% } %>
-                                       <%  }else{
-                                          %>
-                                            <tr>
-                                              <td colspan="6">Categories not fount</td>
-                                            </tr>
-                                    <%  } %>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="text-center pagination">
-                      <div class="pagination-container" style="display: flex; justify-content: center ;">
-
-                      </div>
-                      <br>
-
-
-
-                      <div class="text-center pagination">
-                        <ul class="pagination">
-                          <% if (currentPage> 1) { %>
-                            <li class="page-item">
-                              <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                              </a>
-                            </li>
-                          <% } %>
-                          <% for (let i=1; i <=totalPages; i++) { %>
-                            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-                                <a class="page-link" href="?page=<%= i %>">
-                                  <%= i %>
-                                </a>
-                              </li>
-                          <% } %>
-                            <% if (currentPage < totalPages) { %>
-                              <li class="page-item">
-                                <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>" aria-label="Next">
-                                  <span aria-hidden="true">&raquo;</span>
-                                </a>
-                              </li>
-                            <% } %>
-                        </ul>
-                      </div>
-
-                    </div>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title"> All Categories </h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/category">Categories</a></li>
+                <li class="breadcrumb-item active" aria-current="page">All Categories</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h4 class="card-title">Category Details</h4>
+                    <p class="card-description"><code>Kiona Category</code></p>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <a href="/admin/add_category">
+                      <button type="button" class="btn badge badge-success btn-md" >Add Categories <i class="mdi mdi-plus-circle"></i> </button>
+                    </a>
+                    <div style="width: 20px;"></div>
+                    <a href="/admin/deleteCategory">
+                      <button type="button" class="btn badge badge-warning ">Restore <i class="mdi mdi-file-restore"></i> </button>
+                    </a>
                   </div>
                 </div>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th> No </th>
+                      <th> Image </th>
+                      <th> Category Nmae </th>
+                      <th> Description </th>
+                      <th> Edit </th>
+                      <th> Delete </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (category.length > 0) { %>
+                      <% for (let i = 0; i < category.length; i++) { %>
+                        <tr>
+                          <td><%= i + 1 %></td>
+                          <td><img src="Photos/category/<%= category[i].image %>" class="mr-2" alt="Image of <%= category[i].name %>"></td>
+                          <td><%= category[i].name %></td>
+                          <td><%= category[i].description %></td>
+                          <td>
+                            <button type="button" class=" btn badge btn-gradient-dark" onclick="editCategory('<%= category[i]._id %>')" aria-label="Edit Category">
+                              Edit <i class="mdi mdi-file-check" style="font-size: 15px; width: 15px; height: 15px; color: white;"></i>
+                            </button>
+                          </td>
+                          <td>
+                            <button type="button" class=" btn badge badge-danger" onclick="deleteCategory('<%= category[i]._id %>')" aria-label="Delete Category">
+                              Delete <i class="mdi mdi-delete-sweep" style="font-size: 15px; width: 15px; height: 15px; color: white;"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6">Categories not found</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
               </div>
             </div>
+          </div>
+          <div class="text-center pagination">
+            <ul class="pagination">
+              <% if (currentPage> 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= parseInt(currentPage) - 1 %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              <% } %>
+              <% for (let i=1; i <=totalPages; i++) { %>
+                <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>">
+                    <%= i %>
+                  </a>
+                </li>
+              <% } %>
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= parseInt(currentPage) + 1 %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </div>
+
+
+
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">
             <div class="container-fluid clearfix">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">kioan © kiona.com
+                2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                  href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">kiona admin
+                  </a> from kiona.com</span>
             </div>
           </footer>
           <!-- partial -->
@@ -292,7 +268,7 @@
     <script src="../../admin/js/chart.js"></script>
     <!-- End custom js for this page -->
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -301,29 +277,29 @@
     <script>
 
       async function editCategory(categoryID) {
-    window.location.href = `/admin/edit_category?id=${categoryID}`;
-}
+        window.location.href = `/admin/edit_category?id=${categoryID}`;
+      }
 
 
-     
-      async function deleteCategory(id){
+
+      async function deleteCategory(id) {
 
         const responce = await axios.post('http://localhost:8000/admin/category/delete', { id })
 
-        if(responce.data.success){
+        if (responce.data.success) {
           await Swal.fire({
-            icon:"success",
-            title:"success",
-            text:responce.data.message
+            icon: "success",
+            title: "success",
+            text: responce.data.message
           })
-          window.location.href="/admin/category";
-        }else{
+          window.location.href = "/admin/category";
+        } else {
           await Swal.fire({
-            icon:"error",
-            title:"error",
-            text:responce.data.message
+            icon: "error",
+            title: "error",
+            text: responce.data.message
           })
-          window.location.href="/admin/category"
+          window.location.href = "/admin/category"
         }
 
       }
@@ -333,7 +309,8 @@
 
 
 
-  </body>
+</body>
 
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->
+
 </html>

@@ -325,11 +325,23 @@ const loginHome = async (req, res) => {
     }
 }
 
-// user product details page
+// user all product page
 const productPage = async (req, res) => {
     try {
         const user = req.session.user_id;
-        const products = await Product.find({ delete: false });
+        let products;
+
+        if (req.query.sort === 'low_to_high') {
+            products = await Product.find({ delete:false }).sort({ price: 1 });
+        }else if (req.query.sort === 'high_to_low') {
+            products = await Product.find({ delete:false }).sort({ price: -1 })
+        }else if (req.query.sort === 'shirt') {
+            products = await Product.find({ delete:false, category:"Shirt" })
+        }else if (req.query.sort === 't_shirt') {
+            products = await Product.find({ delete:false, category:"T-Shirt" });
+        }else {
+            products = await Product.find({ delete:false })
+        }
 
         let cartProduct = await Cart.aggregate([
             { $match:{ userId: mongoose.Types.ObjectId(user)  } },
@@ -374,6 +386,16 @@ const productDetails = async(req,res)=>{
         console.log(error.message);
     }
 }
+
+//sort the product price in low to high
+// const LowToHigh = async(req,res)=>{
+//     try {
+//         const products = await Product.find().sort({ price: -1 })
+//         res.json(products)
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
 
 
 //404 page

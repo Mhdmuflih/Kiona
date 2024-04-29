@@ -54,9 +54,7 @@
           </li>
 
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-          data-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas"> <span class="mdi mdi-menu"></span>
         </button>
       </div>
     </nav>
@@ -66,36 +64,30 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="mt-4">
-            <a class="nav-link" href="/admin/home">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i class="mdi mdi-home menu-icon"></i>
+            <a class="nav-link" href="/admin/home"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i class="mdi mdi-home menu-icon"></i>
               </button>
             </a>
           </li>
-          <li >
-            <a class="nav-link" href="/admin/users">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
+          <li>
+            <a class="nav-link" href="/admin/users"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
               </button>
             </a>
           </li>
-         
+
           <li>
-            <a class="nav-link" href="/admin/product">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i class="mdi mdi-tshirt-crew "></i> </button>
+            <a class="nav-link" href="/admin/product"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i class="mdi mdi-tshirt-crew "></i> </button>
             </a>
           </li>
           <li>
-            <a class="nav-link" href="/admin/category">
-              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i class="mdi mdi-cards"></i> </button>
+            <a class="nav-link" href="/admin/category"> <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i class="mdi mdi-cards"></i> </button>
             </a>
           </li>
           <li>
-            <a class="nav-link" href="/admin/order">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
+            <a class="nav-link" href="/admin/order"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
             </a>
           </li>
-          <li >
-            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="general-pages">
@@ -109,18 +101,15 @@
             </div>
           </li>
           <li>
-            <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
+            <a class="nav-link" href="pages/tables/basic-table.html"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
             </a>
           </li>
           <li>
-            <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i> </button>
+            <a class="nav-link" href="pages/tables/basic-table.html"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i> </button>
             </a>
           </li>
           <li>
-            <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
+            <a class="nav-link" href="pages/tables/basic-table.html"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
             </a>
           </li>
         </ul>
@@ -148,30 +137,44 @@
                       <h4 class="card-title">Add Category form</h4>
                       <p class="card-description"> </p>
                       <form class="forms-sample" method="post" id="categoryForm" enctype="multipart/form-data">
-                        <label>Product upload</label>
-                        <input type="file" name="image" id="image" class="file-upload-default">
+                        <!-- upload file -->
+                        <label for="image">Product upload</label>
+                        <input type="file" name="image" id="image" class="file-upload-default" multiple style="display: none;">
                         <div class="input-group col-xs-12">
                           <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
                           <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
+                            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="document.getElementById('image').click();">Upload</button>
                           </span>
-                          <p style="color: red;" id="imageErr"></p>
                         </div>
+
+                        <!-- image showing  -->
+                        <div id="selected-images"></div>
+
+                        <div id="cancel-button-template" style="display: none;">
+                          <button type="button" class="btn btn-danger cancel-button">Cancel</button>
+                        </div>
+                        
+                        <p style="color: red;" id="imageErr"></p>
+
+                        <!-- category name -->
                         <div class="form-group">
                           <label for="exampleInputUsername1">Category</label>
                           <input type="text" name="name" class="form-control" id="category" placeholder="Category name">
                           <p style="color: red;" id="categoryErr"></p>
                         </div>
+
+                        <!-- description -->
                         <div class="form-group">
                           <label>Description</label>
                           <textarea class="form-control" name="description" id="description" rows="4"></textarea>
                           <p style="color: red;" id="descriptionErr"></p>
                         </div>
                         
+                        <!-- submit and cancel button -->
                         <div class="d-flex">
                           <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
                           <div style="width: 20px;"></div>
-                          <a href="/admin/category"> <button type="submit"
+                          <a href="/admin/category"> <button type="button"
                               class="btn btn-gradient-info mr-2">Cancel</button> </a>
                         </div>
 
@@ -217,13 +220,57 @@
     <!-- End custom js for this page -->
 
 
+    <script>
+      document.getElementById('image').addEventListener('change', function (event) {
+        var previewContainer = document.getElementById('selected-images');
+        previewContainer.innerHTML = ''; // Clear any existing images
+  
+        if (event.target.files.length > 0) {
+          for (var i = 0; i < event.target.files.length; i++) {
+            var reader = new FileReader();
+            reader.onload = (function (file) {
+              return function (e) {
+                var imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.style.height = '150px';
+                imgElement.style.maxWidth = '150px';
+                imgElement.style.position = 'relative'; // Set position to relative for parent div
+  
+                var cancelButton = document.createElement('button');
+                cancelButton.type = 'button';
+                cancelButton.className = 'cancel-button';
+                cancelButton.innerHTML = 'X';
+                cancelButton.style.position = 'absolute';
+                cancelButton.style.top = '5px';
+                cancelButton.style.left = '100px';
+                cancelButton.style.padding = '3px';
+                cancelButton.style.color = "white";
+                cancelButton.style.background = "red";
+                cancelButton.style.border = "none"
+                cancelButton.addEventListener('click', function () {
+                  // Remove the image and the cancel button
+                  this.parentNode.remove(); // Remove parent div containing image and cancel button
+                });
+  
+                var imageDiv = document.createElement('div');
+                imageDiv.style.position = 'relative'; // Set position to relative for parent div
+                imageDiv.appendChild(imgElement);
+                imageDiv.appendChild(cancelButton);
+  
+                // Append the image and cancel button to the selected-images div
+                previewContainer.appendChild(imageDiv);
+              };
+            })(event.target.files[i]);
+            reader.readAsDataURL(event.target.files[i]);
+          }
+        }
+      });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
-
-
       document.getElementById('categoryForm').addEventListener('submit', function (e) {
         e.preventDefault();
         check();
@@ -238,6 +285,7 @@
         const descriptionErr = document.getElementById("descriptionErr");
 
         let isValid = true;
+        
         imageErr.innerHTML = "";
         categoryErr.innerHTML = "";
         descriptionErr.innerHTML = "";

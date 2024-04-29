@@ -80,20 +80,15 @@ const productAdd = async(req,res)=>{
             description:req.body.description
         })
         const productData = await product.save();
-        console.log('hiii');
         if(productData){
-            console.log('hlo');
-            res.render('admin/Products/addProduct.ejs', { category: categoryData, message: 'Product added successfully.' });
-
+            res.status(200).json({ success: true, message: 'Product added successfully.' });
         }else{
-            console.log('not kkkkk');
-            res.render('admin/Products/addProduct.ejs', { category: categoryData, error: 'Failed to add product. Please try again.' });
+            res.status(400).json({ success: false, error: 'Failed to add product. Please try again.' });
         }
     
-        console.log('madaa kalikkalle yye nki dheshyam vern n');
     } catch (error) {
-        console.log('poda pottaa');
         console.log(error.message);
+        res.status(500).json({ success: false, error: 'An error occurred while adding the product.' });
     }
 }
 
@@ -197,7 +192,6 @@ const editProduct = async (req, res) => {
                     }
                 }
             );
-            console.log(updatedProduct,'hlooo');
 
         }else{
             updatedProduct = await Product.findByIdAndUpdate(
@@ -212,14 +206,12 @@ const editProduct = async (req, res) => {
                     }
                 }
             );
-
-            console.log(updatedProduct,'hiii');
         }
 
         if (updatedProduct) {
             res.json({ success: true, message: "Product Updated" });
         } else {
-            res.status(200 ).json({ success: false, message: "Product not found or update failed" });
+            res.json({ success: false, message: "Product not found or update failed" });
         }
     } catch (error) {
         console.log(error.message);

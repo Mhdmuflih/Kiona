@@ -157,15 +157,12 @@
                                             <label>Product upload</label>
                                             <input type="file" value="<%= product.image %>" name="images"
                                                 class="file-upload-default" multiple>
-                                            <!-- The file input element allows users to select multiple files -->
                                             <div class="input-group col-xs-12">
                                                 <input type="text" class="form-control file-upload-info" disabled
                                                     placeholder="Upload Image">
-                                                <!-- This input field shows the selected file names (if any) -->
                                                 <span class="input-group-append">
                                                     <button class="file-upload-browse btn btn-gradient-primary"
                                                         type="button">Upload</button>
-                                                    <!-- This button triggers the file selection dialog when clicked -->
                                                 </span>
                                             </div>
                                         </div>
@@ -211,7 +208,6 @@
                                             <select class="form-control my-custom-dropdown" name="category">
                                                 <% category.forEach(function(cat) { %>
                                                     <option value="<%= cat.name %>">
-                                                        <!-- Change value to category name -->
                                                         <%= cat.name %>
                                                     </option>
                                                     <% }); %>
@@ -301,7 +297,7 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    var cancelClicked = false; // Flag to track cancel button click
+                    var cancelClicked = false;
 
                     var closeButtons = document.querySelectorAll('.close-button');
                     closeButtons.forEach(function (button) {

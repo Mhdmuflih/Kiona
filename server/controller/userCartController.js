@@ -51,11 +51,11 @@ const incrementQuantity = async(req,res)=>{
 
         const product = await Product.findOne({_id:item.productId})
         
-            if(product.quantity>item.quantity && item.quantity < 5 ){
-               await Cart.findOneAndUpdate({"cartItems._id":cartItemsId},{$inc:{"cartItems.$.quantity":1}})
-            }else{
-                res.json({success:false, message:"Product quantity is not sufficient to add to the cart."})
-            }
+        if(product.quantity>item.quantity && item.quantity < 5 ){
+            await Cart.findOneAndUpdate({"cartItems._id":cartItemsId},{$inc:{"cartItems.$.quantity":1}})
+        }else{
+            res.json({success:false, message:"Product quantity is not sufficient to add to the cart."})
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -67,17 +67,6 @@ const decrementQuantity = async (req,res)=>{
     try {
      
         const { cartItemsId } = req.body;
-
-        // console.log(cartItemsId);
-
-        // const checkQuantity = await Cart.findOne({"cartItems._id":cartItemsId})
-
-        // console.log(checkQuantity);
-
-        // checkQuantity.cartItems.forEach(item => {
-        //     console.log(item.quantity);
-        //   });
-
 
         const updatedCartItem = await Cart.findOneAndUpdate({ "cartItems._id": cartItemsId, "cartItems.quantity": { $gt: 1 }},
             { $inc: { "cartItems.$.quantity": -1 }},
@@ -100,18 +89,26 @@ const addToCart = async (req,res)=>{
         const userId = req.session.user_id
         const { productId } = req.body;
 
-
         if (!userId || !productId) {
-            return res.status(400).json({ success: false, message: "Missing user ID or product ID" });
+            return res.json({ success: false, message: "Login in Account" });
         }
 
         const existingCartItem = await Cart.findOne({ userId:userId, "cartItems.productId":productId })
+        const product = await Product.findById(productId)
+
+        if (!product) {
+            return res.json({ success: false, message: "Product not found" });
+        }
+
+        if(product.quantity === 0 ){
+            return res.json({ success: false, message: "Product not found" });
+        }
 
         if(existingCartItem){
             return res.json({success:false, message:"Product already exists in the cart"})
         }
 
-       await Cart.updateOne(
+        await Cart.updateOne(
             { userId: userId },
             { $push: { cartItems: { productId: productId } } },
             { upsert: true }

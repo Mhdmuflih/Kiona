@@ -69,6 +69,7 @@ user_route.get('/',loginHome)                                           //home p
 user_route.get('/products',productPage)                                 //show the product page
 user_route.get('/productDetails',productDetails)                        //single product details
 
+
 //user Profile
 user_route.get('/userProfile',profilePage)                              //user profile page
 user_route.put('/userProfile',updateProfile)                            //update user profile

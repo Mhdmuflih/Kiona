@@ -1,235 +1,431 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/forms/basic_elements.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->
+
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="../../admin/css/style.css">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
-  </head>
-  <body>
-    <div class="container-scroller">
-      <!-- partial:../../partials/_navbar.html -->
-      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>
-        </div>
-        <div class="navbar-menu-wrapper d-flex align-items-stretch">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
-          </button>
-          <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" action="#">
-              <div class="input-group">
-                <div class="input-group-prepend bg-transparent">
-                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                </div>
-                <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Purple Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="../../admin/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50"
+            src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="input-group">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
               </div>
-            </form>
-          </div>
-          <ul class="navbar-nav navbar-nav-right">
-            
-            
-            <li class="nav-item nav-logout d-none d-lg-block">
-              <a class="nav-link" href="/admin/logout">
-                <i class="mdi mdi-power"></i>
-              </a>
-            </li>
-        
-          </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-            <span class="mdi mdi-menu"></span>
-          </button>
+              <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+            </div>
+          </form>
         </div>
+        <ul class="navbar-nav navbar-nav-right">
+
+
+          <li class="nav-item nav-logout d-none d-lg-block">
+            <a class="nav-link" href="/admin/logout">
+              <i class="mdi mdi-power"></i>
+            </a>
+          </li>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="mt-4">
+            <a class="nav-link" href="/admin/home">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i
+                  class="mdi mdi-home menu-icon"></i>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/users">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i
+                  class="mdi mdi-contacts menu-icon"></i>
+              </button>
+            </a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="/admin/product">
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Products <i
+                  class="mdi mdi-tshirt-crew "></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/category">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Category <i
+                  class="mdi mdi-cards"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/order">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i
+                  class="mdi mdi-shopping"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
+              aria-controls="general-pages">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i>
+              </button>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i
+                  class="mdi mdi-percent"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i
+                  class="mdi mdi-ticket"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i
+                  class="mdi mdi-clipboard-outline"></i> </button>
+            </a>
+          </li>
+        </ul>
       </nav>
       <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:../../partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="mt-4">
-              <a class="nav-link" href="/admin/home">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i class="mdi mdi-home menu-icon"></i>
-                </button>
-              </a>
-            </li>
-            <li >
-              <a class="nav-link" href="/admin/users">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
-                </button>
-              </a>
-            </li>
-           
-            <li>
-              <a class="nav-link" href="/admin/product">
-                <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Products <i class="mdi mdi-tshirt-crew "></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="/admin/category">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Category <i class="mdi mdi-cards"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="/admin/order">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
-              </a>
-            </li>
-            <li >
-              <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="general-pages">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                  <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i> </button>
-              </a>
-            </li>
-            <li>
-              <a class="nav-link" href="pages/tables/basic-table.html">
-                <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Add Product </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="/admin/add_product">Add Product</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Products</li>
-                </ol>
-              </nav>
-            </div>
-            
-            <div class="row">
-              
-              
-              <div class="col-12 grid-margin stretch-card">
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title"> Add Product </h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/add_product">Add Product</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Products</li>
+              </ol>
+            </nav>
+          </div>
+
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Add Product</h4>
-                    <p class="card-description"> </p>
+                    <div class="card-body">
+                        <h4 class="card-title">Add Product</h4>
+                        <p class="card-description"></p>
+                        <form method="post" action="/admin/add_product" class="forms-sample" id="productForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="image">Product upload</label>
+                                <div class="input-group">
+                                    <input type="file" name="images" id="image" class="file-upload-default" style="display: none;" multiple>
+                                    <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                    <span class="input-group-append">
+                                      <button type="button" class="btn btn-gradient-danger btn-icon-text" onclick="document.getElementById('image').click();">
+                                        <i class="mdi mdi-upload btn-icon-prepend"></i> Upload </button>
+                                        <button type="button" class="btn btn-gradient-info" onclick="document.getElementById('image').click();">
+                                            Upload <i class="mdi mdi-file-image"></i>
+                                        </button>
+                                    </span>
+                                </div>
+        
+                                <!-- Image preview container -->
+                                <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
 
-                    <form method="post" action="/admin/add_product" class="forms-sample" enctype="multipart/form-data">
-
-                        <div class="form-group">
-                            <label>Product upload</label>
-                            <input type="file" name="images" class="file-upload-default" multiple>
-                            <div class="input-group col-xs-12">
-                                <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                <span class="input-group-append">
-                                      <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
-                                </span>
                             </div>
-                        </div>
-                      <div class="form-group">
-                        <label >Name</label>
-                        <input type="text" name="name" class="form-control" id="exampleInputName1" placeholder="Name">
-                        
-                      </div>
-                      <div class="form-group">
-                        <label >Price</label>
-                        <input type="number" name="price" class="form-control" id="exampleInputEmail3" placeholder="Price">
-                      </div>
-                      <div class="form-group">
-                        <label >Quantity</label>
-                        <input type="number" name="quantity" class="form-control" id="exampleInputPassword4" placeholder="Quantity">
-                      </div>
-
-                      <div class="form-group">
-                        <label>Categories</label>
-                        <select class="form-control my-custom-dropdown" name="category">
-                          <% category.forEach(function(cat) { %>
-                            <option value="<%= cat.name %>"> <!-- Change value to category name -->
-                                <%= cat.name %>
-                            </option>
-                        <% }); %>
-                        </select>
-                      </div>
-                      
-                      
-                      <div class="form-group">
-                        <label >Description</label>
-                        <textarea type="text" class="form-control" name="description" id="exampleTextarea1" rows="4"></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
+                            <p style="color: red;" id="imageErr"></p>
+                    <div class="form-group">
+                      <label>Name</label>
+                      <input type="text" name="name" class="form-control" id="name" id="exampleInputName1" placeholder="Name">
+                    </div>
+                    <p style="color: red;" id="nameErr"></p>
+                    <div class="form-group">
+                      <label>Price</label>
+                      <input type="number" name="price" id="price" class="form-control" id="exampleInputEmail3"
+                        placeholder="Price">
+                    </div>
+                    <p style="color: red;" id="priceErr"></p>
+                    <div class="form-group">
+                      <label>Quantity</label>
+                      <input type="number" name="quantity" id="quantity" class="form-control" id="exampleInputPassword4"
+                        placeholder="Quantity">
+                    </div>
+                    <p style="color: red;" id="quantityErr"></p>
+                    <div class="form-group">
+                      <label>Categories</label>
+                      <select class="form-control my-custom-dropdown" name="category">
+                        <% category.forEach(function(cat) { %>
+                          <option value="<%= cat.name %>">
+                            <%= cat.name %>
+                          </option>
+                          <% }); %>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Description</label>
+                      <textarea type="text" class="form-control" id="description" name="description" id="exampleTextarea1"
+                        rows="4"></textarea>
+                    </div>
+                    <p style="color: red;" id="descriptionErr"></p>
+                    <button type="submit" class="btn btn-inverse-success btn-fw"> Add Product <i class="mdi mdi-file-check"></i> </button>
+                    <a href="/admin/product"> <button type="button" class="btn btn-light">Cancel <i class="mdi mdi-close-circle-outline"></i></button> </a>
+                  </form>
                 </div>
               </div>
-              
-              <%
-              if(typeof message !== 'undefined'){
-                  %>
-                  <p><%= message %></p>
-                  <%
-              }
-              %>
-              
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="container-fluid clearfix">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
             </div>
-          </footer>
-          <!-- partial -->
+          </div>
         </div>
-        <!-- main-panel ends -->
       </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="../../admin/js/off-canvas.js"></script>
-    <script src="../../admin/js/hoverable-collapse.js"></script>
-    <script src="../../admin/js/misc.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="../../admin/js/file-upload.js"></script>
-    <!-- End custom js for this page -->
-  </body>
+      <% if(typeof message !=='undefined' ){ %>
+        <p>
+          <%= message %>
+        </p>
+        <% } %>
 
-<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/forms/basic_elements.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <footer class="footer">
+      <div class="container-fluid clearfix">
+        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">kiona © kiona.com 2020</span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="" target="_blank">kiona
+            admin </a> from kiona.com</span>
+      </div>
+    </footer>
+    <!-- partial -->
+  </div>
+  <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="../../admin/js/off-canvas.js"></script>
+  <script src="../../admin/js/hoverable-collapse.js"></script>
+  <script src="../../admin/js/misc.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script src="../../admin/js/file-upload.js"></script>
+  <!-- End custom js for this page -->
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <script>
+    document.getElementById('image').addEventListener('change', function (event) {
+      var previewContainer = document.getElementById('imagePreviewContainer');
+  
+      if (event.target.files.length > 0) {
+        for (var i = 0; i < event.target.files.length; i++) {
+          var reader = new FileReader();
+          reader.onload = (function (file) {
+            return function (e) {
+              var imgElement = document.createElement('img');
+              imgElement.src = e.target.result;
+              imgElement.style.height = '150px';
+              imgElement.style.maxWidth = '150px';
+  
+              var previewDiv = document.createElement('div');
+  
+              var closeButton = document.createElement('button');
+              closeButton.type = 'button';
+              closeButton.className = 'close-button'; // Assign the class name for styling
+              closeButton.style.position = 'absolute';
+              closeButton.style.top = '5px';
+              closeButton.style.right = '5px';
+              closeButton.style.background = 'red';
+              closeButton.style.border = 'none';
+              closeButton.style.outline = 'none';
+              closeButton.style.color = 'white';
+              closeButton.innerHTML = 'X';
+              closeButton.dataset.image = 'image'; // Assign the data attribute
+  
+              closeButton.addEventListener('click', function () {
+                // Remove the image preview and associated close button
+                this.parentNode.remove();
+              });
+  
+              previewDiv.appendChild(closeButton);
+              previewDiv.appendChild(imgElement);
+              previewContainer.appendChild(previewDiv);
+            };
+          })(event.target.files[i]);
+          reader.readAsDataURL(event.target.files[i]);
+        }
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      check();
+    });
+
+    const check = async ()=>{
+
+      const imageInput = document.getElementById("image");
+      const imageErr = document.getElementById("imageErr");
+      const name = document.getElementById("name").value.trim();
+      const nameErr = document.getElementById("nameErr");
+      const price = document.getElementById("price").value.trim();
+      const priceErr = document.getElementById("priceErr");
+      const quantity = document.getElementById("quantity").value.trim();
+      const quantityErr = document.getElementById("quantityErr");
+      const description = document.getElementById("description").value.trim();
+      const descriptionErr = document.getElementById("descriptionErr");
+
+      let isValid = true;
+
+      imageErr.innerHTML = '';
+      nameErr.innerHTML = '';
+      priceErr.innerHTML = '';
+      quantityErr.innerHTML = '';
+      descriptionErr.innerHTML = '';
+
+      if (!imageInput.files || imageInput.files.length === 0) {
+        imageErr.innerHTML = "Please select an Image";
+        isValid = false;
+      } else {
+        for (let i = 0; i < imageInput.files.length; i++) {
+          const image = imageInput.files[i];
+          if (!/\.(jpg|jpeg|png)$/i.test(image.name)) {
+            imageErr.innerHTML = "Only JPG, JPEG, or PNG files are allowed.";
+            isValid = false;
+            break;
+          }
+          if (image.size > 5242880) { // 5 * 1024 * 1024
+            imageErr.innerHTML += "<br>File size must not exceed 5MB.";
+            isValid = false;
+            break;
+          }
+        }
+      }
+
+      if (name === '') {
+        nameErr.innerHTML = "Please Enter the Name.";
+        isValid = false;
+      } else {
+        const nameRegex = /^[a-zA-Z\s]*$/;
+        if (!nameRegex.test(name)) {
+          nameErr.innerHTML = "Please enter a valid name";
+          isValid = false;
+        }
+      }
+
+
+      if (!price) {
+        priceErr.innerHTML = "Please Enter Price";
+        isValid = false;
+      } else {
+        const priceRegex = /^[1-9]\d*(\.\d+)?$/;;
+        if(!priceRegex.test(price)){
+          priceErr.innerHTML = "Price must be a positive number";
+          isValid = false;
+        }
+      }
+
+      if (!quantity) {
+        quantityErr.innerHTML = "Please Enter Quantity";
+        isValid = false;
+      } else {
+        const quantityRegex = /^[1-9]\d*(\.\d+)?$/;;
+        if(!quantityRegex.test(quantity)){
+          quantityErr.innerHTML = "Quantity must be a positive number";
+          isValid = false;
+        }
+      }
+
+      if (description === '') {
+        descriptionErr.innerHTML = "Please Enter Description.";
+        isValid = false;
+      }
+
+      if (isValid) {
+  const form = document.getElementById("productForm");
+  const formData = new FormData(form);
+
+  try {
+    const response = await axios.post('/admin/add_product', formData);
+    if (response.data.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: response.data.message
+      }).then(() => {
+        window.location.href = "/admin/product";
+      })
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: response.data.message
+      });
+      window.location.href = "/admin/add_product";
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.message
+    });
+  }
+}
+    }
+
+
+    
+
+  </script>
+  
+
+
+</body>
 </html>
