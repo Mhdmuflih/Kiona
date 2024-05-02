@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/tables/basic-table.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Order Details </title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="/kiona-logo.png" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+          </button>
+          <div class="search-field d-none d-md-block">
+            <form class="d-flex align-items-center h-100" action="#">
+              <div class="input-group">
+                <div class="input-group-prepend bg-transparent">
+                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                </div>
+                <input type="text" class="form-control" placeholder="Search User name,email" name="search">
+                <button type="submit" class="btn btn-inverse-dark btn-fw">Search</button>
+              </div>
+            </form>
+          </div>
+          <ul class="navbar-nav navbar-nav-right">
+            
+            <li class="nav-item nav-logout d-none d-lg-block">
+              <a class="nav-link" href="/admin/logout">
+                <i class="mdi mdi-power"></i>
+              </a>
+            </li>
+            
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="mt-4">
+            <a class="nav-link" href="/admin/home">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i
+                  class="mdi mdi-home menu-icon"></i>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/users">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i
+                  class="mdi mdi-contacts menu-icon"></i>
+              </button>
+            </a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="/admin/product">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i
+                  class="mdi mdi-tshirt-crew "></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/category">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Category <i
+                  class="mdi mdi-cards"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/order">
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Order <i class="mdi mdi-shopping"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
+              aria-controls="general-pages">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i>
+              </button>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i
+                  class="mdi mdi-percent"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i
+                  class="mdi mdi-ticket"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i
+                  class="mdi mdi-clipboard-outline"></i> </button>
+            </a>
+          </li>
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">  Ordered Details </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href='/admin/order'> Ordered Details </a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> Ordered Details </li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                    <p class="card-description"> Add class <code>.table</code>
+                    </p>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Profile</th>
+                          <th>VatNo.</th>
+                          <th>Created</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Jacob</td>
+                          <td>53275531</td>
+                          <td>12 May 2017</td>
+                          <td><label class="badge badge-danger">Pending</label></td>
+                        </tr>
+                        <tr>
+                          <td>Messsy</td>
+                          <td>53275532</td>
+                          <td>15 May 2017</td>
+                          <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                        <tr>
+                          <td>John</td>
+                          <td>53275533</td>
+                          <td>14 May 2017</td>
+                          <td><label class="badge badge-info">Fixed</label></td>
+                        </tr>
+                        <tr>
+                          <td>Peter</td>
+                          <td>53275534</td>
+                          <td>16 May 2017</td>
+                          <td><label class="badge badge-success">Completed</label></td>
+                        </tr>
+                        <tr>
+                          <td>Dave</td>
+                          <td>53275535</td>
+                          <td>20 May 2017</td>
+                          <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Hoverable Table</h4>
+                    <p class="card-description"> Add class <code>.table-hover</code>
+                    </p>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>User</th>
+                          <th>Product</th>
+                          <th>Sale</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Jacob</td>
+                          <td>Photoshop</td>
+                          <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
+                          <td><label class="badge badge-danger">Pending</label></td>
+                        </tr>
+                        <tr>
+                          <td>Messsy</td>
+                          <td>Flash</td>
+                          <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
+                          <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                        <tr>
+                          <td>John</td>
+                          <td>Premier</td>
+                          <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
+                          <td><label class="badge badge-info">Fixed</label></td>
+                        </tr>
+                        <tr>
+                          <td>Peter</td>
+                          <td>After effects</td>
+                          <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
+                          <td><label class="badge badge-success">Completed</label></td>
+                        </tr>
+                        <tr>
+                          <td>Dave</td>
+                          <td>53275535</td>
+                          <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
+                          <td><label class="badge badge-warning">In progress</label></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"> Ordered Date </h4>
+                    <p class="card-description" > <i class="mdi mdi-calendar-clock" style="font-size: 24px;"></i> <%= order.orderDate.toDateString() %> <code><%= order.orderDate.toLocaleTimeString() %> </code></p>
+
+                    <div class="template-demo pt-4">
+                        <h4> Order Id :  </h4>
+                        <p class="pt-2" style="font-size: 14px; "> <strong> <%= order._id %> </strong></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <h4 class="card-title"> Delivery Address </h4>
+                        <p class="card-description">  <%= order?.address?.name %> <code> <%= order?.address?.addressType %> </code> </p>
+                        <div class="template-demo d-flex justify-content-between flex-nowrap">
+
+                            <p class="card-description">  <%= order?.address?.locality %>,<%= order?.address?.address %>,<%= order?.address?.city %>, <%= order?.address?.state %> - <%= order?.address?.pincode %>  </p>
+                          
+                        </div>
+                        <div class="template-demo d-flex justify-content-between flex-nowrap">
+
+                            <p class="card-description"> Mobile No: <%= order?.address?.mobile %></p>
+
+                        </div>
+                        <div class="template-demo d-flex justify-content-between flex-nowrap mt-4">
+                          
+                        </div>
+                        <div class="template-demo d-flex justify-content-between flex-nowrap">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"> Ordered Details </h4>
+                    <p class="card-description"> <code> Kiona Ordered Details </code>
+                    </p>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> Sl.No </th>
+                          <th> Product </th>
+                          <th> product Price </th>
+                          <th> Quantity </th>
+                          <th> Total </th>
+                          <th> Status </th>
+                          <th> Manage </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                     
+                        <% for(let i=0 ; i<order.orderItems.length ; i++){ %>
+
+                            <tr>
+                                <td><%= i+1 %></td>
+                              <td class="py-1">
+                                <img src="/Photos/product/<%= order.orderItems[i].image[0] %>" alt="image"/> <span> <%= order.orderItems[i].productName %> </span>
+                              </td>
+                              <td> $ <%= order?.orderItems[i]?.productPrice %> </td>
+                              <td> <%= order?.orderItems[i]?.cartQuantity %> </td>
+                              <td> $ <%= order?.orderItems[i]?.totalPrice %> </td>
+                              <td>
+                                <%= order.orderItems[i]._id %>
+
+
+                              </td>
+                              <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">Status</button>
+                                    <div class="dropdown-menu">
+                                        <button onclick="status('<%= order.orderItems[i]._id %>')" > udnkd</button>
+                                    <a class="dropdown-item" onclick="status('<%= order.orderItems[i]._id %>')" > <%= order.orderItems[i].orderStatus %> </a>
+                                    <a class="dropdown-item" href="<%= order.orderItems[i]._id %>" > Shipped </a>
+                                    <a class="dropdown-item" href="<%= order.orderItems[i]._id %>"> Delivered </a>
+                                    <a class="dropdown-item" href="<%= order.orderItems[i]._id %>"> Cancelled </a>
+                                    </div>
+                                </div>
+                             </td>
+                            </tr>
+
+                        <% } %>
+                      
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../admin/js/off-canvas.js"></script>
+    <script src="../../admin/js/hoverable-collapse.js"></script>
+    <script src="../../admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        console.log('kooi');
+      async function status(orderItemId){
+        try {
+            console.log(prodcutId);
+          await axios.post('/orderDetails/updateStatus',{prodcutId:orderItemId})
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    </script>
+
+
+
+  </body>
+
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/tables/basic-table.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->
+</html>

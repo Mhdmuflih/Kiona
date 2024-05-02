@@ -81,97 +81,100 @@
 
 	<div class="container">
 		<div class="main-body">
-			<div class="row">
-				<div class="col-lg-4">
-					<div class="card">
-						<div class="card-body">
-							<div class="d-flex flex-column align-items-center text-center">
-								<img src="/Photos/userImages/<%= user.image %>" alt=""
-									class="rounded-circle p-1 bg-primary" width="110">
-								<div class="mt-3">
-									<h4>
-										<%= user.name %>
-									</h4>
-									<!-- <p class="text-secondary mb-1"></p>
+			<div class="bg0 p-t-40 p-b-85">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-flex flex-column align-items-center text-center">
+									<img src="/Photos/userImages/<%= user.image %>" alt=""
+										class="rounded-circle p-1 bg-primary" width="110">
+									<div class="mt-3">
+										<h4>
+											<%= user.name %>
+										</h4>
+										<!-- <p class="text-secondary mb-1"></p>
 									<p class="text-muted font-size-sm"></p>
 									<button class="btn btn-primary">Follow</button>
 									<button class="btn btn-outline-primary">Message</button> -->
+									</div>
 								</div>
-							</div>
-							<hr class="my-4">
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-									style="width: 310px;">
-									<a href="/userProfile"> <button type="button" class="btn btn-info"
-											style="width: 280px;">User Profile</button> </a>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-									style="width: 310px;">
-									<a href="/changePassword"> <button type="button" class="btn btn-outline-info"
-											style="width: 280px;">Change Password</button> </a>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-									style="width: 310px;">
-									<a href="/address"> <button type="button" class="btn btn-outline-info"
-											style="width: 280px;">Address Management</button> </a>
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-									style="width: 310px;">
-									<a href="/order"> <button type="button" class="btn btn-outline-info"
-											style="width: 280px;">Order</button> </a>
-								</li>
+								<hr class="my-4">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+										style="width: 310px;">
+										<a href="/userProfile"> <button type="button" class="btn btn-info"
+												style="width: 280px;">User Profile</button> </a>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+										style="width: 310px;">
+										<a href="/changePassword"> <button type="button" class="btn btn-outline-info"
+												style="width: 280px;">Change Password</button> </a>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+										style="width: 310px;">
+										<a href="/address"> <button type="button" class="btn btn-outline-info"
+												style="width: 280px;">Address Management</button> </a>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+										style="width: 310px;">
+										<a href="/order"> <button type="button" class="btn btn-outline-info"
+												style="width: 280px;">Order</button> </a>
+									</li>
 
-							</ul>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-lg-8">
-					<div class="card">
-						<form action="" method="put" class="form">
-							<div class="card-body">
-								<div class="row mb-3">
-									<div class="col-sm-3">
-										<h6 class="mb-0">Full Name</h6>
+					<div class="col-lg-8">
+						<div class="card">
+							<form action="" method="put" class="form">
+								<div class="card-body">
+									<div class="row mb-3">
+										<div class="col-sm-3">
+											<h6 class="mb-0">Full Name</h6>
+										</div>
+										<div class="col-sm-9 text-secondary">
+											<input type="text" name="name" id="name" class="form-control"
+												value="<%= user.name %>" required>
+											<p style="color: red;" id="nameErr"></p>
+										</div>
 									</div>
-									<div class="col-sm-9 text-secondary">
-										<input type="text" name="name" id="name" class="form-control"
-											value="<%= user.name %>" required>
-										<p style="color: red;" id="nameErr"></p>
+									<div class="row mb-3">
+										<div class="col-sm-3">
+											<h6 class="mb-0">Email</h6>
+										</div>
+										<div class="col-sm-9 text-secondary">
+											<input type="email" name="email" id="email" class="form-control" readonly
+												value="<%= user.email %>" required>
+											<p style="color: red;" id="emailErr"></p>
+										</div>
 									</div>
-								</div>
-								<div class="row mb-3">
-									<div class="col-sm-3">
-										<h6 class="mb-0">Email</h6>
+									<div class="row mb-3">
+										<div class="col-sm-3">
+											<h6 class="mb-0">Mobile</h6>
+										</div>
+										<div class="col-sm-9 text-secondary">
+											<input type="number" name="mobile" id="mobile" class="form-control"
+												value="<%= user.mobile %>" required>
+											<p style="color: red;" id="mobileErr"></p>
+										</div>
 									</div>
-									<div class="col-sm-9 text-secondary">
-										<input type="email" name="email" id="email" class="form-control" readonly
-											value="<%= user.email %>" required>
-										<p style="color: red;" id="emailErr"></p>
-									</div>
-								</div>
-								<div class="row mb-3">
-									<div class="col-sm-3">
-										<h6 class="mb-0">Mobile</h6>
-									</div>
-									<div class="col-sm-9 text-secondary">
-										<input type="number" name="mobile" id="mobile" class="form-control"
-											value="<%= user.mobile %>" required>
-										<p style="color: red;" id="mobileErr"></p>
-									</div>
-								</div>
 
 
 
-								<div class="row">
-									<div class="col-sm-3"></div>
-									<div class="col-sm-9 text-secondary">
-										<button type="button" class="btn btn-primary" onclick="updateUserData()"> Save
-											Changes </button>
+									<div class="row">
+										<div class="col-sm-3"></div>
+										<div class="col-sm-9 text-secondary">
+											<button type="button" class="btn btn-primary" onclick="updateUserData()">
+												Save
+												Changes </button>
+										</div>
 									</div>
-								</div>
 
-							</div>
-						</form>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -5,7 +5,7 @@ import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
-import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
+import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, orderPage, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
 import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, cod, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
@@ -51,7 +51,6 @@ user_route.post('/register',upload.single('image'),insertUser)          //insert
 // verifyMail route
 user_route.get('/otp',isLogout,otp)                                     //otp page
 user_route.post('/otp',verifyOtp)                                       //verify otp
-
 user_route.post('/resend-otp', resendOTP, verifyOtp)                    //resend otp
 
 // login route
@@ -71,22 +70,24 @@ user_route.get('/productDetails',productDetails)                        //single
 
 
 //user Profile
-user_route.get('/userProfile',profilePage)                              //user profile page
+user_route.get('/userProfile',isLogin,profilePage)                              //user profile page
 user_route.put('/userProfile',updateProfile)                            //update user profile
 
 
-user_route.get('/changePassword',passwordChangePage)                    //change user password page
+user_route.get('/changePassword',isLogin,passwordChangePage)                    //change user password page
 user_route.post('/changePassword',updatePassword)                       //change password
 
 
-user_route.get('/address',addressPage)                                  //user address page
+user_route.get('/address',isLogin,addressPage)                                  //user address page
 user_route.delete('/address/delete',deleteAddress)                      //delete user address
 
-user_route.get('/address/editAddress',editAddresPage)                   //edit user address page
+user_route.get('/address/editAddress',isLogin,editAddresPage)                   //edit user address page
 user_route.post('/address/editAddress',editAddress)                     //edit user address
 
-user_route.get('/addAddress',addAddressPage)                            //add address page
+user_route.get('/addAddress',isLogin,addAddressPage)                            //add address page
 user_route.post('/addAddress',addAddress)                               //add user addresses
+
+user_route.get('/order',isLogin,orderPage)
 
 
 //shoping carts
@@ -97,18 +98,18 @@ user_route.post('/shoping-cart/decrement',decrementQuantity)            //decrem
 user_route.delete('/shoping-cart/remove',removeCart)                    //remove from cart
 
 //select Address in order
-user_route.get('/shoping-cart/selectAddress',selectAddress)             //checkout address select page
+user_route.get('/shoping-cart/selectAddress',isLogin,selectAddress)             //checkout address select page
 user_route.delete('/shoping-cart/selectAddress/delete',checkoutDeleteAddress)
 
-user_route.get('/shoping-cart/selectAddress/addAddress',checkoutAddAddressPage)     //checkout Add address page
+user_route.get('/shoping-cart/selectAddress/addAddress',isLogin,checkoutAddAddressPage)     //checkout Add address page
 user_route.post('/shoping-cart/selectAddress/addAddress',checkoutAddAddress)        //checkoout add address
 
-user_route.get('/shoping-cart/selectAddress/editAddress',checkoutEditAddressPage)       //checkout edit address page
+user_route.get('/shoping-cart/selectAddress/editAddress',isLogin,checkoutEditAddressPage)       //checkout edit address page
 user_route.post('/shoping-cart/selectAddress/editAddress',checkoutEditAddress)          //checkout Edit address
 
-user_route.get('/shoping-cart/checkout_summary',summary)                //summay of order
+user_route.get('/shoping-cart/checkout_summary',isLogin,summary)                //summay of order
 
-user_route.get('/checkout',checkoutPage)                                //checkout page
+user_route.get('/checkout',isLogin,checkoutPage)                                //checkout page
 user_route.post('/checkout/cod',cod)
 
 

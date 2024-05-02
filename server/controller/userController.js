@@ -331,6 +331,7 @@ const productPage = async (req, res) => {
         const user = req.session.user_id;
         let products;
 
+
         if (req.query.sort === 'low_to_high') {
             products = await Product.find({ delete:false }).sort({ price: 1 });
         }else if (req.query.sort === 'high_to_low') {
@@ -386,17 +387,6 @@ const productDetails = async(req,res)=>{
         console.log(error.message);
     }
 }
-
-//sort the product price in low to high
-// const LowToHigh = async(req,res)=>{
-//     try {
-//         const products = await Product.find().sort({ price: -1 })
-//         res.json(products)
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
 
 //404 page
 // const notPage = async(req,res)=>{

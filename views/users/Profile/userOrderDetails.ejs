@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiona</title>
+
+    <link rel="stylesheet" href="http://localhost:8000/css/userProfile.css">
+    <link rel="icon" type="image/png" href="/kiona-logo.png" />
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/userProfile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="content-topbar flex-sb-m h-full container">
+            <div class="left-top-bar">
+                KIONA
+            </div>
+            <div class="right-top-bar flex-w h-full">
+                <a href="#" class="flex-c-m trans-04 p-lr-25">
+                    Help & FAQs
+                </a>
+                <% if(user){ %>
+                <a href="/" class="flex-c-m trans-04 p-lr-25">Home</a>
+                <a href="/userProfile" class="flex-c-m trans-04 p-lr-25">My Account</a>
+                <a href="/logout" class="flex-c-m trans-04 p-lr-25">Logout</a>
+                <% } else { %>
+                <a href="/login" class="flex-c-m trans-04 p-lr-25">Login</a>
+                <a href="/register" class="flex-c-m trans-04 p-lr-25">Sign Up</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p></p>
+    </div>
+    <div>
+        <p></p>
+    </div>
+    <div class="container">
+        <div class="main-body">
+            <div class="bg0 p-t-40 p-b-85">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column align-items-center text-center">
+                                        <img src="/Photos/userImages/<%= user.image %>" alt="" class="rounded-circle p-1 bg-primary" width="110">
+                                        <div class="mt-3">
+                                            <h4><%= user.name %></h4>
+                                        </div>
+                                    </div>
+                                    <hr class="my-4">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                            style="width: 310px;">
+                                            <a href="/userProfile"> <button type="button" class="btn btn-outline-info"
+                                                    style="width: 280px;">User Profile</button> </a>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                            style="width: 310px;">
+                                            <a href="/changePassword"> <button type="button" class="btn btn-outline-info"
+                                                    style="width: 280px;">Change Password</button> </a>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                            style="width: 310px;">
+                                            <a href="/address"> <button type="button" class="btn btn-outline-info"
+                                                    style="width: 280px;">Address Management</button> </a>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                            style="width: 310px;">
+                                            <a href="/order"> <button type="button" class="btn btn-info"
+                                                    style="width: 280px;">Order</button> </a>
+                                        </li>
+        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="wrap-table-shopping-cart">
+                                <table class="table-shopping-cart">
+                                    <thead>
+                                        <tr>
+                                            <th class="column-1"></th>
+                                            <th></th>
+                                            <th class="column-2"></th>
+                                            <th class="column-3"></th>
+                                            <th class="column-4"></th>
+                                            <th class="column-5"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for(let i=0; i<order.orderItems.length; i++) { %>
+                                            <tr class="table_row">
+                                                <td class="column-1">
+                                                    <div class="d-flex align-items-center">
+                                                        <% if (order.orderItems[i].image && order.orderItems[i].image.length > 0) { %>
+                                                            <a href="">
+                                                                <img src="/Photos/product/<%= order.orderItems[i].image[0] %>" alt="" style="max-width: 100px; max-height: 100px;">
+                                                            </a>
+                                                        <% } %>
+                                                        <span class="pl-4 pb-4"><%= order.orderItems[i].productName %></span>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="column-3 pb-5 text-danger">$<%= order.orderItems[i].productPrice %></td>
+                                                <td></td>
+                                                <td class="column-4 pb-0 align-middle">
+                                                    <div class="d-flex flex-column">
+                                                        <label class="badge bg-warning p-2 text-white mb-1"><%= order.orderStatus %></label>
+                                                        <p class="text-warning small mb-0">Your item has been Ordered</p>
+                                                    </div>
+                                                </td>
+                                                <td class="column-5" id="total"></td>
+                                            </tr>
+                                            
+                                        <% } %>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-UY6H/Ru5ZNDvvv8ObnV+2zzHRMk7ekSrMCSqKc7p/rIVe9M+irC6gq0V7xS2Pwfs" crossorigin="anonymous">
+    <script src="http://localhost:8000/js/jquery.min.js"></script>
+    <script src="http://localhost:8000/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</body>
+
+</html>

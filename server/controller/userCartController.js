@@ -6,6 +6,7 @@ import Cart from "../model/cartModel.js";
 import Product from "../model/productModel.js";
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
+import Order from "../model/orderModel.js";
 
 // ----------------------------------------------
 
@@ -114,7 +115,7 @@ const addToCart = async (req,res)=>{
             { upsert: true }
         );
 
-        
+                
         res.json({ success: true, message: "Added to Cart" });
 
     } catch (error) {
@@ -262,8 +263,6 @@ const checkoutEditAddressPage = async(req,res)=>{
 const checkoutEditAddress = async(req,res)=>{
     try {
 
-        console.log(req.query);
-
         const { addressId } = req.query
         console.log(addressId);
         const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
@@ -341,8 +340,9 @@ const summary = async(req,res)=>{
             }
         })
 
+        req.session.address_data = address
+        req.session.cartProduct = cartProduct
 
-        
         res.render('users/checkout/checkoutSummary.ejs',{ user, cartProduct, address })
 
     } catch (error) {
@@ -355,6 +355,30 @@ const checkoutPage = async(req,res)=>{
     try {
         
         const user = req.session.user_id;
+        const cart = req.session.cartProduct
+
+        const cartItemsWithDetails = cart.map(item => item.productDetails);
+
+        var allProduct = []
+
+        for(let i = 0; i < cartItemsWithDetails.length; i++){
+            let products = cartItemsWithDetails[i];
+            for(let j = 0; j < products.length; j++){
+
+                let product = products[j];
+                allProduct.push({
+                    _id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    category: product.category,
+                    quantity: product.quantity,
+                    description: product.description,
+                    image: product.image
+                });
+            }
+        }
+        
+        req.session.cartAllProduct = allProduct
 
         res.render("users/checkout/checkout.ejs", { user })
 
@@ -366,9 +390,65 @@ const checkoutPage = async(req,res)=>{
 //cod
 const cod = async (req,res)=>{
     try {
+
+        const user = req.session.user_id
+        const cart = req.session.cartProduct
+        const address = req.session.address_data
+        const cartAllProduct = req.session.cartAllProduct
+        const paymentMethod = req.body.payment
+
+        let cartQuantity = []
+        for(let i=0 ; i<cart.length ; i++){
+            cartQuantity.push(cart[i].cartItems.quantity)
+        }
+        
+        let totalAmount = 0;
+        const orderItems = [];
+
+        for(let i=0 ; i<cartAllProduct.length ; i++){
+
+            let item  = cartAllProduct[i]
+            let total = item.price*cartQuantity[i]
+            totalAmount += total
+            orderItems.push({
+                productId: item._id,
+                image: item.image,
+                productName: item.name,
+                productPrice: item.price,
+                category: item.category,
+                quantity: item.quantity,
+                description: item.description,
+                cartQuantity:cartQuantity[i],
+                totalPrice:total
+            })
+            await Product.findByIdAndUpdate( { _id:item._id }, { $inc: { quantity:-cartQuantity[i] } } );
+        }
+
+        const order = new Order({
+            userId:user,
+            orderItems:orderItems,
+            address:address,
+            paymentMethod:paymentMethod,
+            orderDate: new Date(),
+            totalAmount:totalAmount
+        })
+        const saveOrder = await order.save();
+
+        if(saveOrder){
+
+            await Cart.deleteOne();
+
+            delete req.session.cartProduct;
+            delete req.session.address_data;
+            delete req.session.cartAllProduct;
+
+            return res.json({ success: true, message: "Order saved successfully" });
+        }else{
+            returnres.json({ success: false, message: "Failed to save order" });
+        }
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }
 

@@ -99,15 +99,15 @@
 						</div>
 
 						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" onclick="COD();">
+							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" onclick="paymentMethod('Cash On Delivery');">
 								Cash On Delivery
 							</div>
 
-							<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-								Online Paymenet
+							<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5" onclick="paymentMethod('Online Payment')" >
+								Online Payment
 							</div>
 							
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10" onclick="paymentMethod('Wallet')" >
 								Wallet
 							</div>
 						</div>
@@ -226,7 +226,7 @@
 
 
 	<script>
-	async function COD() {
+	async function paymentMethod(payment) {
     const confirmation = await Swal.fire({
         title: 'Confirm Payment',
         text: "Are you sure you want to proceed with Cash On Delivery?",
@@ -239,16 +239,16 @@
 
     if (confirmation.isConfirmed) {
         try {
-            const response = await axios.post('/checkout/cod', {});
+            const response = await axios.post('/checkout/cod', {payment});
             if (response.data.success) {
-                await Swal.fire({
+                Swal.fire({
                     icon: 'success',
                     title: 'Confirmed!',
                     text: response.data.message
                 });
-                window.location.href = '/checkout';
+                window.location.href
             } else {
-                await Swal.fire({
+                Swal.fire({
                     icon: 'error',
                     title: 'Failed!',
                     text: response.data.message || 'Unable to process the order.'

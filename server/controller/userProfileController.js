@@ -1,8 +1,10 @@
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
+import Order from "../model/orderModel.js";
+
+// ------------------------------------
 
 import bcrypt from "bcrypt";
-
 
 // ------------------------------------
 
@@ -256,6 +258,27 @@ const deleteAddress = async(req,res)=>{
     }
 }
 
+//user order details page
+const orderPage = async (req,res)=>{
+    try {
+        
+        const id = req.session.user_id
+
+        console.log(id,'kkk');
+
+        const user = await User.findOne({_id:id})
+        console.log('jlooo');
+        const order = await Order.findOne({ userId:id })
+
+        console.log(order,'order');
+
+        res.render('users/Profile/userOrderDetails',{ user, order })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 export {
     profilePage,
@@ -271,5 +294,7 @@ export {
     addAddress,
 
     updateProfile,
-    updatePassword
+    updatePassword,
+
+    orderPage
 }

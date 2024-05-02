@@ -67,8 +67,6 @@ const addProduct = async(req,res)=>{
 const productAdd = async(req,res)=>{
     try {
 
-        const categoryData = await Category.find();
-
         const images = req.files.map((file)=>file.filename);
 
         const product = new Product({
