@@ -154,6 +154,12 @@ const selectAddress = async(req,res)=>{
 
         const id = req.session.user_id;
         const user = await User.findOne({_id:id})
+        const cartItem = await Cart.findOne({userId:id})
+        console.log(cartItem,'sen mone');
+        
+        if(!cartItem){
+            res.redirect('/shoping-cart')
+        }
 
         let addressData = await Address.findOne({userId:id})
         if(!addressData){
@@ -452,6 +458,17 @@ const cod = async (req,res)=>{
     }
 }
 
+//order success
+const orderSuccessPage = async(req,res)=>{
+    try {
+        
+        res.render('users/checkout/orderSuccess.ejs')
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export{
     cart,
     addToCart,
@@ -471,7 +488,9 @@ export{
     summary,
 
     checkoutPage,
-    cod
+    cod,
+
+    orderSuccessPage
 
 
 }

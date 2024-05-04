@@ -13,6 +13,7 @@ const orderPage = async(req,res)=>{
             const user = await User.findOne({ _id:userId })
             users.push(user)
         }
+        
         res.render('admin/order/order.ejs',{ order:orderData, users });
 
     } catch (error) {
@@ -35,13 +36,21 @@ const orderDetailsPage = async(req,res)=>{
 }
 
 //order status update
-const orderSatus = async(req,res)=>{
+const orderStatus = async (req, res) => {
     try {
-        console.log('koooiii');
-        const { productId } = req.body.productId
-        console.log(productId,'id ndd');
-        console.log(req.body,'query um ndd tooo');
 
+        const { id, value } = req.body;
+
+        let update = {};
+        if( value === "Ordered" || value === "Shipped" || value === "Delivered" || value === "Cancelled" ){
+            update =  { $set:{ "orderItems.$.orderStatus": value } }
+        }
+        const response = await Order.findOneAndUpdate({ 'orderItems._id':id }, update);
+
+        if(response){
+            return res.json({success:true})
+        }
+        
     } catch (error) {
         console.log(error.message);
     }
@@ -51,5 +60,5 @@ export {
     orderPage,
     orderDetailsPage,
 
-    orderSatus
+    orderStatus
 }

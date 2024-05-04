@@ -1,6 +1,7 @@
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
 import Order from "../model/orderModel.js";
+import Product from "../model/productModel.js";
 
 // ------------------------------------
 
@@ -262,15 +263,11 @@ const deleteAddress = async(req,res)=>{
 const orderPage = async (req,res)=>{
     try {
         
-        const id = req.session.user_id
+        const userId = req.session.user_id
 
-        console.log(id,'kkk');
-
-        const user = await User.findOne({_id:id})
-        console.log('jlooo');
-        const order = await Order.findOne({ userId:id })
-
-        console.log(order,'order');
+        const user = await User.findOne({_id:userId})
+        const order = await Order.find({ userId })
+        console.log(order,'itd order');
 
         res.render('users/Profile/userOrderDetails',{ user, order })
 
@@ -278,6 +275,108 @@ const orderPage = async (req,res)=>{
         console.log(error.message);
     }
 }
+
+//order details page
+const orderDetailsPage = async(req,res)=>{
+    try {
+        const id = req.session.user_id
+        const orderId = req.query.id
+
+        const orderItem = await Order.findOne({ 'orderItems._id':orderId })
+        
+        let ordered = null;
+        for (let i = 0; i < orderItem.orderItems.length; i++) {
+            if (orderItem.orderItems[i]._id.toString() === orderId) {
+                ordered = orderItem.orderItems[i];
+                break;
+            }
+        }
+
+        const user = await User.findOne({_id:id})
+
+        res.render('users/Profile/orderDetails.ejs',{ user, orderItem, ordered })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//cancel order
+const cancelOrder = async (req, res) => {
+    try {
+        const user = req.session.user_id;
+        const { id, reason } = req.body;
+        
+        const orders = await Order.find({ userId: user });
+        
+        let response;
+        let cancelOrderItem;
+        for (let i = 0; i < orders.length; i++) {
+            const orderItems = orders[i].orderItems;
+            for (let j = 0; j < orderItems.length; j++) {
+                if (orderItems[j]._id.toString() === id) {
+                    cancelOrderItem = orderItems[j]
+                    response = await Order.findOneAndUpdate(
+                        { userId: user, 'orderItems._id': id },
+                        { $set: { "orderItems.$.cancelReason": reason, "orderItems.$.orderStatus": "Cancelled" } }
+                    );
+                    break;
+                }
+            }
+            if (response) break;
+        }
+
+        await Product.findByIdAndUpdate({ _id:cancelOrderItem.productId },{ $inc: { quantity:cancelOrderItem.cartQuantity } }, { new:true })
+        
+        if (response) {
+            res.json({ success: true, message: 'Your order item is successfully cancelled.' });
+        } else {
+            res.status(500).json({ success: false, message: 'Server error occurred while cancelling the order item.' });
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+// return user ordered Product
+const returnOrder = async(req,res)=>{
+    try {
+        
+        const user = req.session.user_id
+        const { id, reason } = req.body
+        
+        const order = await Order.find({ userId:user });
+
+        let response;
+        let returnOrderItem;
+        for(let i=0 ; i<order.length ; i++){
+            const orderItem = order[i].orderItems
+            for(let j=0 ; j<orderItem.length ; j++){
+                if( orderItem[j]._id.toString() === id ){
+                    returnOrderItem = orderItem[j]
+                    response = await Order.findOneAndUpdate({ userId:user, 'orderItems._id':id },{ $set:{ 'orderItems.$.returnReason':reason, "orderItems.$.orderStatus": "Returned" } })
+                }
+                break;
+            }
+            if(response) break;
+        }
+
+        await Product.findByIdAndUpdate({ _id:returnOrderItem.productId },{ $inc:{ quantity:returnOrderItem.cartQuantity } },{ new:true })
+
+        if(response){
+            res.json({ success: true, message: "Your order item is successfully returned." });
+        }else{
+            res.status(500).json({ success: false, message: "Server error occurred while returning the order item." });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 
 
 export {
@@ -296,5 +395,8 @@ export {
     updateProfile,
     updatePassword,
 
-    orderPage
+    orderPage,
+    orderDetailsPage,
+    cancelOrder,
+    returnOrder
 }

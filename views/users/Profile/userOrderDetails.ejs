@@ -96,37 +96,58 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% for(let i=0; i<order.orderItems.length; i++) { %>
-                                            <tr class="table_row">
-                                                <td class="column-1">
-                                                    <div class="d-flex align-items-center">
-                                                        <% if (order.orderItems[i].image && order.orderItems[i].image.length > 0) { %>
-                                                            <a href="">
-                                                                <img src="/Photos/product/<%= order.orderItems[i].image[0] %>" alt="" style="max-width: 100px; max-height: 100px;">
-                                                            </a>
+                                        <% order.forEach(orderItem => { %>
+                                            <% orderItem.orderItems.forEach(item => { %>
+                                                <tr class="table_row">
+                                                    <td class="column-1">
+                                                        <div class="d-flex align-items-center">
+                                                            <% if (item.image && item.image.length > 0) { %>
+                                                                <img src="/Photos/product/<%= item.image[0] %>" alt="<%= item.productName %>" style="max-width: 100px; max-height: 100px;">
+                                                            <% } %>
+                                                            <span class="pl-4 pb-4"><%= item.productName %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td class="column-3 pb-5 text-danger">$<%= item.totalPrice %></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <% if (item.orderStatus === "Ordered") { %>
+                                                            <p class="text-warning small mb-0">Your item has been Ordered</p>
+                                                        <% } else if (item.orderStatus === "Shipped") { %>
+                                                            <p class="text-info small mb-0">Your item has been Shipped</p>
+                                                        <% } else if (item.orderStatus === "Delivered") { %>
+                                                            <p class="text-success small mb-0">Your item has been Delivered</p>
+                                                        <% } else if (item.orderStatus === "Cancelled") { %>
+                                                            <p class="text-danger small mb-0">Your item has been Cancelled</p>
                                                         <% } %>
-                                                        <span class="pl-4 pb-4"><%= order.orderItems[i].productName %></span>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="column-3 pb-5 text-danger">$<%= order.orderItems[i].productPrice %></td>
-                                                <td></td>
-                                                <td class="column-4 pb-0 align-middle">
-                                                    <div class="d-flex flex-column">
-                                                        <label class="badge bg-warning p-2 text-white mb-1"><%= order.orderStatus %></label>
-                                                        <p class="text-warning small mb-0">Your item has been Ordered</p>
-                                                    </div>
-                                                </td>
-                                                <td class="column-5" id="total"></td>
-                                            </tr>
-                                            
-                                        <% } %>
-                                        
+                                                    </td>
+                                                    <td class="column-4">
+                                                        <div class="d-flex justify-content-between align-items-end flex-column">
+                                                            <% if (item.orderStatus === "Ordered") { %>
+                                                                <label class="badge bg-warning p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                            <% } else if (item.orderStatus === "Shipped") { %>
+                                                                <label class="badge bg-info p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                            <% } else if (item.orderStatus === "Delivered") { %>
+                                                                <label class="badge bg-success p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                            <% } else if (item.orderStatus === "Cancelled") { %>
+                                                                <label class="badge bg-danger p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                            <% } else if (item.orderStatus === "Returned") { %>
+                                                                <label class="badge bg-dark p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                            <% } %> %>
+                                                        </div>
+                                                    </td>
+                                                    
+                                                    <td class="pr-5"><button class="btn btn-success" onclick="details('<%= item._id %>')" >Details</button>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        <% }); %>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -139,6 +160,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        async function details(orderId){
+            window.location.href = `/orderDetails?id=${orderId}`
+        }
+    </script>
+
 </body>
 
 </html>

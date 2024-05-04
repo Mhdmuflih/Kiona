@@ -9,7 +9,7 @@ import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage,
 import { userDetails, userBlock } from "../controller/adminUserController.js";
 import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/adminCategoryController.js";
 import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
-import { orderDetailsPage, orderPage, orderSatus } from "../controller/adminOrderController.js";
+import { orderDetailsPage, orderPage, orderStatus } from "../controller/adminOrderController.js";
 
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ admin_route.post('/category/deleted',categoryDeleted)                       //de
 
 admin_route.get('/order',isLogin,orderPage)                                         //order Page
 admin_route.get('/orderDetails',isLogin,orderDetailsPage)                           //order Details Page
-admin_route.post('/orderDetails/orderStatus',orderSatus)
+admin_route.post('/orderDetails/updateStatus',isLogin ,orderStatus);                // order Status Changing
 
 
 export default admin_route;

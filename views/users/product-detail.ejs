@@ -215,33 +215,35 @@
 
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
-					<% let totalAmout=0 %>
-
-					<% for(let i=0 ; i<cartProduct.length ; i++){ %>
-
-						<li class="header-cart-item flex-w flex-t m-b-12">
-							<div class="header-cart-item-img">
-								<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>"
-									alt="IMG">
-							</div>
-
-							<div class="header-cart-item-txt p-t-8">
-								<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">									<%= cartProduct[i].productDetails[0].name %>
-								</a>
-
-								<span class="header-cart-item-info">
-									<%= cartProduct[i].productDetails[0].price %>
-								</span>
-							</div>
-
-						</li>
-						<% totalAmout +=cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity%>
+					<% let totalAmount = 0; %>
+				
+					<% if (cartProduct.length === 0) { %>
+						<img src="/empty%20cart.jpg" alt="Empty Cart" style="width: 200px; height: auto;">
+						<% } else { %>
+						<% for (let i = 0; i < cartProduct.length; i++) { %>
+							<li class="header-cart-item flex-w flex-t m-b-12">
+								<div class="header-cart-item-img">
+									<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
+								</div>
+				
+								<div class="header-cart-item-txt p-t-8">
+									<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+										<%= cartProduct[i].productDetails[0].name %>
+									</a>
+				
+									<span class="header-cart-item-info">
+										<%= cartProduct[i].productDetails[0].price %>
+									</span>
+								</div>
+							</li>
+							<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+						<% } %>
 					<% } %>
 				</ul>
-
+				
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $<%= totalAmout %>
+						Total: $<%= totalAmount %>
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -298,7 +300,6 @@
 										<img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT" id="product-image">
 										<div id="mouse-overlay" style="cursor: zoom-in; position:absolute; width: 2rem; height: 2em; transform: translate(-50%,-50%); background-color: rgba(245,245,245,0.6); border-radius: 50%;"></div>
 										<div id="overlay" style="display: none; position:absolute; width: 35%; height: 45%; margin-top: -30%; margin-left: 50%; border: 1px solid #555; z-index: 1000; background-repeat: no-repeat;"></div>
-
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 											href="/Photos/product/<%= product.image[0] %>">
 											<i class="fa fa-expand"></i>
@@ -358,10 +359,10 @@
 									<div class="rs1-select2 bor8 bg0">
 										<select class="js-select2" name="time">
 											<option>Choose an option</option>
-											<option>Size S</option>
-											<option>Size M</option>
+											<option> Free Size </option>
+											<!-- <option>Size M</option>
 											<option>Size L</option>
-											<option>Size XL</option>
+											<option>Size XL</option> -->
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
@@ -1197,17 +1198,6 @@
 
 		/*---------------------------------------------*/
 
-	// $('.js-addcart-detail').each(function () {
-	// 		var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-	// 		$(this).on('click', function () {
-	// 			swal(nameProduct, "is added to cart !", "success");
-	// 		});
-			
-	// 	});
-
-	
-
-
 	</script>
 	<!--===============================================================================================-->
 	
@@ -1234,15 +1224,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	
+	
 	<script>
 		async function addToCart(productId) {
 			console.log(productId);
-			console.log('hello');
 			try {
 				const response = await axios.post('/productDetails/cart', { productId });
 				console.log(response);
 				if (response.data.success) {
-					console.log('kooooi');
 					await Swal.fire({
 						icon: "success",
 						title: "Success",
@@ -1267,7 +1256,7 @@
 
 <!-- image zoom its not working -->
 
-<!--
+<!-- 
 	<script>
 		let imageContainer = document.getElementById("image-container");
 		let productImage = document.getElementById("product-iamge");

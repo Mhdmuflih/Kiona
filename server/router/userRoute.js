@@ -5,8 +5,8 @@ import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
-import { addAddress, addAddressPage, addressPage, deleteAddress, editAddresPage, editAddress, orderPage, passwordChangePage, profilePage, updatePassword, updateProfile } from "../controller/userProfileController.js";
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, cod, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
+import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, returnOrder, updatePassword, updateProfile } from "../controller/userProfileController.js";
+import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, cod, decrementQuantity, incrementQuantity, orderSuccessPage, removeCart, selectAddress, summary } from "../controller/userCartController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -87,7 +87,10 @@ user_route.post('/address/editAddress',editAddress)                     //edit u
 user_route.get('/addAddress',isLogin,addAddressPage)                            //add address page
 user_route.post('/addAddress',addAddress)                               //add user addresses
 
-user_route.get('/order',isLogin,orderPage)
+user_route.get('/order',isLogin,orderPage)                              //ordered Product Show
+user_route.get('/orderDetails',isLogin,orderDetailsPage)                //single order product details and status show
+user_route.patch('/orderDetails/cancelOrder',cancelOrder)      //cancel the order
+user_route.patch('/orderDetails/returnOrder',returnOrder)
 
 
 //shoping carts
@@ -110,7 +113,9 @@ user_route.post('/shoping-cart/selectAddress/editAddress',checkoutEditAddress)  
 user_route.get('/shoping-cart/checkout_summary',isLogin,summary)                //summay of order
 
 user_route.get('/checkout',isLogin,checkoutPage)                                //checkout page
-user_route.post('/checkout/cod',cod)
+user_route.post('/checkout/cod',cod)                                            //cod
+
+user_route.get('/orderSuccess',orderSuccessPage)
 
 
 //logout

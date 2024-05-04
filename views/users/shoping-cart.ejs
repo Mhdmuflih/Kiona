@@ -178,36 +178,35 @@
 
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
-
-					<% let totalAmout=0 %>
-
-					<% for(let i=0 ; i<cartProduct.length ; i++){ %>
-
-						<li class="header-cart-item flex-w flex-t m-b-12">
-							<div class="header-cart-item-img">
-								<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>"
-									alt="IMG">
-							</div>
-
-							<div class="header-cart-item-txt p-t-8">
-								<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">									<%= cartProduct[i].productDetails[0].name %>
-								</a>
-
-								<span class="header-cart-item-info">
-									<%= cartProduct[i].productDetails[0].price %>
-								</span>
-							</div>
-
-						</li>
-						<% totalAmout +=cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity%>
+					<% let totalAmount = 0; %>
+				
+					<% if (cartProduct.length === 0) { %>
+						<img src="/empty%20cart.jpg" alt="Empty Cart" style="width: 200px; height: auto;">
+						<% } else { %>
+						<% for (let i = 0; i < cartProduct.length; i++) { %>
+							<li class="header-cart-item flex-w flex-t m-b-12">
+								<div class="header-cart-item-img">
+									<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
+								</div>
+				
+								<div class="header-cart-item-txt p-t-8">
+									<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+										<%= cartProduct[i].productDetails[0].name %>
+									</a>
+				
+									<span class="header-cart-item-info">
+										<%= cartProduct[i].productDetails[0].price %>
+									</span>
+								</div>
+							</li>
+							<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+						<% } %>
 					<% } %>
-
-
 				</ul>
-
+				
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $ <%= totalAmout %>
+						Total: $ <%= totalAmount %>
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -250,6 +249,11 @@
 					<div class="m-l-25 m-r--38 m-lr-0-xl">
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
+								<% if (cartProduct.length === 0) { %>
+									<div style="display: flex; justify-content: center; align-items: center;">
+										<img src="/empty%20cart.jpg" alt="Empty Cart" style="width: 200px; height: auto;">
+									</div>
+								<% } else { %>
 								<tr class="table_head">
 									<th class="column-1">Product</th>
 									<th class="column-2"></th>
@@ -257,55 +261,42 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-								
-								<% for(let i=0 ; i<cartProduct.length ; i++){ %>
 
-									<tr class="table_row">
-										<td class="column-1">
-											<div class="how-itemcart1"
-												onclick="deleteCartProduct('<%= cartProduct[i].productDetails[0]._id %>')">
-												<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>"
-													alt="IMG">
-											</div>
-										</td>
-										<td class="column-2">
-											<%= cartProduct[i].productDetails[0].name %>
-										</td>
-										<td class="column-3">$<%= cartProduct[i].productDetails[0].price %>
-										</td>
-										<td class="column-4">
-											<div class="wrap-num-product flex-w m-l-auto m-r-0">
-												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
-													onclick="decrement('<%= cartProduct[i].cartItems._id %>','<%= cartProduct[i].productDetails[0].price %>','<%= i %>')">
-													<i class="fs-16 zmdi zmdi-minus"></i>
+
+									<% for(let i=0; i < cartProduct.length; i++){ %>
+										<tr class="table_row">
+											<td class="column-1">
+												<div class="how-itemcart1" onclick="deleteCartProduct('<%= cartProduct[i].productDetails[0]._id %>')">
+													<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
 												</div>
-
-												<input class="mtext-104 cl3 txt-center num-product" type="number"
-													name="num-product1" id="quantity<%= i %>"
-													value="<%= cartProduct[i].cartItems.quantity %>" min="1" max="5" readonly>
-
-
-												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
-													onclick="increment('<%= cartProduct[i].cartItems._id %>','<%= cartProduct[i].productDetails[0].price %>','<%= i %>')">
-													<i class="fs-16 zmdi zmdi-plus"></i>
+											</td>
+											<td class="column-2"><%= cartProduct[i].productDetails[0].name %></td>
+											<td class="column-3">$<%= cartProduct[i].productDetails[0].price %></td>
+											<td class="column-4">
+												<div class="wrap-num-product flex-w m-l-auto m-r-0">
+													<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
+														 onclick="decrement('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>')">
+														<i class="fs-16 zmdi zmdi-minus"></i>
+													</div>
+													<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" id="quantity<%= i %>"
+														   value="<%= cartProduct[i].cartItems.quantity %>" min="1" max="5" readonly>
+													<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
+														 onclick="increment('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>')">
+														<i class="fs-16 zmdi zmdi-plus"></i>
+													</div>
 												</div>
-											</div>
-											
-											<% if (cartProduct[i].cartItems.quantity >= 5) { %>
-												<p class="text-danger">Minimum quantity reached.</p>
-											<% } else if (!cartProduct[i].productDetails[0].quantity) { %>
-												<p class="text-danger">Product is out of stock.</p>
-											<% } %>
-
-										</td>
-
-										<td class="column-5" id="total<%= i %>">$ <%=
-												cartProduct[i].productDetails[0].price *
-												cartProduct[i].cartItems.quantity %>
-										</td>
-									</tr>
+												
+												<% if (cartProduct[i].cartItems.quantity >= 5) { %>
+													<p class="text-danger">Maximum quantity reached.</p>
+												<% } else if (!cartProduct[i].productDetails[0].quantity) { %>
+													<p class="text-danger">Product is out of stock.</p>
+												<% } %>
+											</td>
+											<td class="column-5" id="total<%= i %>">$<%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %></td>
+										</tr>
 									<% } %>
-
+								<% } %>
+								
 							</table>
 						</div>
 
@@ -343,7 +334,7 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2" id="grandTotal">
-									$<%= totalAmout %>
+									$<%= totalAmount %>
 								</span>
 							</div>
 						</div>
@@ -405,14 +396,13 @@
 
 							<div class="size-209 p-t-1">
 								<span class="mtext-110 cl2" id="grandTotal">
-									$<%= totalAmout %>
+									$<%= totalAmount %>
 								</span>
 							</div>
 						</div>
 
-						<a href="/shoping-cart/selectAddress"> <button
-								class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-								PLACE ORDER
+						<a href="/shoping-cart/selectAddress"> <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+							PLACE ORDER
 							</button> </a>
 					</div>
 				</div>
@@ -485,7 +475,6 @@
 					// const totalAmoutElement = document.getElementById("totalAmout");
 
 					if (quantity >= 5) {
-						// Display message for minimum quantity constraint
 						await Swal.fire({
 							icon: 'error',
 							title: 'Oops...',
@@ -533,7 +522,6 @@
 					const quantity = document.getElementById(`quantity${index}`).value;
 
 					if (quantity <= 1) {
-						// Prevent quantity from going below 1
 						await Swal.fire({
 							icon: 'error',
 							title: 'Oops...',
