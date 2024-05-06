@@ -231,6 +231,8 @@
 
         document.getElementById("form").addEventListener('submit', async (e) => {
             e.preventDefault();
+            check();
+        })
 
             const formElement = document.getElementById('form');
             const addressId = document.getElementById('addressId').value;
@@ -286,7 +288,7 @@
                 });
             }
 
-        })
+
 
     </script>
 

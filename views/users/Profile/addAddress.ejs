@@ -133,12 +133,14 @@
                                         <label class="small mb-1" for="name">Name</label>
                                         <input class="form-control" id="name" name="name" type="text"
                                             placeholder=" Name">
+                                        <p style="color: red;" id="nameErr"></p>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="mobile">Mobile Number</label>
                                         <input class="form-control" id="mobile" name="mobile" type="number"
                                             placeholder="10-digits Mobile No">
+                                        <p style="color: red;" id="mobileErr"></p>
                                     </div>
                                 </div>
 
@@ -148,12 +150,14 @@
                                         <label class="small mb-1" for="inputOrgName"> Pincode </label>
                                         <input class="form-control" id="pincode" name="pincode" type="number"
                                             placeholder="Pincode">
+                                        <p style="color: red;" id="pincodeErr"></p>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Locality</label>
                                         <input class="form-control" id="locality" name="locality" type="text"
                                             placeholder="Locality">
+                                            <p style="color: red;" id="localityErr"></p>
                                     </div>
                                 </div>
 
@@ -161,6 +165,7 @@
                                     <label class="small mb-1" for="inputEmailAddress">Address</label>
                                     <textarea class="form-control" name="address" id="address" rows="4" tabindex="5"
                                         required="" autocomplete="street-address" style="width: 100%;"></textarea>
+                                        <p style="color: red;" id="addressErr"></p>
                                 </div>
 
 
@@ -171,12 +176,14 @@
                                         <label class="small mb-1" for="inputPhone">City/District</label>
                                         <input class="form-control" id="city" name="city" type="text"
                                             placeholder="City/District">
+                                            <p style="color: red;" id="cityErr"></p>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputBirthday">States</label>
                                         <input class="form-control" id="state" type="text" name="state"
                                             placeholder="States">
+                                            <p style="color: red;" id="stateErr"></p>
                                     </div>
                                 </div>
 
@@ -197,7 +204,7 @@
 
 
                                 <!-- Save changes button-->
-                                <a href="/address"> <button class="btn btn-danger" type="button">Back</button> </a>
+                                <a href="/address" style="text-decoration: none;"> <button class="btn btn-danger" type="button">Back</button> </a>
                                 <a href=""> <button class="btn btn-primary" type="submit">Save Address</button> </a>
                             </form>
                         </div>
@@ -220,14 +227,131 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-
     <script>
-        const formElement = document.getElementById('form');
-        document.getElementById("form").addEventListener('submit', async (e) => {
-            e.preventDefault();
 
+    </script>
+
+
+<script>
+    document.getElementById("form").addEventListener('submit', async (e) => {
+        e.preventDefault();
+        check();
+    });
+
+    const check = async () => {
+        const name = document.getElementById('name').value.trim();
+        const nameErr = document.getElementById('nameErr');
+        const mobile = document.getElementById('mobile').value.trim();
+        const mobileErr = document.getElementById('mobileErr');
+        const pincode = document.getElementById('pincode').value.trim(); // Corrected ID here
+        const pincodeErr = document.getElementById('pincodeErr');
+        const locality = document.getElementById('locality').value.trim();
+        const localityErr = document.getElementById('localityErr');
+        const address = document.getElementById('address').value.trim();
+        const addressErr = document.getElementById('addressErr');
+        const city = document.getElementById('city').value.trim();
+        const cityErr = document.getElementById('cityErr');
+        const state = document.getElementById('state').value.trim();
+        const stateErr = document.getElementById('stateErr');
+
+        let isValid = true;
+
+        // Clearing previous error messages
+        nameErr.innerHTML = '';
+        mobileErr.innerHTML = '';
+        pincodeErr.innerHTML = '';
+        localityErr.innerHTML = '';
+        addressErr.innerHTML = '';
+        cityErr.innerHTML = '';
+        stateErr.innerHTML = '';
+
+        // Name validation
+        if (name === '') {
+            nameErr.innerHTML = "Please enter your name.";
+            isValid = false;
+        } else {
+            const nameRegex = /^[a-zA-Z\s]*$/;
+            if (!nameRegex.test(name)) {
+                nameErr.innerHTML = "Please enter a valid name.";
+                isValid = false;
+            }
+        }
+
+        // Mobile number validation
+        if (!mobile) {
+            mobileErr.innerHTML = "Please enter your mobile number.";
+            isValid = false;
+        } else {
+            const mobileRegex = /^[1-9][0-9]{9}$/; // Simplified regex for 10-digit numbers, adjust as needed
+            if (!mobileRegex.test(mobile)) {
+                mobileErr.innerHTML = "Please enter a valid mobile number.";
+                isValid = false;
+            }
+        }
+
+        // Pincode validation
+        if (!pincode) {
+            pincodeErr.innerHTML = "Please enter a pincode.";
+            isValid = false;
+        } else {
+            const pincodeRegex = /^[0-9]{5,6}$/; // Example: 5-6 digit pincodes
+            if (!pincodeRegex.test(pincode)) {
+                pincodeErr.innerHTML = "Please enter a valid pincode.";
+                isValid = false;
+            }
+        }
+
+        // Locality validation
+        if (locality === '') {
+            localityErr.innerHTML = "Please enter the locality.";
+            isValid = false;
+        } else {
+            const localityRegex = /^[a-zA-Z\s]*$/;
+            if (!localityRegex.test(locality)) {
+                localityErr.innerHTML = "Please enter a valid locality.";
+                isValid = false;
+            }
+        }
+
+        // Address validation
+        if (address === "") {
+            addressErr.innerHTML = "Please enter the address.";
+            isValid = false;
+        }else{
+            const addressRegex = /^[a-zA-Z\s,]*$/;
+            if(!addressRegex.test(address)){
+                addressErr.innerHTML = "Please Enter valid address.";
+                isValid = false
+            }
+        }
+
+        // City validation
+        if (city === "") {
+            cityErr.innerHTML = "Please enter the city name.";
+            isValid = false;
+        } else {
+            const cityRegex = /^[a-zA-Z\s]*$/;
+            if (!cityRegex.test(city)) {
+                cityErr.innerHTML = "Please enter a valid city name.";
+                isValid = false;
+            }
+        }
+
+        // State validation
+        if (state === "") {
+            stateErr.innerHTML = "Please enter the state name.";
+            isValid = false;
+        } else {
+            const stateRegex = /^[a-zA-Z\s]*$/;
+            if (!stateRegex.test(state)) {
+                stateErr.innerHTML = "Please enter a valid state name.";
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            const formElement = document.getElementById('form');
             const formData = new FormData(formElement);
-
             const formValues = {};
 
             for (const entry of formData.entries()) {
@@ -235,7 +359,7 @@
                 formValues[key] = value;
             }
 
-            console.log(formValues)
+            console.log(formValues);
 
             try {
                 const response = await axios.post('/addAddress', formValues);
@@ -259,11 +383,13 @@
                 Swal.fire({
                     title: "Error",
                     icon: "error",
-                    text: "There was an error submitting your form"
+                    text: "There was an error submitting your form."
                 });
             }
-        });
-    </script>
+        }
+    }
+</script>
+
 
 
 </body>

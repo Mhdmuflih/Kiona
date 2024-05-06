@@ -5,7 +5,7 @@ import session from "express-session";
 
 
 import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/adminController.js";
-import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage, deleted  } from "../controller/adminProductController.js";
+import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage, deleted, deleteImage  } from "../controller/adminProductController.js";
 import { userDetails, userBlock } from "../controller/adminUserController.js";
 import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/adminCategoryController.js";
 import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
@@ -94,6 +94,7 @@ admin_route.post('/product/deleted',deleted)                                //pr
 
 admin_route.get('/editProduct',isLogin,editProductPage)                     //edit product page route
 admin_route.post('/editProduct',upload,editProduct)                         //edit product
+admin_route.delete('/editProduct/deleteImage',deleteImage)
 
 
 //category management

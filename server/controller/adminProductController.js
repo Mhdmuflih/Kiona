@@ -216,6 +216,32 @@ const editProduct = async (req, res) => {
     }
 };
 
+//delete single single images
+const deleteImage = async (req, res) => {
+    try {
+
+        const { id, imageId } = req.query;
+
+        const response = await Product.findOneAndUpdate(
+            { _id: id },
+            { $pull: { image: imageId } },
+            { new: true }
+        );
+    
+        if (response) {
+            res.json({ success: true, message: "Image deleted successfully" });
+        } else {
+            res.status(404).json({ success: false, message: "Product not found or image not in product's images" });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+
+
 
 export{
     productPage,
@@ -226,5 +252,6 @@ export{
     restoreProduct,
     editProductPage,
     editProduct,
+    deleteImage,
     deleted
 }

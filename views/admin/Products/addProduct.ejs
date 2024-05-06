@@ -20,7 +20,54 @@
   <link rel="stylesheet" href="../../admin/css/style.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/imgs/theme/favicon.svg" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.css" rel="stylesheet">
+  <!-- Template CSS -->
+ 
+
+  <!-- Cropper.js CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+  <!-- Cropper.js JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+
+  
 </head>
+
+<style>
+  .imageContainerItem {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+  }
+
+  .deleteButton {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: red;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+  }
+
+  .deleteButton:hover {
+      background-color: darkred;
+  }
+</style>
+
+
 
 <body>
   <div class="container-scroller">
@@ -158,16 +205,15 @@
                             <div class="form-group">
                               <div class="form-group">
                                 <label>Images</label>
-                                <input type="file" name="images" class="file-upload-default" accept="image/*" multiple onchange="handleFileSelect(event)" id="image"> 
+                                <input type="file" name="images" class="file-upload-default" accept="image/*" multiple onchange="viewImages()" id="image">
                                 <div class="input-group col-xs-12">
                                     <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image" id="fileCount" value="">
                                     <span class="input-group-append">
-                                        <button class="file-upload-browse btn btn-gradient-light" type="button" onclick="document.getElementById('image').click()">Upload</button>
+                                        <button class="file-upload-browse btn btn-gradient-light" type="button">Upload</button>
                                     </span>
                                 </div>
-                                <div id="imagePreview" class="mt-2"></div>
-                                <small id="imageError" class="text-danger"></small>
-                            </div>
+                                <div id="imageContainer"></div>
+                              </div>
                             </div>
                             <p style="color: red;" id="imageErr"></p>
                     <div class="form-group">
@@ -189,21 +235,32 @@
                     <p style="color: red;" id="quantityErr"></p>
                     <div class="form-group">
                       <label>Categories</label>
-                      <select class="form-control my-custom-dropdown" name="category">
-                        <% category.forEach(function(cat) { %>
-                          <option value="<%= cat.name %>">
-                            <%= cat.name %>
-                          </option>
-                          <% }); %>
+                      <select class="form-control my-custom-dropdown" name="category" id="category">
+                        <option value="">Select Category</option>
+                        <% for(let i=0 ; i<category.length ; i++){ %>
+                          <% if(category[i].delete === false){ %>
+                            <option> <%= category[i].name %> </option>
+                          <% } %>
+                        <% } %>
                       </select>
                     </div>
+                    <p style="color: red;" id="categoryErr"></p>
+
                     <div class="form-group">
                       <label>Description</label>
                       <textarea type="text" class="form-control" id="description" name="description" id="exampleTextarea1"
                         rows="4"></textarea>
                     </div>
                     <p style="color: red;" id="descriptionErr"></p>
-                    <button type="submit" class="btn btn-inverse-success btn-fw"> Add Product <i class="mdi mdi-file-check"></i> </button>
+
+                    <!-- <div class="mb-3">
+                      <div id="imageContainer"></div>
+                      <input class="form-control" onchange="viewImages()" placeholder="Select image" type="file"
+                          name="images" id="images" multiple required>
+
+                  </div> -->
+
+                  <button type="submit" class="btn btn-inverse-success btn-fw"> Add Product <i class="mdi mdi-file-check"></i> </button>
                     <a href="/admin/product"> <button type="button" class="btn btn-light">Cancel <i class="mdi mdi-close-circle-outline"></i></button> </a>
                   </form>
                 </div>
@@ -219,6 +276,30 @@
         <% } %>
 
     </div>
+
+    <!-- modal -->
+    <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="cropper-container">
+                      <img id="cropperImage" src="" alt="Crop Image">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button id="cropButton" type="button" class="btn btn-primary">Crop Image</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
     <!-- content-wrapper ends -->
     <!-- partial:../../partials/_footer.html -->
     <footer class="footer">
@@ -253,40 +334,109 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
+
+  <script src="/js/main.js?v=1.1" type="text/javascript"></script>
 
   <script>
+    let selectedFiles = [];
 
-function handleFileSelect(event) {
-    const files = event.target.files;
-    const imagePreview = document.getElementById('imagePreview');
-    imagePreview.innerHTML = ''; // Clear previous previews
+    function viewImages() {
+        let inputFiles = document.getElementById('image').files;
+        let imageContainer = document.getElementById('imageContainer');
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
+        // Clear previous previews
+        imageContainer.innerHTML = '';
 
-        reader.onload = function (e) {
-            const image = document.createElement('img');
-            image.src = e.target.result;
+        for (let i = 0; i < inputFiles.length; i++) {
+            const img = document.createElement('img');
+            img.className = `ImagePreview${i}`;
+            img.style.height = '150px';
+            img.style.width = '150px';
+            img.src = URL.createObjectURL(inputFiles[i]);
 
-            const closeButton = document.createElement('button');
-            closeButton.innerHTML = 'Close';
-            closeButton.className = 'btn btn-sm btn-danger mt-1';
-            closeButton.onclick = function () {
-                imagePreview.removeChild(imageContainer);
-            };
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '&times;';
+            deleteButton.className = 'deleteButton';
 
-            const imageContainer = document.createElement('div');
-            imageContainer.className = 'image-container';
-            imageContainer.appendChild(image);
-            imageContainer.appendChild(closeButton);
 
-            imagePreview.appendChild(imageContainer);
-        };
+            // const cropButton = document.createElement('a');
+            // cropButton.innerHTML = 'Crop'
+            // cropButton.className = 'cropButton position-absolute  start-0 translate-middle badge rounded-pill bg-success'; // Add a class for styling
 
-        reader.readAsDataURL(file);
+            // Add click event listener to the crop button
+            cropButton.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent form submission
+                openCropModal(inputFiles[i], img, i);
+            });
+
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'imageContainerItem'; // Add a class for styling
+            containerDiv.appendChild(img);
+            containerDiv.appendChild(deleteButton);
+            // containerDiv.appendChild(cropButton); // Append the crop button
+
+            imageContainer.appendChild(containerDiv);
+
+
+            selectedFiles.push(inputFiles[i]);
+            deleteButton.addEventListener('click', function (event) {
+                event.preventDefault()
+                if (selectedFiles.length - 1 === 0) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: 'You cannot Remove All images',
+
+                    });
+                    return
+                }
+                img.remove();
+                deleteButton.remove();
+                selectedFiles.splice(i, 1);
+                // cropButton.remove()
+
+            });
+        }
     }
-}
+
+    // async function openCropModal(selectedImage, imgElement, index) {
+       
+    //     const modal = new bootstrap.Modal(document.getElementById('cropModal'));
+    //     modal.show();
+
+     
+    //     const cropperImage = document.getElementById('cropperImage');
+    //     cropperImage.src = URL.createObjectURL(selectedImage);
+
+        
+    //     let cropper = new Cropper(cropperImage, {
+    //         aspectRatio: 1,
+    //         viewMode: 1,
+    //     });
+
+
+    //     const cropButton = document.getElementById('cropButton');
+    //     cropButton.addEventListener('click', async function () {
+
+    //         const croppedCanvas = cropper.getCroppedCanvas();
+
+    //         croppedCanvas.toBlob(async function (blob) {
+
+    //             const croppedImageFile = new File([blob], selectedImage.name, { type: 'image/jpeg' });
+
+    //             selectedFiles[index] = croppedImageFile;
+
+    //             imgElement.src = URL.createObjectURL(blob);
+
+    //             modal.hide();
+
+
+
+    //         }, 'image/jpeg');
+    //         cropper.destroy();
+    //     });
+    // }
 
 
     
@@ -306,8 +456,17 @@ function handleFileSelect(event) {
       const priceErr = document.getElementById("priceErr");
       const quantity = document.getElementById("quantity").value.trim();
       const quantityErr = document.getElementById("quantityErr");
+      const category = document.getElementById('category').value
+      const categoryErr = document.getElementById('categoryErr');
       const description = document.getElementById("description").value.trim();
       const descriptionErr = document.getElementById("descriptionErr");
+
+      // this is image take in proper. if you click to delete in that image is not take
+      const imageList = new DataTransfer();
+      for(let i=0 ; i<selectedFiles.length ;i++){
+        imageList.items.add(selectedFiles[i])
+      }
+      imageInput.files = imageList.files;
 
       let isValid = true;
 
@@ -370,42 +529,47 @@ function handleFileSelect(event) {
         }
       }
 
+      if(category === ""){
+        categoryErr.innerHTML = "Please select category"
+        isValid = false
+      }
+
       if (description === '') {
         descriptionErr.innerHTML = "Please Enter Description.";
         isValid = false;
       }
 
       if (isValid) {
-  const form = document.getElementById("productForm");
-  const formData = new FormData(form);
+        const form = document.getElementById("productForm");
+        const formData = new FormData(form);
 
-  try {
-    const response = await axios.post('/admin/add_product', formData);
-    if (response.data.success) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: response.data.message
-      }).then(() => {
-        window.location.href = "/admin/product";
-      })
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: response.data.message
-      });
-      window.location.href = "/admin/add_product";
-    }
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: error.message
-    });
-  }
-}
+        try {
+          const response = await axios.post('/admin/add_product', formData);
+          if (response.data.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: response.data.message
+            }).then(() => {
+              window.location.href = "/admin/product";
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.data.message
+            });
+            window.location.href = "/admin/add_product";
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+          });
+        }
+      }
     }
 
 
