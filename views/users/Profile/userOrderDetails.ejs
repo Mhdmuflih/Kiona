@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiona</title>
 
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="http://localhost:8000/css/userProfile.css">
-    <link rel="icon" type="image/png" href="/kiona-logo.png" />
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="/css/userProfile.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -35,12 +36,7 @@
             </div>
         </div>
     </div>
-    <div>
-        <p></p>
-    </div>
-    <div>
-        <p></p>
-    </div>
+
     <div class="container">
         <div class="main-body">
             <div class="bg0 p-t-40 p-b-85">
@@ -50,7 +46,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-column align-items-center text-center">
-                                        <img src="/Photos/userImages/<%= user.image %>" alt="" class="rounded-circle p-1 bg-primary" width="110">
+                                        <img src="/Photos/userImages/<%= user.image %>" alt=""
+                                            class="rounded-circle p-1 bg-primary" width="110">
                                         <div class="mt-3">
                                             <h4><%= user.name %></h4>
                                         </div>
@@ -59,25 +56,30 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                             style="width: 310px;">
-                                            <a href="/userProfile"> <button type="button" class="btn btn-outline-info"
+                                            <a href="/userProfile"> <button type="button" class="btn btn-outline-dark"
                                                     style="width: 280px;">User Profile</button> </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                             style="width: 310px;">
-                                            <a href="/changePassword"> <button type="button" class="btn btn-outline-info"
+                                            <a href="/changePassword"> <button type="button" class="btn btn-outline-dark"
                                                     style="width: 280px;">Change Password</button> </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                             style="width: 310px;">
-                                            <a href="/address"> <button type="button" class="btn btn-outline-info"
+                                            <a href="/address"> <button type="button" class="btn btn-outline-dark"
                                                     style="width: 280px;">Address Management</button> </a>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                             style="width: 310px;">
-                                            <a href="/order"> <button type="button" class="btn btn-info"
+                                            <a href="/order"> <button type="button" class="btn btn-dark"
                                                     style="width: 280px;">Order</button> </a>
                                         </li>
-        
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                            style="width: 310px;">
+                                            <a href="/wishlist"> <button type="button" class="btn btn-outline-dark"
+                                                    style="width: 280px;">Wishlist</button> </a>
+                                        </li>
+    
                                     </ul>
                                 </div>
                             </div>
@@ -96,77 +98,92 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <% if (order.length === 0) { %>
+                                        <tr>
+                                            <td colspan="7" class="text-center"><img style="width: 500px; height: 450px;"
+                                                    src="/empty order.png" alt=""></td>
+                                        </tr>
+                                        <% } else { %>
                                         <% order.forEach(orderItem => { %>
-                                            <% orderItem.orderItems.forEach(item => { %>
-                                                <tr class="table_row">
-                                                    <td class="column-1">
-                                                        <div class="d-flex align-items-center">
-                                                            <% if (item.image && item.image.length > 0) { %>
-                                                                <img src="/Photos/product/<%= item.image[0] %>" alt="<%= item.productName %>" style="max-width: 100px; max-height: 100px;">
-                                                            <% } %>
-                                                            <span class="pl-4 pb-4"><%= item.productName %></span>
-                                                        </div>
-                                                    </td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td class="column-3 pb-5 text-danger">$<%= item.totalPrice %></td>
-                                                    <td></td>
-                                                    <td>
-                                                        <% if (item.orderStatus === "Ordered") { %>
-                                                            <p class="text-warning small mb-0">Your item has been Ordered</p>
-                                                        <% } else if (item.orderStatus === "Shipped") { %>
-                                                            <p class="text-info small mb-0">Your item has been Shipped</p>
-                                                        <% } else if (item.orderStatus === "Delivered") { %>
-                                                            <p class="text-success small mb-0">Your item has been Delivered</p>
-                                                        <% } else if (item.orderStatus === "Cancelled") { %>
-                                                            <p class="text-danger small mb-0">Your item has been Cancelled</p>
-                                                        <% } %>
-                                                    </td>
-                                                    <td class="column-4">
-                                                        <div class="d-flex justify-content-between align-items-end flex-column">
-                                                            <% if (item.orderStatus === "Ordered") { %>
-                                                                <label class="badge bg-warning p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                            <% } else if (item.orderStatus === "Shipped") { %>
-                                                                <label class="badge bg-info p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                            <% } else if (item.orderStatus === "Delivered") { %>
-                                                                <label class="badge bg-success p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                            <% } else if (item.orderStatus === "Cancelled") { %>
-                                                                <label class="badge bg-danger p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                            <% } else if (item.orderStatus === "Returned") { %>
-                                                                <label class="badge bg-dark p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                            <% } %> %>
-                                                        </div>
-                                                    </td>
-                                                    
-                                                    <td class="pr-5"><button class="btn btn-success" onclick="details('<%= item._id %>')" >Details</button>
-                                                    </td>
-                                                </tr>
-                                            <% }); %>
+                                        <% if (orderItem.orderItems.length === 0) { %>
+                                        <tr>
+                                            <td colspan="7" class="text-center">No items in this order.</td>
+                                        </tr>
+                                        <% } else { %>
+                                        <% orderItem.orderItems.forEach(item => { %>
+                                        <tr class="table_row">
+                                            <td class="column-1">
+                                                <div class="d-flex align-items-center">
+                                                    <% if (item.image && item.image.length > 0) { %>
+                                                    <img src="/Photos/product/<%= item.image[0] %>"
+                                                        alt="<%= item.productName %>" style="max-width: 100px; max-height: 100px;">
+                                                    <% } %>
+                                                    <span class="pl-4 pb-4"><%= item.productName %></span>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="column-3 pb-5 text-danger">$<%= item.totalPrice %></td>
+                                            <td></td>
+                                            <td>
+                                                <% if (item.orderStatus === "Ordered") { %>
+                                                <p class="text-warning small mb-0">Your item has been Ordered</p>
+                                                <% } else if (item.orderStatus === "Shipped") { %>
+                                                <p class="text-info small mb-0">Your item has been Shipped</p>
+                                                <% } else if (item.orderStatus === "Delivered") { %>
+                                                <p class="text-success small mb-0">Your item has been Delivered</p>
+                                                <% } else if (item.orderStatus === "Cancelled") { %>
+                                                <p class="text-danger small mb-0">Your item has been Cancelled</p>
+                                                <% } else if (item.orderStatus === "Returned") { %>
+                                                <p class="small mb-0" style="color: orange;"><%= item.paymentStatus %></p>
+                                                <% } %>
+                                            </td>
+                                            <td class="column-4">
+                                                <div class="d-flex justify-content-between align-items-end flex-column">
+                                                    <% if (item.orderStatus === "Ordered") { %>
+                                                    <label class="badge bg-warning p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                    <% } else if (item.orderStatus === "Shipped") { %>
+                                                    <label class="badge bg-info p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                    <% } else if (item.orderStatus === "Delivered") { %>
+                                                    <label class="badge bg-success p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                    <% } else if (item.orderStatus === "Cancelled") { %>
+                                                    <label class="badge bg-danger p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                    <% } else if (item.orderStatus === "Returned") { %>
+                                                    <label class="badge bg-dark p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
+                                                    <% } %>
+                                                </div>
+                                            </td>
+                                            <td class="pr-5"><button class="btn btn-success" onclick="details('<%= item._id %>')">Details</button></td>
+                                        </tr>
                                         <% }); %>
+                                        <% } %>
+                                        <% }); %>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" integrity="sha384-UY6H/Ru5ZNDvvv8ObnV+2zzHRMk7ekSrMCSqKc7p/rIVe9M+irC6gq0V7xS2Pwfs" crossorigin="anonymous">
-    <script src="http://localhost:8000/js/jquery.min.js"></script>
-    <script src="http://localhost:8000/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 4 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Other scripts -->
+    <script src="http://localhost:8000/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
-        async function details(orderId){
+        async function details(orderId) {
             window.location.href = `/orderDetails?id=${orderId}`
         }
     </script>
-
 </body>
 
 </html>

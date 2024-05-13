@@ -20,8 +20,14 @@ const orderSchema = new mongoose.Schema({
                 required:true
             },
             productPrice:{
-                type:String,
+                type:Number,
                 required:true
+            },
+            offerPrice:{
+                type:Number
+            },
+            offer:{
+                type:Number
             },
             category:{
                 type:String,
@@ -56,12 +62,23 @@ const orderSchema = new mongoose.Schema({
             },
             totalAmount: {
                 type: Number
-            }
+            },
+            paymentStatus:{
+                type:String,
+                default:"Pending"
+            },
         }
     ],
+    razorpayOrderId:{
+        type:String
+    },
     paymentMethod:{
         type:String,
         required:true
+    },
+    paymentStatus:{
+        type:String,
+        default:"Pending"
     },
     orderDate:{
         type:Date,

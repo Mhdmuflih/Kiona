@@ -7,6 +7,7 @@ import Product from "../model/productModel.js";
 import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
 import Order from "../model/orderModel.js";
+import Wishlist from "../model/wishlistModel.js";
 
 // ----------------------------------------------
 
@@ -30,9 +31,20 @@ const cart = async (req, res) => {
             } }
         ])
 
+        let wishlistProduct = await Wishlist.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user) } },
+            { $unwind:"$wishlistItems" },
+            { $lookup:{
+                from:"products",
+                localField:"wishlistItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
         let message;
 
-        res.render('users/shoping-cart.ejs', { user, cartProduct, message:message });
+        res.render('users/shoping-cart.ejs', { user, cartProduct, wishlistProduct, message:message });
         
     } catch (error) {
         console.log(error.message);
@@ -149,29 +161,70 @@ const removeCart = async(req,res)=>{
 
 
 //checkout address showing page
-const selectAddress = async(req,res)=>{
+const selectAddress = async (req, res) => {
     try {
-
         const id = req.session.user_id;
-        const user = await User.findOne({_id:id})
-        const cartItem = await Cart.findOne({userId:id})
-        console.log(cartItem,'sen mone');
+        const user = await User.findOne({ _id: id });
+
+        let cartProduct = await Cart.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(id) } },
+            { $unwind: "$cartItems" },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "cartItems.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            }
+        ]);
+
+        if (cartProduct.length === 0) {
+            return res.redirect('/shoping-cart');
+        }
         
-        if(!cartItem){
-            res.redirect('/shoping-cart')
+        let totalPrice = 0;
+
+        for (let i = 0; i < cartProduct.length; i++) {
+            const cartItem = cartProduct[i].cartItems;
+            const productDetails = cartProduct[i].productDetails;
+
+            for (let j = 0; j < productDetails.length; j++) {
+                const quantity = cartItem.quantity;
+                const prodcutQuantity = productDetails[j].quantity
+
+                if(quantity>prodcutQuantity){
+                    return res.redirect('/shoping-cart')
+                }
+
+                let price;
+                if (productDetails[j].offerPrice) {
+                    price = productDetails[j].offerPrice;
+                } else {
+                    price = productDetails[j].price;
+                }
+                const itemTotalPrice = quantity * price;
+
+                totalPrice += itemTotalPrice;
+            }
         }
 
-        let addressData = await Address.findOne({userId:id})
-        if(!addressData){
-            addressData =  { addresses: [] };
+        console.log(totalPrice,'total price');
+
+        req.session.totalPrice = totalPrice
+
+
+        let addressData = await Address.findOne({ userId: id });
+        if (!addressData) {
+            addressData = { addresses: [] };
         }
 
-        res.render('users/checkout/showAddress.ejs',{ user, addressData })
-
+        res.render('users/checkout/showAddress.ejs', { user, addressData, totalPrice });
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 //checkout add address page
 const checkoutAddAddressPage = async(req,res)=>{
@@ -372,10 +425,13 @@ const checkoutPage = async(req,res)=>{
             for(let j = 0; j < products.length; j++){
 
                 let product = products[j];
+                console.log(product.offerPrice,'ith nth product ann');
                 allProduct.push({
                     _id: product._id,
                     name: product.name,
                     price: product.price,
+                    offerPrice:product.offerPrice,
+                    offer:product.offer,
                     category: product.category,
                     quantity: product.quantity,
                     description: product.description,
@@ -393,81 +449,6 @@ const checkoutPage = async(req,res)=>{
     }
 }
 
-//cod
-const cod = async (req,res)=>{
-    try {
-
-        const user = req.session.user_id
-        const cart = req.session.cartProduct
-        const address = req.session.address_data
-        const cartAllProduct = req.session.cartAllProduct
-        const paymentMethod = req.body.payment
-
-        let cartQuantity = []
-        for(let i=0 ; i<cart.length ; i++){
-            cartQuantity.push(cart[i].cartItems.quantity)
-        }
-        
-        let totalAmount = 0;
-        const orderItems = [];
-
-        for(let i=0 ; i<cartAllProduct.length ; i++){
-
-            let item  = cartAllProduct[i]
-            let total = item.price*cartQuantity[i]
-            totalAmount += total
-            orderItems.push({
-                productId: item._id,
-                image: item.image,
-                productName: item.name,
-                productPrice: item.price,
-                category: item.category,
-                quantity: item.quantity,
-                description: item.description,
-                cartQuantity:cartQuantity[i],
-                totalPrice:total
-            })
-            await Product.findByIdAndUpdate( { _id:item._id }, { $inc: { quantity:-cartQuantity[i] } } );
-        }
-
-        const order = new Order({
-            userId:user,
-            orderItems:orderItems,
-            address:address,
-            paymentMethod:paymentMethod,
-            orderDate: new Date(),
-            totalAmount:totalAmount
-        })
-        const saveOrder = await order.save();
-
-        if(saveOrder){
-
-            await Cart.deleteOne();
-
-            delete req.session.cartProduct;
-            delete req.session.address_data;
-            delete req.session.cartAllProduct;
-
-            return res.json({ success: true, message: "Order saved successfully" });
-        }else{
-            returnres.json({ success: false, message: "Failed to save order" });
-        }
-        
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-//order success
-const orderSuccessPage = async(req,res)=>{
-    try {
-        
-        res.render('users/checkout/orderSuccess.ejs')
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 export{
     cart,
@@ -488,9 +469,7 @@ export{
     summary,
 
     checkoutPage,
-    cod,
 
-    orderSuccessPage
 
 
 }

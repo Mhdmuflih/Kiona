@@ -133,10 +133,14 @@
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 
+						<% let wishlistCount = 0 %>
+						<% for(let i=0 ; i<wishlistProduct.length ; i++){ %>
+							<% wishlistCount++; %>
+						<% } %>
 
 						<a href="#"
 							class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
+							data-notify="<%= wishlistCount++; %>">
 							<i class="zmdi zmdi-favorite-outline"></i>
 						</a>
 					</div>
@@ -192,14 +196,31 @@
 								<div class="header-cart-item-txt p-t-8">
 									<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
 										<%= cartProduct[i].productDetails[0].name %>
+										<% if(cartProduct[i].productDetails[0].offer){ %>
+											<span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+												<%= cartProduct[i].productDetails[0].offer %> %
+											</span>
+										<% } %>
 									</a>
-				
-									<span class="header-cart-item-info">
-										<%= cartProduct[i].productDetails[0].price %>
+
+									
+								<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+									<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
+									<span class="stext-105 cl3">
+										<%= cartProduct[i].productDetails[0].price  %>
 									</span>
+								<% }else{ %>
+									<span class="header-cart-item-info">
+										RS: <%= cartProduct[i].productDetails[0].price %>
+									</span>
+								<% } %>
 								</div>
 							</li>
-							<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+								<% totalAmount += cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %>
+							<% }else{ %>
+								<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% } %>
 						<% } %>
 					<% } %>
 				</ul>
@@ -270,18 +291,36 @@
 													<img src="/Photos/product/<%= cartProduct[i].productDetails[0].image[0] %>" alt="IMG">
 												</div>
 											</td>
-											<td class="column-2"><%= cartProduct[i].productDetails[0].name %></td>
-											<td class="column-3">$<%= cartProduct[i].productDetails[0].price %></td>
+											<td class="column-2">
+												<%= cartProduct[i].productDetails[0].name %>
+												<% if(cartProduct[i].productDetails[0].offer){ %>
+													<span style="color: green; font-weight: bold; ">
+														<%= cartProduct[i].productDetails[0].offer %> %
+													</span>
+												<% } %>
+											</td>
+											<td class="column-3">
+												<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+													<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
+													<span class="stext-105 cl3">
+														<%= cartProduct[i].productDetails[0].price  %>
+													</span>
+												<% }else{ %>
+													<span class="header-cart-item-info">
+														RS: <%= cartProduct[i].productDetails[0].price %>
+													</span>
+												<% } %>
+											</td>
 											<td class="column-4">
 												<div class="wrap-num-product flex-w m-l-auto m-r-0">
 													<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
-														 onclick="decrement('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>')">
+														 onclick="decrement('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>', '<%= cartProduct[i].productDetails[0].offerPrice %>')">
 														<i class="fs-16 zmdi zmdi-minus"></i>
 													</div>
 													<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" id="quantity<%= i %>"
 														   value="<%= cartProduct[i].cartItems.quantity %>" min="1" max="5" readonly>
 													<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
-														 onclick="increment('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>')">
+														 onclick="increment('<%= cartProduct[i].cartItems._id %>', '<%= cartProduct[i].productDetails[0].price %>', '<%= i %>', '<%= cartProduct[i].productDetails[0].offerPrice %>')">
 														<i class="fs-16 zmdi zmdi-plus"></i>
 													</div>
 												</div>
@@ -292,7 +331,13 @@
 													<p class="text-danger">Product is out of stock.</p>
 												<% } %>
 											</td>
-											<td class="column-5" id="total<%= i %>">$<%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %></td>
+											<td class="column-5" id="total<%= i %>">
+												<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+													RS: <%= cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %>
+												<% }else{ %>
+													RS: <%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+												<% } %>
+											</td>
 										</tr>
 									<% } %>
 								<% } %>
@@ -401,9 +446,7 @@
 							</div>
 						</div>
 
-						<a href="/shoping-cart/selectAddress"> <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-							PLACE ORDER
-							</button> </a>
+						<a href="/shoping-cart/selectAddress">	<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" > PLACE ORDER </button> </a>
 					</div>
 				</div>
 			</div>
@@ -468,7 +511,7 @@
 
 
 		<script>
-			async function increment(cartItemsId, price, index) {
+			async function increment(cartItemsId, price, index, offerPrice) {
 				try {
 					const total = document.getElementById(`total${index}`);
 					const quantity = document.getElementById(`quantity${index}`).value;
@@ -482,8 +525,14 @@
 						});
 						window.location.href='/shoping-cart'
 					}
-					const totalAmout = (Number(quantity) + 1) * price
-					total.textContent = `$${totalAmout}`
+					if(offerPrice){
+						const totalAmout = (Number(quantity) + 1) * offerPrice
+						total.textContent = `RS:${totalAmout}`
+					}else{
+						const totalAmout = (Number(quantity) + 1) * price
+						total.textContent = `RS:${totalAmout}`
+					}
+
 					
 					// totalAmoutElement.textContent = `$${totalAmout}`
 
@@ -516,7 +565,7 @@
 				}
 			}
 
-			async function decrement(cartItemsId, price, index) {
+			async function decrement(cartItemsId, price, index,offerPrice) {
 				try {
 					const total = document.getElementById(`total${index}`);
 					const quantity = document.getElementById(`quantity${index}`).value;
@@ -529,8 +578,14 @@
 						});
 						window.location.href='/shoping-cart'
 					}else{
-						const totalAmout = (Number(quantity) - 1) * price
-						total.textContent = `$${totalAmout}`
+						if(offerPrice){
+							const totalAmout = (Number(quantity) - 1) * offerPrice
+							total.textContent = `RS:${totalAmout}`
+						}else{
+							const totalAmout = (Number(quantity) - 1) * price
+							total.textContent = `RS:${totalAmout}`
+						}
+
 					}
 					await axios.post('/shoping-cart/decrement', { cartItemsId })
 				} catch (error) {
@@ -579,6 +634,44 @@
 				}
 
 			}
+
+// 			async function next() {
+//     try {
+//         console.log('hklo');
+//         window.location.href = '/shoping-cart/selectAddress';
+//     } catch (error) {
+//         console.log(error.message);
+//         if (error.response && error.response.data) {
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Error',
+//                 text: error.response.data.message
+//             });
+//         } else {
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Error',
+//                 text: 'An error occurred'
+//             });
+//         }
+//     }
+// }
+
+
+					// Swal.fire({
+					// 	icon: 'success',
+					// 	title: 'Success',
+					// 	text: 'Your order has been placed successfully'
+					// });
+				// } catch (error) {
+				// 	console.log(error.message);
+				// 	// Handle errors (e.g., display an error message)
+				// 	Swal.fire({
+				// 		icon: 'error',
+				// 		title: 'Error',
+				// 		text: 'There was an error placing the order'
+				// 	});
+				// }
 
 		</script>
 

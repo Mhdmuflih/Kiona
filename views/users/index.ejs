@@ -139,9 +139,14 @@
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 
+						<% let wishlistCount = 0 %>
+						<% for(let i=0 ; i<wishlistProduct.length ; i++){ %>
+							<% wishlistCount++; %>
+						<% } %>
+
 						<a href="#"
 							class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
+							data-notify="<%= wishlistCount++; %>">
 							<i class="zmdi zmdi-favorite-outline"></i>
 						</a>
 					</div>
@@ -522,7 +527,7 @@
 				<div class="dis-none panel-filter w-full p-t-10">
 					<div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
 						<div class="filter-col1 p-r-15 p-b-27">
-							<div class="mtext-102 cl2 p-b-15">
+							<!-- <div class="mtext-102 cl2 p-b-15">
 								Sort By
 							</div>
 
@@ -563,9 +568,9 @@
 									</a>
 								</li>
 							</ul>
-						</div>
+						</div> -->
 
-						<div class="filter-col2 p-r-15 p-b-27">
+						<!-- <div class="filter-col2 p-r-15 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
 								Price
 							</div>
@@ -607,9 +612,9 @@
 									</a>
 								</li>
 							</ul>
-						</div>
+						</div> -->
 
-						<div class="filter-col3 p-r-15 p-b-27">
+						<!-- <div class="filter-col3 p-r-15 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
 								Color
 							</div>
@@ -675,9 +680,9 @@
 									</a>
 								</li>
 							</ul>
-						</div>
+						</div> -->
 
-						<div class="filter-col4 p-b-27">
+						<!-- <div class="filter-col4 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
 								Tags
 							</div>
@@ -707,7 +712,7 @@
 									class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Crafts
 								</a>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -732,11 +737,27 @@
 							<div class="block2-txt-child1 flex-col-l ">
 								<a href="/productDetails?productId=<%= products[i]._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 									<%= products[i].name  %>
+									<% if(products[i].offer){ %>
+										<span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+											<%= products[i].offer %> %
+										</span>
+									<% } %>
+									
 								</a>
 
-								<span class="stext-105 cl3">
-									$<%= products[i].price  %>
-								</span>
+								<% if(products[i].offerPrice){ %>
+									<span> RS:  <%= products[i].offerPrice %> </span>
+									<span class="stext-105 cl3">
+										<strike><%= products[i].price  %></strike>
+									</span>
+								<% }else{ %>
+									<span class="stext-105 cl3">
+										RS: <%= products[i].price  %>
+									</span>
+								<% } %>
+
+
+
 							</div>
 
 							<div class="block2-txt-child2 flex-r p-t-3">

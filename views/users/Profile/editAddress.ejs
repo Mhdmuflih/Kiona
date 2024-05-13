@@ -99,23 +99,28 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                         style="width: 310px;">
-                                        <a href="/userProfile"> <button type="button" class="btn btn-outline-info"
+                                        <a href="/userProfile"> <button type="button" class="btn btn-outline-dark"
                                                 style="width: 280px;">User Profile</button> </a>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                         style="width: 310px;">
-                                        <a href="/changePassword"> <button type="button" class="btn btn-outline-info"
+                                        <a href="/changePassword"> <button type="button" class="btn btn-outline-dark"
                                                 style="width: 280px;">Change Password</button> </a>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                         style="width: 310px;">
-                                        <a href="/address"> <button type="button" class="btn btn-info"
+                                        <a href="/address"> <button type="button" class="btn btn-dark"
                                                 style="width: 280px;">Address Management</button> </a>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
                                         style="width: 310px;">
-                                        <a href="/order"> <button type="button" class="btn btn-outline-info"
+                                        <a href="/order"> <button type="button" class="btn btn-outline-dark"
                                                 style="width: 280px;">Order</button> </a>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
+                                        style="width: 310px;">
+                                        <a href="/wishlist"> <button type="button" class="btn btn-outline-dark"
+                                            style="width: 280px;">Wishlist</button> </a>
                                     </li>
 
                                 </ul>
@@ -135,12 +140,13 @@
                                         <label class="small mb-1" for="name">Name</label>
                                         <input class="form-control" id="name" name="name" type="text"
                                             value=" <%= address.name %> ">
+                                            <p style="color: red;" id="nameErr"></p>
                                     </div>
-
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="mobile">Mobile Number</label>
                                         <input type="number" name="mobile" id="mobile" class="form-control"
                                             value="<%= address.mobile %>" required>
+                                            <p style="color: red;" id="mobileErr"></p>
                                     </div>
                                 </div>
 
@@ -150,12 +156,14 @@
                                         <label class="small mb-1" for="inputOrgName"> Pincode </label>
                                         <input type="number" name="pincode" id="pincode" class="form-control"
                                             value="<%= address.pincode %>" required>
+                                            <p style="color: red;" id="pincodeErr"></p>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputLocation">Locality</label>
                                         <input class="form-control" id="locality" name="locality" type="text"
                                             value=" <%= address.locality %> ">
+                                            <p style="color: red;" id="localityErr"></p>
                                     </div>
                                 </div>
 
@@ -164,6 +172,7 @@
                                     <textarea class="form-control" name="address" id="address" rows="4" tabindex="5"
                                         required="" autocomplete="street-address"
                                         style="width: 100%;"> <%= address.address %> </textarea>
+                                        <p style="color: red;" id="addressErr"></p>
                                 </div>
 
 
@@ -174,13 +183,16 @@
                                         <label class="small mb-1" for="inputPhone">City/District</label>
                                         <input class="form-control" id="city" name="city" type="text"
                                             value=" <%= address.city %> ">
+                                            <p style="color: red;" id="cityErr"></p>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="inputBirthday">States</label>
                                         <input class="form-control" id="state" type="text" name="state"
                                             value=" <%= address.state %> ">
+                                            <p style="color: red;" id="stateErr"></p>
                                     </div>
+
                                 </div>
 
 
@@ -228,67 +240,177 @@
 
     <script>
 
-
         document.getElementById("form").addEventListener('submit', async (e) => {
             e.preventDefault();
             check();
-        })
+        });
 
-            const formElement = document.getElementById('form');
-            const addressId = document.getElementById('addressId').value;
-            const formData = new FormData(formElement);
+        const check = async () => {
+            const name = document.getElementById('name').value.trim();
+            const nameErr = document.getElementById('nameErr');
+            const mobile = document.getElementById('mobile').value.trim();
+            const mobileErr = document.getElementById('mobileErr');
+            const pincode = document.getElementById('pincode').value.trim();
+            const pincodeErr = document.getElementById('pincodeErr');
+            const locality = document.getElementById('locality').value.trim();
+            const localityErr = document.getElementById('localityErr');
+            const address = document.getElementById('address').value.trim();
+            const addressErr = document.getElementById('addressErr');
+            const city = document.getElementById('city').value.trim();
+            const cityErr = document.getElementById('cityErr');
+            const state = document.getElementById('state').value.trim();
+            const stateErr = document.getElementById('stateErr');
 
-            let formValues = {}
+            let isValid = true;
 
-            for (const entry of formData.entries()) {
-                const [key, value] = entry;
-                formValues[key] = value;
-            }
+            // Clear previous error messages
+            nameErr.innerHTML = '';
+            mobileErr.innerHTML = '';
+            pincodeErr.innerHTML = '';
+            localityErr.innerHTML = '';
+            addressErr.innerHTML = '';
+            cityErr.innerHTML = '';
+            stateErr.innerHTML = '';
 
-            const confirmation = await Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Update Address!'
-            });
-
-            if (!confirmation.isConfirmed) {
-                return;
-            }
-
-            try {
-
-                const response = await axios.post(`/address/editAddress?addressId=${addressId}`, formValues);
-
-                if (response.data.success) {
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Update Address!',
-                        text: response.data.message
-                    }).then(() => {
-                        window.location.href = `/address`;
-                    });
+            // Validation logic...
+            if (name === '') {
+                    nameErr.innerHTML = "Please enter your name.";
+                    isValid = false;
                 } else {
-                    await Swal.fire({
+                    const nameRegex = /^[a-zA-Z\s]*$/;
+                    if (!nameRegex.test(name)) {
+                        nameErr.innerHTML = "Please enter a valid name.";
+                        isValid = false;
+                    }
+                }
+
+                // Mobile number validation
+                if (!mobile) {
+                    mobileErr.innerHTML = "Please enter your mobile number.";
+                    isValid = false;
+                } else {
+                    const mobileRegex = /^[1-9][0-9]{9}$/; // Simplified regex for 10-digit numbers, adjust as needed
+                    if (!mobileRegex.test(mobile)) {
+                        mobileErr.innerHTML = "Please enter a valid mobile number.";
+                        isValid = false;
+                    }
+                }
+
+                // Pincode validation
+                if (!pincode) {
+                    pincodeErr.innerHTML = "Please enter a pincode.";
+                    isValid = false;
+                } else {
+                    const pincodeRegex = /^[0-9]{5,6}$/; // Example: 5-6 digit pincodes
+                    if (!pincodeRegex.test(pincode)) {
+                        pincodeErr.innerHTML = "Please enter a valid pincode.";
+                        isValid = false;
+                    }
+                }
+
+                // Locality validation
+                if (locality === '') {
+                    localityErr.innerHTML = "Please enter the locality.";
+                    isValid = false;
+                } else {
+                    const localityRegex = /^[a-zA-Z\s]*$/;
+                    if (!localityRegex.test(locality)) {
+                        localityErr.innerHTML = "Please enter a valid locality.";
+                        isValid = false;
+                    }
+                }
+
+                // Address validation
+                if (address === "") {
+                    addressErr.innerHTML = "Please enter the address.";
+                    isValid = false;
+                }else{
+                    const addressRegex = /^[a-zA-Z\s,]*$/;
+                    if(!addressRegex.test(address)){
+                        addressErr.innerHTML = "Please Enter valid address.";
+                        isValid = false
+                    }
+                }
+
+                // City validation
+                if (city === "") {
+                    cityErr.innerHTML = "Please enter the city name.";
+                    isValid = false;
+                } else {
+                    const cityRegex = /^[a-zA-Z\s]*$/;
+                    if (!cityRegex.test(city)) {
+                        cityErr.innerHTML = "Please enter a valid city name.";
+                        isValid = false;
+                    }
+                }
+
+                // State validation
+                if (state === "") {
+                    stateErr.innerHTML = "Please enter the state name.";
+                    isValid = false;
+                } else {
+                    const stateRegex = /^[a-zA-Z\s]*$/;
+                    if (!stateRegex.test(state)) {
+                        stateErr.innerHTML = "Please enter a valid state name.";
+                        isValid = false;
+                    }
+                }
+
+            if (isValid) {
+                const formElement = document.getElementById('form');
+                const addressId = document.getElementById('addressId').value;
+                const formData = new FormData(formElement);
+
+                let formValues = {};
+
+                for (const entry of formData.entries()) {
+                    const [key, value] = entry;
+                    formValues[key] = value;
+                }
+
+                const confirmation = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Update Address!'
+                });
+
+                if (!confirmation.isConfirmed) {
+                    return;
+                }
+
+                try {
+                    const response = await axios.post(`/address/editAddress?addressId=${addressId}`, formValues);
+
+                    if (response.data.success) {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Update Address!',
+                            text: response.data.message
+                        }).then(() => {
+                            window.location.href = `/address`;
+                        });
+                    } else {
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.data.message
+                        });
+                        window.location.href = `/address/editAddress?addressId=${addressId}`;
+                    }
+                } catch (error) {
+                    console.error("Error updating Address: ", error.message);
+                    Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: response.data.message
+                        text: 'There was an error updating the profile'
                     });
-                    window.location.href = `/address/editAddress?id=${addressId}`;
                 }
-            } catch (error) {
-                console.error("Error updating Address: ", error.message);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error updating the profile'
-                });
             }
-
-
+        };
 
     </script>
 

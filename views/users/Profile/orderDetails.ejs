@@ -120,6 +120,7 @@
                                     <label class="badge bg-danger p-2 text-white mb-1"><%= ordered.orderStatus %></label>
                                 <% } else if(ordered.orderStatus === "Returned") { %>
                                   <label class="badge bg-dark p-2 text-white mb-1"><%= ordered.orderStatus %></label>
+                                  <span style="color: orange;"> <%= ordered.paymentStatus %> </span>
                               <% } %> %>
                             </div>
                             

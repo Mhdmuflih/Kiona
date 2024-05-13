@@ -1,5 +1,4 @@
 import Category from "../model/categoryModel.js";
-import { resendOTP } from "./userController.js";
 
 // -----------------------------------------------------------------
 

@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import session from "express-session";
 
+// -----------------------------
 
 import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/adminController.js";
 import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage, deleted, deleteImage  } from "../controller/adminProductController.js";
@@ -10,6 +11,8 @@ import { userDetails, userBlock } from "../controller/adminUserController.js";
 import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/adminCategoryController.js";
 import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
 import { orderDetailsPage, orderPage, orderStatus } from "../controller/adminOrderController.js";
+import { addCategoryOffer, addCategoryOfferPage, addCoupon, addCouponOfferPage, addProductOffer, addProductOfferPage, categoryOfferPage, couponOfferPage, deleteCategoryOffer, deleteCoupon, deleteProductOffer, productOfferPage } from "../controller/adminOfferController.js";
+import { salesReportPage } from "../controller/adminSalesReport.js";
 
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -63,25 +66,25 @@ const storageCategory = multer.diskStorage({
 const uploadCategory = multer({ storage: storageCategory });
 // -----------------------------------------------------------------------
 
-//admin login
+//------------------------------------------------admin login------------------------------------------------
 admin_route.get('/',isLogout,adminLogin)
 admin_route.post('/',verifyAdminLogin)
 
-//admin register
+//------------------------------------------------admin register------------------------------------------------
 admin_route.get('/register',isLogout,adminRegister)                         //admin register page
 admin_route.post('/register',insertAdmin)                                   //insert Admin
 
-//admin home page
+//------------------------------------------------admin home page------------------------------------------------
 admin_route.get('/home',isLogin,adminHome)                                  //admin home page
 
-//admin Logout
+//------------------------------------------------admin Logout------------------------------------------------
 admin_route.get('/logout',isLogin,adminLogout)                              //Logout
 
-//admin user management
+//------------------------------------------------admin user management------------------------------------------------
 admin_route.get('/users',isLogin,userDetails);
 admin_route.post('/users/block',userBlock)                                  //post method is using axiox in back end
 
-//product management
+//------------------------------------------------product management------------------------------------------------
 admin_route.get('/product',isLogin,productPage)                             //product list page route
 
 admin_route.get('/add_product',isLogin,addProduct)                          // Add product page route
@@ -97,7 +100,7 @@ admin_route.post('/editProduct',upload,editProduct)                         //ed
 admin_route.delete('/editProduct/deleteImage',deleteImage)
 
 
-//category management
+//------------------------------------------------category management------------------------------------------------
 admin_route.get('/category',isLogin,categoryPage)                           //category page
 admin_route.get('/add_category',isLogin,addCategory)                        //add category page
 admin_route.post('/add_category', uploadCategory.single('image'),createCategory)  //add Category
@@ -110,9 +113,31 @@ admin_route.post('/category/delete',deleteCategory)                         //de
 admin_route.post('/category/restore',restoreCategory)                       //restore the soft delete page to main page
 admin_route.post('/category/deleted',categoryDeleted)                       //delete in db
 
+// ------------------------------------------------order Management------------------------------------------------
 admin_route.get('/order',isLogin,orderPage)                                         //order Page
 admin_route.get('/orderDetails',isLogin,orderDetailsPage)                           //order Details Page
 admin_route.post('/orderDetails/updateStatus',isLogin ,orderStatus);                // order Status Changing
+
+// ------------------------------------------------offer Management------------------------------------------------
+admin_route.get('/categoryOffers',isLogin,categoryOfferPage)                    //category offer list page
+admin_route.get('/add_category_offer',isLogin,addCategoryOfferPage)             //add category offer page
+admin_route.post('/add_category_offer',addCategoryOffer)                        //added the category offer
+admin_route.delete('/categoryOffers/delete',deleteCategoryOffer)                //delete the category offer
+
+admin_route.get('/productOffers',isLogin,productOfferPage)                      //Product offer page
+admin_route.get('/add_product_offer',isLogin,addProductOfferPage)               //add Product Offer Page
+admin_route.post('/add_product_offer',addProductOffer)                          //added the product offer
+admin_route.delete('/productOffers/delete',deleteProductOffer)                  //delete the product offer
+
+//coupon Managemenet
+// ------------------
+admin_route.get('/couponOffers',isLogin,couponOfferPage)                        //coupon page
+admin_route.get('/add_coupon_offer',isLogin,addCouponOfferPage)                 //add coupon page
+admin_route.post('/add_coupon_offer',addCoupon)                                 //added the coupon
+admin_route.delete('/couponOffers/delete',deleteCoupon)
+
+// ------------------------------------------------offer Management------------------------------------------------
+admin_route.get('/salesReport',isLogin,salesReportPage)
 
 
 export default admin_route;

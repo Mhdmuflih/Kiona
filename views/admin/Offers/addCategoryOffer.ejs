@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Purple Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End Plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="../../admin/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50" src="/kiona-high-resolution-logo-transparent.png"
+            alt="logo" /></a>
+        <!-- <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../admin/images/logo-mini.svg" alt="logo" /></a> -->
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="input-group">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+            </div>
+          </form>
+        </div>
+        <ul class="navbar-nav navbar-nav-right">
+
+          <li class="nav-item nav-logout d-none d-lg-block">
+            <a class="nav-link" href="/admin/logout">
+              <i class="mdi mdi-power"></i>
+            </a>
+          </li>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas"> <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="mt-4">
+            <a class="nav-link" href="/admin/home"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i class="mdi mdi-home menu-icon"></i>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/users"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i class="mdi mdi-contacts menu-icon"></i>
+              </button>
+            </a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="/admin/product"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i class="mdi mdi-tshirt-crew "></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/category"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Category <i class="mdi mdi-cards"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/order"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i class="mdi mdi-shopping"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages"> <button type="button" class="btn btn-gradient-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i> </button>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/categoryOffers"> Category Offers </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/productOffers"> Product Offers </a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Coupons </a></li> -->
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/couponOffers"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i class="mdi mdi-ticket"></i>  </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales  <i class="mdi mdi-sale"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html"> <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i class="mdi mdi-clipboard-outline"></i> </button>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title"> All Category Offer </h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/add_category_offer">Add Category Offer</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Offers</li>
+              </ol>
+            </nav>
+          </div>
+
+          <p></p>
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-md-6">
+                <div class="grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Add Category Offer</h4>
+                      <p class="card-description"> </p>
+                      <form class="forms-sample" method="post" id="categoryOfferForm" >
+
+                        <!-- category name -->
+                        <div class="form-group">
+                            <label>Categories</label>
+                            <select class="form-control my-custom-dropdown" name="name" id="category">
+                              <option value="">Select Category</option>
+                              <% for(let i=0 ; i<category.length ; i++){ %>
+                                <% if(category[i].delete === false){ %>
+                                    <option> <%= category[i].name %> </option>
+                                <% } %>
+                              <% } %>
+                            </select>
+                          </div>
+                          <p style="color: red;" id="categoryErr"></p>
+
+
+                        <!-- <div class="form-group">
+                          <label for="exampleInputUsername1">Category Name</label>
+                          <input type="text" name="name" class="form-control" id="category" placeholder="Category name">
+                          <p style="color: red;" id="categoryErr"></p>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">Offer % </label>
+                            <input type="number" name="offer" class="form-control" id="offer" placeholder="Category Offer %">
+                            <p style="color: red;" id="offerErr"></p>
+                        </div>
+
+                        <!-- description -->
+                        <div class="form-group">
+                            <label for="exampleInputValidityDate">Validity Date</label>
+                            <input type="date" name="date" class="form-control" id="exampleInputValidityDate">
+                            <p style="color: red;" id="validityDateErr"></p>
+                        </div>
+                        
+                        
+                        <!-- submit and cancel button -->
+                        <div class="d-flex">
+                          <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
+                          <div style="width: 20px;"></div>
+                          <a href="/admin/categoryOffers"> <button type="button"
+                              class="btn btn-gradient-info mr-2">Cancel</button> </a>
+                        </div>
+
+
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Kiona © kiona.com
+                2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">  <a
+                  href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">kiona admin
+                  </a>  kiona.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../../admin/vendors/chart.js/Chart.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../admin/js/off-canvas.js"></script>
+    <script src="../../admin/js/hoverable-collapse.js"></script>
+    <script src="../../admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="../../admin/js/chart.js"></script>
+    <!-- End custom js for this page -->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        document.getElementById('categoryOfferForm').addEventListener('submit', async(event)=>{
+            event.preventDefault();
+
+            const formElement = document.getElementById("categoryOfferForm");
+            const formData = new FormData(formElement);
+            
+            const formValues = {};
+
+            for (const entry of formData.entries()) {
+                const [key, value] = entry;
+                formValues[key] = value;
+            }
+
+            try {
+                const response = await axios.post('/admin/add_category_offer',formValues )
+                if(response.data.success){
+                    Swal.fire({
+                        icon:"success",
+                        title:"success",
+                        text:response.data.message
+                    }).then(()=>{
+                        window.location.href = "/admin/categoryOffers";
+                    })
+                }else{
+                    Swal.fire({
+                        icon:"error",
+                        title:"error",
+                        text:response.data.message
+                    })
+                    window.location.href = "/admin/add_category_offer";
+                }
+            } catch (error) {
+                console.log(error.message);
+                Swal.fire({
+                    icon:"error",
+                    title:"error",
+                    text:error.message
+                })
+            }
+        })
+    </script>
+
+
+
+</body>
+
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->
+
+</html>

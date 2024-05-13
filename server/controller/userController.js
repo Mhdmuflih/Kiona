@@ -8,7 +8,14 @@ import mongoose from "mongoose";
 import User from "../model/userModel.js";
 import OTP from "../model/otpModel.js";
 import Product from "../model/productModel.js";
+import Category from "../model/categoryModel.js";
 import Cart from "../model/cartModel.js";
+import Wishlist from "../model/wishlistModel.js";
+// ----------------------------------------------
+
+import ProductOffer from "../model/productOfferModel.js";
+import CategoryOffer from "../model/categoryOfferModel.js";
+
 // ----------------------------------------------
 
 // password secure
@@ -302,10 +309,57 @@ const verifyLogin = async (req, res) => {
 //login Home
 const loginHome = async (req, res) => {
     try {
-        const id = req.session.user_id
-        const userData = await User.findById(id)
-        const products = await Product.find({ delete: false })
+        // const id = req.session.user_id
         const user = req.session.user_id
+
+
+        const productOffers = await ProductOffer.aggregate([
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            }
+        ]);
+
+        for (let i = 0; i < productOffers.length; i++) {
+            const productOffer = productOffers[i];
+            const categoryName = productOffer.productDetails[0].category;
+            const category = await Category.findOne({ name: categoryName });
+        
+            if (category) {
+                const categoryOffer = await CategoryOffer.findOne({ categoryId: category._id });
+        
+                let offerPrice = productOffer.productDetails[0].price;
+        
+                if (productOffer.offer) {
+                    const discountRateProduct = productOffer.offer / 100;
+                    const discountAmountProduct = productOffer.productDetails[0].price * discountRateProduct;
+                    offerPrice -= discountAmountProduct;
+                }
+        
+                let categoryOfferPrice = productOffer.productDetails[0].price;
+        
+                if (categoryOffer) {
+                    const discountRateCategory = categoryOffer.offer / 100;
+                    const discountAmountCategory = productOffer.productDetails[0].price * discountRateCategory;
+                    categoryOfferPrice -= discountAmountCategory;
+                }
+        
+                const greaterOffer = Math.max(productOffer.offer || 0, (categoryOffer ? categoryOffer.offer : 0));
+        
+                await Product.updateOne(
+                    { _id: productOffer.productDetails[0]._id },
+                    { $set: { offerPrice: Math.min(offerPrice, categoryOfferPrice), offer: greaterOffer } }
+                );
+            }
+        }
+        
+
+        const userData = await User.findById(user)
+        const products = await Product.find({ delete: false })
 
         let cartProduct = await Cart.aggregate([
             { $match:{ userId: mongoose.Types.ObjectId(user)  } },
@@ -318,7 +372,18 @@ const loginHome = async (req, res) => {
             } }
         ])
 
-        res.render('users/index.ejs', { user: userData || 'muflih', products, user, cartProduct })
+        let wishlistProduct = await Wishlist.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user) } },
+            { $unwind:"$wishlistItems" },
+            { $lookup:{
+                from:"products",
+                localField:"wishlistItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        res.render('users/index.ejs', { user: userData || 'muflih', products, user, cartProduct, wishlistProduct })
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server error");
@@ -354,8 +419,19 @@ const productPage = async (req, res) => {
                 as:"productDetails"
             } }
         ])
+
+        let wishlistProduct = await Wishlist.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user) } },
+            { $unwind:"$wishlistItems" },
+            { $lookup:{
+                from:"products",
+                localField:"wishlistItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
         
-        res.render('users/product.ejs', { user, products, cartProduct })
+        res.render('users/product.ejs', { user, products, cartProduct, wishlistProduct })
     } catch (error) {
         console.log(error.message);
     }
@@ -381,7 +457,18 @@ const productDetails = async(req,res)=>{
             } }
         ])
 
-        res.render('users/product-detail.ejs', { user, product, cartProduct })
+        let wishlistProduct = await Wishlist.aggregate([
+            { $match:{ userId: mongoose.Types.ObjectId(user) } },
+            { $unwind:"$wishlistItems" },
+            { $lookup:{
+                from:"products",
+                localField:"wishlistItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        res.render('users/product-detail.ejs', { user, product, cartProduct, wishlistProduct })
 
     } catch (error) {
         console.log(error.message);

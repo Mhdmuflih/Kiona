@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:48 GMT -->
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> Category Details </title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../../admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End Plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="../../admin/css/style.css">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="../../admin/images/kiona-logo.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="/admin/home"><img class="h-50"
+            src="/kiona-high-resolution-logo-transparent.png" alt="logo" /></a>
+        <!-- <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../admin/images/logo-mini.svg" alt="logo" /></a> -->
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="mdi mdi-menu"></span>
+        </button>
+        <div class="search-field d-none d-md-block">
+          <form class="d-flex align-items-center h-100" action="#">
+            <div class="input-group">
+              <div class="input-group-prepend bg-transparent">
+                <i class="input-group-text border-0 mdi mdi-magnify"></i>
+              </div>
+              <input type="text" class="form-control" placeholder="Search User name,email" name="search">
+              <button type="submit" class="btn btn-inverse-dark btn-fw">Search</button>
+            </div>
+          </form>
+        </div>
+        <ul class="navbar-nav navbar-nav-right">
+
+          <li class="nav-item nav-logout d-none d-lg-block">
+            <a class="nav-link" href="/admin/logout">
+              <i class="mdi mdi-power"></i>
+            </a>
+          </li>
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="mt-4">
+            <a class="nav-link" href="/admin/home">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Dashboard <i
+                  class="mdi mdi-home menu-icon"></i>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/users">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">User <i
+                  class="mdi mdi-contacts menu-icon"></i>
+              </button>
+            </a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="/admin/product">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Products <i
+                  class="mdi mdi-tshirt-crew "></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/category">
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i
+                  class="mdi mdi-cards"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/order">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Order <i
+                  class="mdi mdi-shopping"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
+              aria-controls="general-pages">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 "> Offer <i
+                class="mdi mdi-percent"></i>
+              </button>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="general-pages">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/categoryOffers"> Category Offers </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/productOffers"> Product Offers </a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li>
+            <a class="nav-link" href="/admin/couponOffers">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 "> Coupons <i class="mdi mdi-ticket"></i></button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 "> Sales <i class="mdi mdi-sale"></i> </button>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" href="pages/tables/basic-table.html">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Banner <i
+                  class="mdi mdi-clipboard-outline"></i> </button>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title"> Sales Report </h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/salesReport"> Sales Report </a></li>
+                <li class="breadcrumb-item active" aria-current="page"> Sales Report </li>
+              </ol>
+            </nav>
+          </div>
+
+          <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="card-title">Sales Report</h4>
+                            <p class="card-description"><code>Kiona Sales</code></p>
+                        </div>
+                        <div style="width: 250px;"></div>
+
+                        <button type="button" class="btn badge badge-success btn-md" > Download <i class="mdi mdi-plus-circle"></i> </button>
+
+                        <div class="size-204 respon6-next">
+                            <div class="rs1-select2 bor8 bg0 dropdown">
+                                <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Sales Report Type
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button onclick="reportType()" class="dropdown-item">Daily</button>
+                                    <button onclick="reportType('','Shipped')" class="dropdown-item">Weekly</button>
+                                    <button onclick="reportType('','Delivered')" class="dropdown-item">Monthly</button>
+                                    <button onclick="reportType('','Cancelled')" class="dropdown-item">Yearly</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="font-size: 8px; padding: 5px;">No</th>
+                                    <th style="font-size: 8px; padding: 5px;">Order Id</th>
+                                    <th style="font-size: 8px; padding: 5px;">User Name</th>
+                                    <th style="font-size: 8px; padding: 5px;">Address</th>
+                                    <th style="font-size: 8px; padding: 5px;">Date</th>
+                                    <th style="font-size: 8px; padding: 5px;">Product Name</th>
+                                    <th style="font-size: 8px; padding: 5px;">Price</th>
+                                    <th style="font-size: 8px; padding: 5px;">Quantity</th>
+                                    <th style="font-size: 8px; padding: 5px;">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i=0 ; i<orderItems.length ; i++){ %>
+                                    <tr>
+                                        <td style="font-size: 8px;"><%= i+1 %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderId %></td>
+                                        <td style="font-size: 8px;"><%= users[i].name %></td>
+                                        <td style="font-size: 8px;">
+                                            <%= orderItems[i].address.name %>, <%= orderItems[i].address.addressType %>,<br>
+                                            <%= orderItems[i].address.address %>,<br>
+                                            <%= orderItems[i].address.locality %>, <%= orderItems[i].address.city %><br>
+                                            <%= orderItems[i].address.state %> - <%= orderItems[i].address.pincode %><br>
+                                            Mobile: <%= orderItems[i].address.mobile %>
+                                        </td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderDate.toDateString() %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.productName %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.productPrice %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.cartQuantity %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.totalPrice %></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="container-fluid clearfix">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">kioan © kiona.com
+                2020</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
+                  href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">kiona admin
+                  </a> from kiona.com</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../../admin/vendors/chart.js/Chart.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../admin/js/off-canvas.js"></script>
+    <script src="../../admin/js/hoverable-collapse.js"></script>
+    <script src="../../admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="../../admin/js/chart.js"></script>
+    <!-- End custom js for this page -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+    <script>
+
+    </script>
+
+
+
+
+</body>
+
+<!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->
+
+</html>

@@ -106,15 +106,29 @@
 										<td >
 											
 											<div>
-												name:<%= cartProduct[i].productDetails[0].name %>
-												Price:$<%= cartProduct[i].productDetails[0].price %>
-												Quantity:<%= cartProduct[i].cartItems.quantity %>
-												<p style="color: red;"> Total: $<%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %> </p>
+												Name: <%= cartProduct[i].productDetails[0].name %>
+												<% if(cartProduct[i].productDetails[0].offer){ %>
+													<span style="color: green; font-size: 17px;"><%= cartProduct[i].productDetails[0].offer %> %</span><br>
+													Price: Rs <%= cartProduct[i].productDetails[0].offerPrice %>
+													<code><%= cartProduct[i].productDetails[0].price %></code>
+													Quantity: <%= cartProduct[i].cartItems.quantity %><br>
+													<p style="color: red;">Total: Rs <%= cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %> </p>
+												<% } else { %>
+													<br>Price: Rs <%= cartProduct[i].productDetails[0].price %>
+													Quantity: <%= cartProduct[i].cartItems.quantity %><br>
+													<p style="color: red;">Total: Rs <%= cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %> </p>
+												<% } %><br>
+												
 											</div>
+											
 											
 
 										</td>
-									<% totalAmount +=cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity%>
+										<% if(cartProduct[i].productDetails[0].offer){ %>
+											<% totalAmount +=cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity%>
+										<% }else{ %>
+											<% totalAmount +=cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity%>
+										<% } %>
 
 								<% } %>
 

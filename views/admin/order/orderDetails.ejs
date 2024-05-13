@@ -95,30 +95,29 @@
           <li>
             <a class="nav-link" data-toggle="collapse" href="#general-pages" aria-expanded="false"
               aria-controls="general-pages">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i class="mdi mdi-percent"></i>
               </button>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="general-pages">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/categoryOffers"> Category Offers </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/productOffers"> Product Offers </a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li> -->
               </ul>
             </div>
           </li>
           <li>
-            <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Offer <i
-                  class="mdi mdi-percent"></i> </button>
+            <a class="nav-link" href="/admin/couponOffers">
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i
+                class="mdi mdi-ticket"></i> </button>
             </a>
           </li>
           <li>
             <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Coupons <i
-                  class="mdi mdi-ticket"></i> </button>
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 ">Sales <i class="mdi mdi-sale"></i> </button>
             </a>
           </li>
           <li>
@@ -186,84 +185,124 @@
                     <h4 class="card-title"> Ordered Details </h4>
                     <p class="card-description"> <code> Kiona Ordered Details </code>
                     </p>
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th> Sl.No </th>
-                          <th> Product </th>
-                          <th> product Price </th>
-                          <th> Quantity </th>
-                          <th> Total </th>
-                          <th> Reason </th>
-                          <th> Status </th>
-                          <th> Manage </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                     
-                        <% for(let i=0 ; i<order.orderItems.length ; i++){ %>
+                    <div style="overflow-x: auto;">
 
-                            <tr>
-                                <td><%= i+1 %></td>
-                              <td class="py-1">
-                                <img src="/Photos/product/<%= order.orderItems[i].image[0] %>" alt="image"/> <span> <%= order.orderItems[i].productName %> </span>
-                              </td>
-                              <td> $ <%= order?.orderItems[i]?.productPrice %> </td>
-                              <td> <%= order?.orderItems[i]?.cartQuantity %> </td>
-                              <td> $ <%= order?.orderItems[i]?.totalPrice %> </td>
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th> Sl.No </th>
+                            <th> Product </th>
+                            <th> product Price </th>
+                            <th> Quantity </th>
+                            <th> Total </th>
+                            <th> Reason </th>
+                            <th> Status </th>
+                            <th> Payment Status </th>
+                            <th> Manage </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                      
+                          <% for(let i=0 ; i<order.orderItems.length ; i++){ %>
 
-                              <td>
-                              <% if(order?.orderItems[i]?.orderStatus === "Cancelled"){ %>
-                                 <code><%= order?.orderItems[i]?.cancelReason %></code>
-                              <% } else if ( order?.orderItems[i]?.orderStatus === "Returned" ) { %>
-                                <code><%= order?.orderItems[i]?.returnReason %></code>
+                              <tr>
+                                  <td><%= i+1 %></td>
+                                <td class="py-1">
+                                  <img src="/Photos/product/<%= order.orderItems[i].image[0] %>" alt="image"/> <span> <%= order.orderItems[i].productName %> </span>
+                                </td>
+                                <td>
+                                  <% if(order.orderItems[i].offerPrice){ %>
+                                    <span> Rs: <%= order.orderItems[i].offerPrice %>  </span> <span style="color: green;"><%= order.orderItems[i].offer %>%</span> </code><br>
+                                    <%= order?.orderItems[i]?.productPrice %>
+                                  <% }else{ %>
+                                    Rs: <%= order?.orderItems[i]?.productPrice %>
+                                  <% } %>
+                                </td>
+                                <td> <%= order?.orderItems[i]?.cartQuantity %> </td>
+                                <td> Rs <%= order?.orderItems[i]?.totalPrice %> </td>
 
-                              <% } %>
-                              </td>
-                              
-                              <td>
+                                <td>
+                                <% if(order?.orderItems[i]?.orderStatus === "Cancelled"){ %>
+                                  <code><%= order?.orderItems[i]?.cancelReason %></code>
+                                <% } else if ( order?.orderItems[i]?.orderStatus === "Returned" ) { %>
+                                  <code><%= order?.orderItems[i]?.returnReason %></code>
 
-                                <% if( order?.orderItems[i]?.orderStatus === "Ordered" ){ %>
-                                  <label class="badge badge-warning"> Ordered </label>
-                                <% } else if( order?.orderItems[i]?.orderStatus === "Shipped" ) { %>
-                                  <label class="badge badge-info"> Shipped </label>
-                                <% } else if( order?.orderItems[i]?.orderStatus === "Delivered" ) { %>
-                                  <label class="badge badge-success"> Delivered </label>
-                                <% } else if( order?.orderItems[i]?.orderStatus === "Cancelled" ) { %>
-                                  <label class="badge badge-danger"> Cancelled </label>
-                                <% } else if( order?.orderItems[i]?.orderStatus === "Returned" ) { %>
-                                  <label class="badge badge-dark"> Returned </label>
-                                <% } %> %>
+                                <% } %>
+                                </td>
                                 
-                              </td>
-                              <td>
+                                <td>
 
-                              <% if(order.orderItems[i].orderStatus === 'Ordered' || order.orderItems[i].orderStatus === 'Shipped' ){ %>
+                                  <% if( order?.orderItems[i]?.orderStatus === "Ordered" ){ %>
+                                    <label class="badge badge-warning"> Ordered </label>
+                                  <% } else if( order?.orderItems[i]?.orderStatus === "Shipped" ) { %>
+                                    <label class="badge badge-info"> Shipped </label>
+                                  <% } else if( order?.orderItems[i]?.orderStatus === "Delivered" ) { %>
+                                    <label class="badge badge-success"> Delivered </label>
+                                  <% } else if( order?.orderItems[i]?.orderStatus === "Cancelled" ) { %>
+                                    <label class="badge badge-danger"> Cancelled </label>
+                                  <% } else if( order?.orderItems[i]?.orderStatus === "Returned" ) { %>
+                                    <label class="badge badge-dark"> Returned </label>
+                                  <% } %> %>
+                                  
+                                </td>
+                                <td>
+                                  <% if(order.paymentMethod === "Online Payment"){ %>
+                                    <span style="color: green;"><%= order.paymentStatus %></span>
+                                <% } else if(order.orderItems[i].paymentStatus === "Refund Completed"){ %>
+                                    <span style="color: orange;"><%= order.orderItems[i].paymentStatus %></span>
+                                <% } else if(order.orderItems[i].paymentStatus === "Pending"){ %>
+                                    <span style="color: red;"><%= order.orderItems[i].paymentStatus %></span>
+                                <% } else { %>
+                                  <span style="color: green;"><%= order.orderItems[i].paymentStatus %></span>
+                                <% } %>
                                 
-                                <div class="size-204 respon6-next">
-                                <div class="rs1-select2 bor8 bg0 dropdown">
-                                  <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                                      Status
-                                  </button>
-                                  <div class="dropdown-menu">
-                                    <button onclick="status('<%= order.orderItems[i]._id %>','Ordered')" class="dropdown-item">Ordered</button>
-                                    <button onclick="status('<%= order.orderItems[i]._id %>','Shipped')" class="dropdown-item">Shipped</button>
-                                    <button onclick="status('<%= order.orderItems[i]._id %>','Delivered')" class="dropdown-item">Delivered</button>
-                                    <button onclick="status('<%= order.orderItems[i]._id %>','Cancelled')" class="dropdown-item">Cancelled</button>
+                                  
+                                <td>
+
+                                <% if(order.orderItems[i].orderStatus === 'Ordered' || order.orderItems[i].orderStatus === 'Shipped' ){ %>
+                                  
+                                  <div class="size-204 respon6-next">
+                                  <div class="rs1-select2 bor8 bg0 dropdown">
+                                    <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Status
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Ordered')" class="dropdown-item">Ordered</button>
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Shipped')" class="dropdown-item">Shipped</button>
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Delivered')" class="dropdown-item">Delivered</button>
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Cancelled')" class="dropdown-item">Cancelled</button>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              
-                              <% } %>
-                               
-                             </td>
-                            </tr>
+                                
+                                <% } %>
 
-                        <% } %>
-                      
+
+                                <!-- <% if(order.orderItems[i].orderStatus === 'Returned'){ %>
+                                  
+                                  <div class="size-204 respon6-next">
+                                  <div class="rs1-select2 bor8 bg0 dropdown">
+                                    <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Status
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Payment Pending')" class="dropdown-item">Pending</button>
+                                      <button onclick="status('<%= order.orderItems[i]._id %>','Refund Completed')" class="dropdown-item">Refund Completed</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <% } %>
+                                  -->
+                              </td>
+                              </tr>
+
+                          <% } %>
                         
-                      </tbody>
-                    </table>
+                          
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

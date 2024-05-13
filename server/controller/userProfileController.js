@@ -2,10 +2,12 @@ import User from "../model/userModel.js";
 import Address from "../model/addressModel.js";
 import Order from "../model/orderModel.js";
 import Product from "../model/productModel.js";
+import Wishlist from "../model/wishlistModel.js";
 
 // ------------------------------------
 
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 // ------------------------------------
 
@@ -224,7 +226,7 @@ const editAddress = async(req,res)=>{
         if(state) update["addresses.$.state"] = state
         if(addressType) update["addresses.$.addressType"] = addressType
  
-        const addressData = await Address.findOneAndUpdate({"addresses._id":addressId},{$set:update})
+        const addressData = await Address.findOneAndUpdate({"addresses._id":addressId},{$set:update}, {new:true})
 
         if(addressData){
             res.json({success:true,message:"Address Updated"})
@@ -267,7 +269,6 @@ const orderPage = async (req,res)=>{
 
         const user = await User.findOne({_id:userId})
         const order = await Order.find({ userId })
-        console.log(order,'itd order');
 
         res.render('users/Profile/userOrderDetails',{ user, order })
 
@@ -356,7 +357,7 @@ const returnOrder = async(req,res)=>{
             for(let j=0 ; j<orderItem.length ; j++){
                 if( orderItem[j]._id.toString() === id ){
                     returnOrderItem = orderItem[j]
-                    response = await Order.findOneAndUpdate({ userId:user, 'orderItems._id':id },{ $set:{ 'orderItems.$.returnReason':reason, "orderItems.$.orderStatus": "Returned" } })
+                    response = await Order.findOneAndUpdate({ userId:user, 'orderItems._id':id },{ $set:{ 'orderItems.$.returnReason':reason, "orderItems.$.orderStatus": "Returned", "orderItems.$.paymentStatus":"Refound Completed" } })
                 }
                 break;
             }
@@ -376,6 +377,63 @@ const returnOrder = async(req,res)=>{
     }
 }
 
+//user wishlist page
+const wishlistPage = async(req,res)=>{
+    try {
+        
+        const id = req.session.user_id
+        if(!id){
+            res.redirect('/login')
+        }
+
+        const user = await User.findOne({ _id:id })
+
+        const wishlist = await Wishlist.aggregate([
+            { $match:{ userId:mongoose.Types.ObjectId(user) } },
+            { $unwind:"$wishlistItems" },
+            { $lookup:{
+                from:"products",
+                localField:"wishlistItems.productId",
+                foreignField:"_id",
+                as:"productDetails"
+            } }
+        ])
+
+        console.log(wishlist,'wosh');
+        
+        // const wishlist = await Wishlist.findOne({ userId: user._id }).populate('wishlistItems.productId');
+        // console.log(wishlist);
+
+        res.render('users/Profile/userWishlist.ejs',{ user, wishlist })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//remove wishlist item
+const remove = async(req,res)=>{
+    try {
+        const { id }  = req.body
+        const user = req.session.user_id
+
+        const removeWishlist = await Wishlist.findOneAndUpdate(
+            { userId: user },
+            { $pull: { wishlistItems: { productId: id } } },
+            { new: true }
+        )
+        console.log(removeWishlist,'settt');
+
+        if(removeWishlist){
+            res.json({ success: true, message: "Wishlist item removed successfully" });
+        } else {
+            res.json({ success: false, message: "Failed to remove wishlist item" });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
@@ -398,5 +456,9 @@ export {
     orderPage,
     orderDetailsPage,
     cancelOrder,
-    returnOrder
+    returnOrder,
+
+    wishlistPage,
+    remove
+
 }

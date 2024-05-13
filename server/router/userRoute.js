@@ -5,8 +5,10 @@ import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
 import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
-import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, returnOrder, updatePassword, updateProfile } from "../controller/userProfileController.js";
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, cod, decrementQuantity, incrementQuantity, orderSuccessPage, removeCart, selectAddress, summary } from "../controller/userCartController.js";
+import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, wishlistPage } from "../controller/userProfileController.js";
+import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
+import { addToWishlist } from "../controller/userWishlist.js";
+import { orderSuccessPage, payment, verifyPayment } from "../controller/userOrderController.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -16,7 +18,7 @@ const user_route = express();   //express connection
 
 const __dirname = path.resolve()  //to take the dirname(directery name) path in this new feature
 
-//session working code
+//------------------------------------------------session working code------------------------------------------------
 user_route.use(session({
     secret: 'allisWell',
     resave: false,
@@ -25,7 +27,7 @@ user_route.use(session({
 
 user_route.use(express.static('assets'))
 
-// no-cache  no Store
+//------------------------------------------------no-cache  no Store------------------------------------------------
 user_route.use(Cache)                           //Cache - controller
 
 // -----------------------------------------------------------------------
@@ -44,16 +46,16 @@ const storage = multer.diskStorage({
 const upload = multer({storage:storage})
 // -----------------------------------------------------------------------
 
-// register route
+//------------------------------------------------register route------------------------------------------------
 user_route.get('/register',isLogout,register)                           //registion page
 user_route.post('/register',upload.single('image'),insertUser)          //insert user
 
-// verifyMail route
+//------------------------------------------------verifyMail route------------------------------------------------
 user_route.get('/otp',isLogout,otp)                                     //otp page
 user_route.post('/otp',verifyOtp)                                       //verify otp
 user_route.post('/resend-otp', resendOTP, verifyOtp)                    //resend otp
 
-// login route
+//------------------------------------------------login route------------------------------------------------
 user_route.get('/login',isLogout,login)                                 //login page
 user_route.post('/login',verifyLogin)                                   //verify the user
 
@@ -61,15 +63,15 @@ user_route.post('/login',verifyLogin)                                   //verify
 // user_route.get('/forgot',forgot)
 // user_route.post('/forgot',forgotOTP)
 
-//login Home
+//------------------------------------------------login Home------------------------------------------------
 user_route.get('/',loginHome)                                           //home page.
 
-//product show details
+//------------------------------------------------product show details------------------------------------------------
 user_route.get('/products',productPage)                                 //show the product page
 user_route.get('/productDetails',productDetails)                        //single product details
 
 
-//user Profile
+//------------------------------------------------user Profile------------------------------------------------
 user_route.get('/userProfile',isLogin,profilePage)                              //user profile page
 user_route.put('/userProfile',updateProfile)                            //update user profile
 
@@ -90,17 +92,17 @@ user_route.post('/addAddress',addAddress)                               //add us
 user_route.get('/order',isLogin,orderPage)                              //ordered Product Show
 user_route.get('/orderDetails',isLogin,orderDetailsPage)                //single order product details and status show
 user_route.patch('/orderDetails/cancelOrder',cancelOrder)      //cancel the order
-user_route.patch('/orderDetails/returnOrder',returnOrder)
+user_route.patch('/orderDetails/returnOrder',returnOrder)       //retuen order status
 
 
-//shoping carts
+//------------------------------------------------shoping carts------------------------------------------------
 user_route.get('/shoping-cart',cart)                                    //user cart page
 user_route.post('/productDetails/cart',addToCart)                       //add to cart
 user_route.post('/shoping-cart/increment',incrementQuantity)            //increment quantity
 user_route.post('/shoping-cart/decrement',decrementQuantity)            //decrement quantity
 user_route.delete('/shoping-cart/remove',removeCart)                    //remove from cart
 
-//select Address in order
+//------------------------------------------------select Address in order ,checkout, order------------------------------------------------
 user_route.get('/shoping-cart/selectAddress',isLogin,selectAddress)             //checkout address select page
 user_route.delete('/shoping-cart/selectAddress/delete',checkoutDeleteAddress)
 
@@ -112,10 +114,18 @@ user_route.post('/shoping-cart/selectAddress/editAddress',checkoutEditAddress)  
 
 user_route.get('/shoping-cart/checkout_summary',isLogin,summary)                //summay of order
 
+// ------------------------------------------------All Payments------------------------------------------------
 user_route.get('/checkout',isLogin,checkoutPage)                                //checkout page
-user_route.post('/checkout/cod',cod)                                            //cod
+user_route.post('/checkout/payment',payment)                                            //payment
+user_route.post('/paymentSuccess',verifyPayment)
 
-user_route.get('/orderSuccess',orderSuccessPage)
+user_route.get('/orderSuccess',isLogin,orderSuccessPage)                                //order succes page
+
+//------------------------------------------------Wishlist------------------------------------------------
+user_route.get('/wishlist',isLogin,wishlistPage)
+user_route.post('/products/wishlist',addToWishlist)
+user_route.delete('/wishlist/remove',remove)
+
 
 
 //logout

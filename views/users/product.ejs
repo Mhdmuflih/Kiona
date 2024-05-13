@@ -141,8 +141,13 @@
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
 
+						<% let wishlistCount = 0 %>
+						<% for(let i=0 ; i<wishlistProduct.length ; i++){ %>
+							<% wishlistCount++; %>
+						<% } %>
+
 						<a href="#" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
+							data-notify="<%= wishlistCount %>">
 							<i class="zmdi zmdi-favorite-outline"></i>
 						</a>
 					</div>
@@ -381,9 +386,9 @@
 						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
 							<i class="zmdi zmdi-search"></i>
 						</button>
-
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
-							placeholder="Search">
+						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search" placeholder="Search">
+						<!-- <input type="text" name="search" placeholder="Search products...">
+						<button type="submit">Search</button> -->
 					</div>
 				</div>
 
@@ -434,7 +439,7 @@
 							</ul>
 						</div>
 
-						<div class="filter-col2 p-r-15 p-b-27">
+						<!-- <div class="filter-col2 p-r-15 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
 								Price
 							</div>
@@ -476,7 +481,7 @@
 									</a>
 								</li>
 							</ul>
-						</div>
+						</div> -->
 
 						<div class="filter-col2 p-r-15 p-b-27">
 							<div class="mtext-102 cl2 p-b-15">
@@ -617,22 +622,35 @@
 
 						<div class="block2-txt flex-w flex-t p-t-14">
 							<div class="block2-txt-child1 flex-col-l ">
-								<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<a href="/productDetails?productId=<%= products[i]._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 									<%= products[i].name  %>
+									<% if(products[i].offer){ %>
+										<span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+											<%= products[i].offer %> %
+										</span>
+									<% } %>
 								</a>
 
-								<span class="stext-105 cl3">
-									$<%= products[i].price  %>
-								</span>
+								<% if(products[i].offerPrice){ %>
+									<span> RS:  <%= products[i].offerPrice %> </span>
+									<span class="stext-105 cl3">
+										<strike> <%= products[i].price  %> </strike>
+									</span>
+								<% }else{ %>
+									<span class="stext-105 cl3">
+										RS: <%= products[i].price  %>
+									</span>
+								<% } %>
+
 							</div>
 
 							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-										alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l"
-										src="images/icons/icon-heart-02.png" alt="ICON">
-								</a>
+								<div class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON" onclick="removeToWishlist('<%= products[i]._id %>')" >
+									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON" onclick="addToWishlist('<%= products[i]._id %>')">
+								</div>
+								<!-- <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
+										<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON"> -->
 							</div>
 						</div>
 					</div>
@@ -805,7 +823,7 @@
                 </div>
 
 				
-                <% } %>
+            <% } %>
 		</div>
 
 		<!-- Back to top -->
@@ -876,30 +894,30 @@
 		<!--===============================================================================================-->
 		<script src="vendor/sweetalert/sweetalert.min.js"></script>
 		<script>
-			$('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
-				e.preventDefault();
-			});
+			// $('.js-addwish-b2, .js-addwish-detail').on('click', function (e) {
+			// 	e.preventDefault();
+			// });
 
-			$('.js-addwish-b2').each(function () {
-				var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
-				$(this).on('click', function () {
-					swal(nameProduct, "is added to wishlist !", "success");
+			// $('.js-addwish-b2').each(function () {
+			// 	var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+			// 	$(this).on('click', function () {
+			// 		swal(nameProduct, "is added to wishlist !", "success");
 
-					$(this).addClass('js-addedwish-b2');
-					$(this).off('click');
-				});
-			});
+			// 		$(this).addClass('js-addedwish-b2');
+			// 		$(this).off('click');
+			// 	});
+			// });
 
-			$('.js-addwish-detail').each(function () {
-				var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+			// $('.js-addwish-detail').each(function () {
+			// 	var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
 
-				$(this).on('click', function () {
-					swal(nameProduct, "is added to wishlist !", "success");
+			// 	$(this).on('click', function () {
+			// 		swal(nameProduct, "is added to wishlist !", "success");
 
-					$(this).addClass('js-addedwish-detail');
-					$(this).off('click');
-				});
-			});
+			// 		$(this).addClass('js-addedwish-detail');
+			// 		$(this).off('click');
+			// 	});
+			// });
 
 			/*---------------------------------------------*/
 
@@ -941,6 +959,9 @@
 		<!--===============================================================================================-->
 		<script src="js/main.js"></script>
 
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 		<script>
 			async function sortLowToHigh() {
 				window.location.href = "/products?sort=low_to_high";
@@ -958,6 +979,35 @@
 				window.location.href = "/products?sort=t_shirt";
 				return false;
 			}
+
+
+			async function addToWishlist(productId){
+				try {
+					console.log(productId);
+					const response = await axios.post('/products/wishlist',{ productId })
+					if(response.data.success){
+						await Swal.fire({
+							icon:'success',
+							title:'success',
+							text:response.data.message
+						}).then(()=>{
+							window.location.href='/products';
+						})
+					}else{
+						await Swal.fire({
+							icon:'error',
+							title:'error',
+							text:response.data.message
+						})
+						window.location.href='/products'
+					}
+
+				} catch (error) {
+					console.log(error.message);
+				}
+			}
+
+
 		</script>
 		
 

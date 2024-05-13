@@ -1,13 +1,13 @@
 import Product from "../model/productModel.js";
 import Category from "../model/categoryModel.js";
 
-import fs from "fs";
+// --------------------------------------------------------------
 
 // product page
 const productPage = async (req,res)=>{
     try {
         
-        var search = '';
+    var search = '';
     if(req.query.search){
         search = req.query.search;
     }
