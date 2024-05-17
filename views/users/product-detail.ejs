@@ -302,7 +302,9 @@
 							<div class="slick3 gallery-lb">
 								<div class="item-slick3" data-thumb="/Photos/product/<%= product.image[0] %>">
 									<div class="wrap-pic-w pos-relative" id="image-container">
-										<img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT" id="product-image">
+										<img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT" id="product-image" class="zoom" style="transition: transform 0.2s; cursor: zoom-in;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">
+
+										<!-- <img src="/Photos/product/<%= product.image[0] %>" alt="IMG-PRODUCT" id="product-image"> -->
 										<div id="mouse-overlay" style="cursor: zoom-in; position:absolute; width: 2rem; height: 2em; transform: translate(-50%,-50%); background-color: rgba(245,245,245,0.6); border-radius: 50%;"></div>
 										<div id="overlay" style="display: none; position:absolute; width: 35%; height: 45%; margin-top: -30%; margin-left: 50%; border: 1px solid #555; z-index: 1000; background-repeat: no-repeat;"></div>
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
@@ -314,7 +316,9 @@
 
 								<div class="item-slick3" data-thumb="/Photos/product/<%= product.image[1] %>">
 									<div class="wrap-pic-w pos-relative">
-										<img src="/Photos/product/<%= product.image[1] %>" alt="IMG-PRODUCT">
+										<img src="/Photos/product/<%= product.image[1] %>" alt="IMG-PRODUCT" id="product-image" class="zoom" style="transition: transform 0.2s; cursor: zoom-in;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">
+
+										<!-- <img src="/Photos/product/<%= product.image[1] %>" alt="IMG-PRODUCT"> -->
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 											href="/Photos/product/<%= product.image[1] %>">
@@ -325,7 +329,9 @@
 
 								<div class="item-slick3" data-thumb="/Photos/product/<%= product.image[2] %>">
 									<div class="wrap-pic-w pos-relative">
-										<img src="/Photos/product/<%= product.image[2] %>" alt="IMG-PRODUCT">
+										<img src="/Photos/product/<%= product.image[2] %>" alt="IMG-PRODUCT" id="product-image" class="zoom" style="transition: transform 0.2s; cursor: zoom-in;" onmouseover="this.style.transform='scale(1.5)'" onmouseout="this.style.transform='scale(1)'">
+
+										<!-- <img src="/Photos/product/<%= product.image[2] %>" alt="IMG-PRODUCT"> -->
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 											href="/Photos/product/<%= product.image[2] %>">

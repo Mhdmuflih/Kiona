@@ -122,7 +122,7 @@
     function verifyOTP(event) {
         event.preventDefault();
         const otp = Array.from(OTPinputs).map(input => input.value).join('');
-        axios.post('/otp', { otp })
+        axios.post('/forgotOtp', { otp })
             .then(response => {
                 if (!response.data.success) {
                     otpMessage.innerText = "Invalid OTP. Please try again.";
@@ -134,7 +134,7 @@
                     otpMessage.innerText = "OTP verified successfully!";
                     otpMessage.style.color = 'green';
                     setTimeout(() => {
-                        window.location.href = '/';
+                        window.location.href = '/resetPassword';
                     }, 1000); // Redirect after 1 second
                 }
             })

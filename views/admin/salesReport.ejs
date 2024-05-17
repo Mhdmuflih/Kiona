@@ -88,7 +88,7 @@
           </li>
           <li>
             <a class="nav-link" href="/admin/category">
-              <button type="button" class="btn btn-gradient-dark btn-rounded w-100">Category <i
+              <button type="button" class="btn btn-inverse-dark btn-rounded w-100">Category <i
                   class="mdi mdi-cards"></i> </button>
             </a>
           </li>
@@ -122,8 +122,8 @@
             </a>
           </li>
           <li>
-            <a class="nav-link" href="pages/tables/basic-table.html">
-              <button type="button" class="btn btn-inverse-dark btn-rounded w-100 "> Sales <i class="mdi mdi-sale"></i> </button>
+            <a class="nav-link" href="/admin/salesReport">
+              <button type="button" class="btn btn-gradient-dark btn-rounded w-100 "> Sales <i class="mdi mdi-sale"></i> </button>
             </a>
           </li>
           <li>
@@ -157,7 +157,7 @@
                         </div>
                         <div style="width: 250px;"></div>
 
-                        <button type="button" class="btn badge badge-success btn-md" > Download <i class="mdi mdi-plus-circle"></i> </button>
+                        <button type="button" class="btn badge badge-success btn-md" id="downloadPdfBtn"> Download <i class="mdi mdi-download"></i> </button>
 
                         <div class="size-204 respon6-next">
                             <div class="rs1-select2 bor8 bg0 dropdown">
@@ -165,10 +165,10 @@
                                     Sales Report Type
                                 </button>
                                 <div class="dropdown-menu">
-                                    <button onclick="reportType()" class="dropdown-item">Daily</button>
-                                    <button onclick="reportType('','Shipped')" class="dropdown-item">Weekly</button>
-                                    <button onclick="reportType('','Delivered')" class="dropdown-item">Monthly</button>
-                                    <button onclick="reportType('','Cancelled')" class="dropdown-item">Yearly</button>
+                                    <button onclick="reportType('Daily')" class="dropdown-item">Daily</button>
+                                    <button onclick="reportType('Weekly')" class="dropdown-item">Weekly</button>
+                                    <button onclick="reportType('Monthly')" class="dropdown-item">Monthly</button>
+                                    <button onclick="reportType('Yearly')" class="dropdown-item">Yearly</button>
                                 </div>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                                     <tr>
                                         <td style="font-size: 8px;"><%= i+1 %></td>
                                         <td style="font-size: 8px;"><%= orderItems[i].orderId %></td>
-                                        <td style="font-size: 8px;"><%= users[i].name %></td>
+                                        <td style="font-size: 8px;"><%= orderItems[i].orderUser %></td>
                                         <td style="font-size: 8px;">
                                             <%= orderItems[i].address.name %>, <%= orderItems[i].address.addressType %>,<br>
                                             <%= orderItems[i].address.address %>,<br>
@@ -215,6 +215,7 @@
                 </div>
             </div>
         </div>
+
         
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
@@ -253,15 +254,44 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Add jsPDF-AutoTable plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <script>
+          document.getElementById("downloadPdfBtn").addEventListener("click", function () {
+          let doc = new window.jspdf.jsPDF();
+          let pageCenter = doc.internal.pageSize.getWidth() / 2;
 
+          doc.setFontSize(25);
+          doc.text("KIONA", pageCenter, 10, { align: 'center' });
+          doc.setFontSize(15);
+          doc.text("Sales Report", pageCenter, 20, { align: 'center' });
+
+          let table = document.querySelector(".table");
+
+          doc.autoTable({ html: table, startY: 35 });
+
+          doc.save("sales_report.pdf");
+        });
     </script>
 
-
-
-
+    <script>
+      async function reportType(value){
+        try {
+          const response = await axios.post('/admin/salesReport/type',{value})
+          if(response.data.success){
+            const orderItems = response.data.orderItems;
+            console.log(orderItems,'its order Item');
+            window.location.reload()
+          }else{
+            console.error('Failed to fetch sales report data');
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    </script>
 </body>
 
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->

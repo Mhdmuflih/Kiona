@@ -12,7 +12,7 @@ import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCateg
 import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
 import { orderDetailsPage, orderPage, orderStatus } from "../controller/adminOrderController.js";
 import { addCategoryOffer, addCategoryOfferPage, addCoupon, addCouponOfferPage, addProductOffer, addProductOfferPage, categoryOfferPage, couponOfferPage, deleteCategoryOffer, deleteCoupon, deleteProductOffer, productOfferPage } from "../controller/adminOfferController.js";
-import { salesReportPage } from "../controller/adminSalesReport.js";
+import { salesReport, salesReportPage } from "../controller/adminSalesReport.js";
 
 
 // ------------------------------------------------------------------------------------------------------------------
@@ -134,10 +134,11 @@ admin_route.delete('/productOffers/delete',deleteProductOffer)                  
 admin_route.get('/couponOffers',isLogin,couponOfferPage)                        //coupon page
 admin_route.get('/add_coupon_offer',isLogin,addCouponOfferPage)                 //add coupon page
 admin_route.post('/add_coupon_offer',addCoupon)                                 //added the coupon
-admin_route.delete('/couponOffers/delete',deleteCoupon)
+admin_route.delete('/couponOffers/delete',deleteCoupon)                         //delete coupon
 
-// ------------------------------------------------offer Management------------------------------------------------
+// ------------------------------------------------sales Report------------------------------------------------
 admin_route.get('/salesReport',isLogin,salesReportPage)
+admin_route.post('/salesReport/type',salesReport)
 
 
 export default admin_route;

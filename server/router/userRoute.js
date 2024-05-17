@@ -4,7 +4,7 @@ import path from "path";
 import session from "express-session";
 
 import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
-import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails } from "../controller/userController.js";
+import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails, forgotPasswordPage, forgotPassword, forgotOtpPage, forgotOtpVerification, resetPasswordPage, resetPassword } from "../controller/userController.js";
 import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, wishlistPage } from "../controller/userProfileController.js";
 import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
 import { addToWishlist } from "../controller/userWishlist.js";
@@ -60,8 +60,12 @@ user_route.get('/login',isLogout,login)                                 //login 
 user_route.post('/login',verifyLogin)                                   //verify the user
 
 //forgot passeord
-// user_route.get('/forgot',forgot)
-// user_route.post('/forgot',forgotOTP)
+user_route.get('/forgot',forgotPasswordPage)
+user_route.post('/forgot',forgotPassword)
+user_route.get('/forgotOtp',forgotOtpPage)
+user_route.post('/forgotOtp',forgotOtpVerification)
+user_route.get('/resetPassword',resetPasswordPage)
+user_route.post('/resetPassword',resetPassword)
 
 //------------------------------------------------login Home------------------------------------------------
 user_route.get('/',loginHome)                                           //home page.

@@ -52,20 +52,18 @@
             <div class="row">
                 <div class="col-12">
                     <div class="_form_07_main">
-                        <form action="" class="login-form" method="post" enctype="multipart/form-data" onsubmit="check(); return false">
+                        <form action="" class="login-form" method="post" id="form" enctype="multipart/form-data" onsubmit="check(); return false">
                             <div class="row">
                                 <div class="col-sm-6 ncv-kl-bn">
                                     <div class="_form_07_main_sub_01">
                                         <div class="form-07-head">
                                             <h2>Kiona</h2>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem Ipsum has been the industry's standard dummy</p>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
                                         </div>
                                         <div class="form-7-social-media">
                                             <ol>
                                                 <li><i class="fa fa-facebook"></i></li>
                                                 <li><i class="fa fa-twitter"></i></li>
-
                                                 <li><i class="fa fa-youtube"></i></li>
                                                 <li><i class="fa fa-linkedin"></i></li>
                                             </ol>
@@ -77,73 +75,51 @@
                                         <div class="_bg_cs">
                                             <h2>Registration Account</h2>
                                         </div>
-                                        
-                                            
-                                            <input type="text" name="name" id="name" class="form-control" type="text"
-                                                placeholder="Enter Name" required="" aria-required="true"   >
-                                                <p style="color: red;" id="nameErr"></p>
-                                        
-
-                                        
-                                           
-                                            <input type="email" name="email" id="email" class="form-control" type="text"
-                                                placeholder="Enter Email" required="" aria-required="true">
-                                                <p style="color: red;" id="emailErr"></p>
-                                        
-
-                                       
-                                            
-                                            <input type="text" name="mobile" id="mobile" class="form-control" type="text"
-                                                placeholder="Enter Mobile" required="" aria-required="true">
-                                                <p style="color: red;" id="mobileErr"></p>
-                                       
-
-                                    
-                                            
-                                            <input type="file" name="image" id="image" class="form-control" type="text"
-                                                placeholder="Upload Image" required="" aria-required="true">
-                                                <p style="color: red;" id="imageErr"></p>
-                                     
-
-                                        
-                                            
-                                            <input type="password" name="password" id="password" class="form-control" type="text"
-                                                placeholder="Enter password" required="" aria-required="true">
-                                                <p style="color: red;" id="passwordErr"></p>
-                                       
-
-                                        
-
-                                        
-                                                <button type="submit" class="_btn_04">Register</button>
-                                            
-                                        
+    
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name" required aria-required="true">
+                                        <p id="nameErr" style="color: red;"></p>
+    
+                                        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required aria-required="true">
+                                        <p id="emailErr" style="color: red;"></p>
+    
+                                        <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Enter Mobile" required aria-required="true">
+                                        <p id="mobileErr" style="color: red;"></p>
+    
+                                        <input type="file" name="image" id="image" class="form-control" placeholder="Upload Image" required aria-required="true">
+                                        <p id="imageErr" style="color: red;"></p>
+    
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required aria-required="true">
+                                        <p id="passwordErr" style="color: red;"></p>
+    
+                                        <button type="submit" class="_btn_04">Register</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <%
-                        if(typeof message !== 'undefined'){
-                            %>
+                        <% if (typeof message !== 'undefined') { %>
                             <p><%= message %></p>
-                            <%
-                        }
-                        %>
+                        <% } %>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </section>
+    
 
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
 
         // form Validation
 
-        function check(){
-            const form  = document.querySelector(".login-form");
+        document.getElementById('form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            check();
+        });
+
+        async function check() {
+            const form = document.querySelector(".login-form");
             const name = document.getElementById("name").value.trim();
             const nameErr = document.getElementById("nameErr");
             const email = document.getElementById("email").value.trim();
@@ -155,72 +131,87 @@
             const password = document.getElementById("password").value.trim();
             const passwordErr = document.getElementById("passwordErr");
 
-            const nameErrMsg = []
-            const emailErrMsg = []
-            const mobileErrMsg = []
-            const imageErrMsg = []
-            const passwordErrMsg = []
+            let isValid = true;
 
-            if(name === ''){
-                nameErrMsg.push("Please enter Your Name.")
-            }else{
+            // Reset error messages
+            nameErr.textContent = '';
+            emailErr.textContent = '';
+            mobileErr.textContent = '';
+            imageErr.textContent = '';
+            passwordErr.textContent = '';
+
+            if (name === '') {
+                nameErr.textContent = "Please enter your name.";
+                isValid = false;
+            } else {
                 const nameRegex = /^[a-zA-Z\s]*$/;
-                if(!nameRegex.test(name)){
-                    nameErrMsg.push("Please enter valid name");
+                if (!nameRegex.test(name)) {
+                    nameErr.textContent = "Please enter a valid name.";
+                    isValid = false;
                 }
             }
-            
-            if(email === ''){
-                emailErrMsg.push("Please enter Your Email.");
-            }else{
+
+            if (email === '') {
+                emailErr.textContent = "Please enter your email.";
+                isValid = false;
+            } else {
                 const emailRegex = /^[^!#$%&'*+/=?^_`{|}~]+@gmail\.com$/i;
-                if(!emailRegex.test(email)){
-                    emailErrMsg.push("Please enter Your Valid Email Id.")
+                if (!emailRegex.test(email)) {
+                    emailErr.textContent = "Please enter a valid email ID.";
+                    isValid = false;
                 }
             }
 
-            if(mobile == ''){
-                mobileErrMsg.push("Please enter Your Mobile.");
-            }else{
-                mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
-                if(!mobileRegex.test(mobile)){
-                    mobileErrMsg.push("Please enter Your Valid Mobile Number.")
+            if (mobile === '') {
+                mobileErr.textContent = "Please enter your mobile number.";
+                isValid = false;
+            } else {
+                const mobileRegex = /^(?!([0-9])\1{9})[1-9]\d{9}$/;
+                if (!mobileRegex.test(mobile)) {
+                    mobileErr.textContent = "Please enter a valid mobile number.";
+                    isValid = false;
                 }
             }
 
-            if(!image){
-                imageErrMsg.push("Please Select an Image")
+            if (!image) {
+                imageErr.textContent = "Please select an image.";
+                isValid = false;
             }
 
-            if(password == ''){
-                passwordErrMsg.push("Please enter Your Password")
-            }else{
+            if (password === '') {
+                passwordErr.textContent = "Please enter your password.";
+                isValid = false;
+            } else {
                 const passwordRegex = [
-                    { regex: /.{8,}/, index: 0, message: "At least 8 character" },
-                    { regex: /\d/, index: 1, message: "At least 1 digits" },
-                    { regex:/[a-z]/, index: 2, message: "At least 1 lowercase letter" },
-                    { regex:/[!@#$%^&*]/, index: 3, message: "At least 1 special character" },
-                    { regex:/[A-Z]/, index: 4, message: "At least 1 uppercase letter" }
+                    { regex: /.{8,}/, message: "At least 8 characters" },
+                    { regex: /\d/, message: "At least 1 digit" },
+                    { regex: /[a-z]/, message: "At least 1 lowercase letter" },
+                    { regex: /[!@#$%^&*]/, message: "At least 1 special character" },
+                    { regex: /[A-Z]/, message: "At least 1 uppercase letter" }
                 ];
 
-                passwordRegex.forEach((rule)=>{
-                    if(!rule.regex.test(password)){
-                        passwordErrMsg.push(rule.message)
+                passwordRegex.forEach((rule) => {
+                    if (!rule.regex.test(password)) {
+                        passwordErr.textContent += rule.message + '\n';
+                        isValid = false;
                     }
-                })
-
+                });
             }
 
-            // display Error Message
-            nameErr.innerHTML = nameErrMsg.join("<br>");
-            emailErr.innerHTML = emailErrMsg.join("<br>");
-            mobileErr.innerHTML = mobileErrMsg.join("<br>");
-            imageErr.innerHTML = imageErrMsg.join("<br>");
-            passwordErr.innerHTML = passwordErrMsg.join("<br>");
+            if (isValid) {
+                const formElement = document.getElementById('form');
+                const formData = new FormData(formElement);
 
-            // submit the form if all validations pass
-            if(nameErrMsg.length === 0 && emailErrMsg.length === 0 && mobileErrMsg.length === 0 && imageErrMsg.length === 0 && passwordErrMsg.length === 0){
-                form.submit();
+                try {
+                    const response = await axios.post('/register', formData);
+                    if (response.data.success) {
+                        window.location.href = '/otp'
+                    } else {
+                        emailErr.textContent = response.data.message;
+                    }
+                } catch (error) {
+                    console.error('Submission error:', error.message);
+                }
             }
         }
     </script>

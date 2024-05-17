@@ -209,8 +209,6 @@ const selectAddress = async (req, res) => {
             }
         }
 
-        console.log(totalPrice,'total price');
-
         req.session.totalPrice = totalPrice
 
 
@@ -323,7 +321,6 @@ const checkoutEditAddress = async(req,res)=>{
     try {
 
         const { addressId } = req.query
-        console.log(addressId);
         const { name, mobile, pincode, locality, address, city, state, addressType } = req.body
         const update = {}
 
@@ -425,7 +422,6 @@ const checkoutPage = async(req,res)=>{
             for(let j = 0; j < products.length; j++){
 
                 let product = products[j];
-                console.log(product.offerPrice,'ith nth product ann');
                 allProduct.push({
                     _id: product._id,
                     name: product.name,

@@ -58,15 +58,13 @@
                   <div class="_form_07_main_sub_01">
                     <div class="form-07-head">
                       <h2>Kiona</h2>
-                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy</p>
+                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
                     </div>
                     <div class="form-7-social-media">
                       <ol>
                         <li><a href="#"><i class="fa fa-google"></i></a></li>
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                         <li><a href="https://www.instagram.com/kiona__store/"><i class="fa fa-instagram"></i></a></li>
-
                         <li><a href="#"><i class="fa fa-youtube"></i></a></li>
                         <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                       </ol>
@@ -77,69 +75,49 @@
                   <div class="_pl_nb_df">
                     <div class="_bg_cs">
                       <h2>Sign into your account</h2>
-
-                      <% if(message){%>
-                        <p class="text-danger" id="ok">
-                          <%= message %>
-                        </p>
-                        <% } %>
-                        
+                      <% if (message) { %>
+                        <p class="text-danger" id="ok"><%= message %></p>
+                      <% } %>
                     </div>
-
-                    <label>Enter Your Email</label>
-                    <input type="email" name="email" id="email" class="form-control" type="text"
-                      placeholder="Enter Email" required="" aria-required="true">
+  
+                    <label for="email">Enter Your Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required aria-required="true">
                     <p style="color: red;" id="emailErr"></p>
-
-
-
-                    <label>Enter Your Password</label>
-                    <input type="password" name="password" id="password" class="form-control" type="text"
-                      placeholder="Enter password" required="" aria-required="true">
+  
+                    <label for="password">Enter Your Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required aria-required="true">
                     <p style="color: red;" id="passwordErr"></p>
-
-                    <!-- <ol>
-                      <a href="#" class="form-control" ><i class="fa fa-google" style="margin-left: 40%;"> Google </i></a>
-                    </ol> -->
-                    
-
-
+  
                     <div class="checkbox form-group">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="">
-                        <label class="form-check-label" for="">
-                          Remember me
-                        </label>
+                        <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
                       </div>
                       <a href="/forgot">Forgot Password</a>
                     </div>
-
-                    <% if (typeof userBlocked !=='undefined' && userBlocked) { %>
+  
+                    <% if (typeof userBlocked !== 'undefined' && userBlocked) { %>
                       <script>
                         alert("<%= message %>");
                       </script>
-                      <% } %>
-
-
-
-                        
-                          
-                            <button type="submit" class="_btn_04"> Login</button>
-                          
-                          <div class="mt-2" style="display: flex; justify-content: center;">
-                            <p class="text-danger m-0">Don't have an account ?</p>
-                            <a style="text-decoration: none; margin-left: 15px;" href="/register">SignUp</a>
-                          </div>
-                        
+                    <% } %>
+  
+                    <button type="submit" class="_btn_04">Login</button>
+  
+                    <div class="mt-2" style="display: flex; justify-content: center;">
+                      <p class="text-danger m-0">Don't have an account?</p>
+                      <a style="text-decoration: none; margin-left: 15px;" href="/register">SignUp</a>
+                    </div>
                   </div>
                 </div>
+              </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-    </div>
   </section>
+  
 
 
 

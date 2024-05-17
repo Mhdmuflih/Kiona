@@ -115,7 +115,7 @@ const insertUser = async (req, res) => {
         if (req.body.email) {
             const existingUser = await User.findOne({ email: req.body.email })
             if (existingUser) {
-                console.log("Email id already taken")
+                return res.json({ success:false, message:'Already existing this Email.' })
             }
         }
         req.session.email = req.body.email
@@ -137,8 +137,7 @@ const insertUser = async (req, res) => {
         console.log(req.session.userData)
 
         await sendOpt(req, res)
-        res.redirect('/otp')
-
+        return res.json({ success:true })
 
     } catch (error) {
         console.log(error.message);
@@ -217,7 +216,7 @@ const resendOTP = async (req, res) => {
         res.send({ success: true }); // Sending success response
     } catch (error) {
         console.error(error);
-        res.status(500).send({ success: false, error: error.message }); // Sending error response
+        res.status(500).send({ success: false, error: error.message });
     }
 };
 
@@ -225,15 +224,15 @@ const resendOTP = async (req, res) => {
 const verifyOtp = async (req, res) => {
     try {
 
-        const { otp1, otp2, otp3, otp4 } = req.body
-        const otp = [otp1, otp2, otp3, otp4].join('')
+        const { otp } = req.body
+        // const otp = [otp1, otp2, otp3, otp4].join('')
         console.log(otp)
 
         const otpData = await OTP.findOne({ email: req.session.email })
         console.log(otpData)
 
         if (!otpData) {
-            return redirect('/otp')
+            return res.json({success:false})
         }
 
         if (otpData.OTP == otp) {
@@ -243,7 +242,7 @@ const verifyOtp = async (req, res) => {
             await userData.save()
 
             await OTP.deleteOne({ email: req.session.email })
-            res.redirect("/")
+            return res.json({success:true})
         }else{
             return res.redirect('/otp?message=invalid');
         }
@@ -305,6 +304,164 @@ const verifyLogin = async (req, res) => {
         console.log(error.message)
     }
 }
+
+//forgot password page
+const forgotPasswordPage = async(req,res)=>{
+    try {
+        res.render('users/forgot.ejs');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//forgot password
+const forgotPassword = async(req,res)=>{
+    try {
+
+        let otp = OtpGenerator()
+        console.log(otp);
+
+        const { email } = req.body
+        const user = await User.findOne({ email:email })
+        if(!user){
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        req.session.email = email
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.AUTH_EMAIL,
+                pass: process.env.AUTH_PASSWORD
+            }
+        });
+
+        const MailGenerator = new Mailgen({
+            theme: "default",
+            product: {
+                name: "Kiona",
+                link: "http://mailgen.js/"
+            }
+        });
+
+        const response = {
+            body: {
+                name: email,
+                intro: 'Your OTP for KIONA Verification is:',
+                table: {
+                    data: [{
+                        OTP: otp
+                    }]
+                },
+                outro: "looking forward to doing more Business"
+            }
+        };
+
+        const mail = MailGenerator.generate(response);
+
+        const message = {
+            from: process.env.AUTH_EMAIL,
+            to: email,
+            subject: 'KIONA Forgot Password OTP Verification',
+            html: mail
+        };
+
+        const newOtp = new OTP({
+            email: email,
+            OTP: otp,
+            createdAt: Date.now(),
+            expaireAt: Date.now() + 60000
+        })
+        
+        await newOtp.save()
+        await transporter.sendMail(message);
+
+        // req.session.forgotuser = user
+        res.json({success:true})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//forgot otp page
+const forgotOtpPage = async(req,res)=>{
+    try {
+        const message = req.query.message
+        res.render('users/forgotOtp.ejs',{ message })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//fprgot otp verification
+const forgotOtpVerification = async(req,res)=>{
+    try {
+
+        const { otp } = req.body
+        const email = req.session.email;
+        
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Session expired. Please try again." });
+        }
+
+        const otpData = await OTP.findOne({ email: req.session.email })
+
+        if (!otpData) {
+            return res.status(404).json({ success: false, message: "OTP not found. Please request a new OTP." });
+        }
+
+        if (otpData.OTP == otp) {
+            await OTP.deleteOne({ email: req.session.email })
+            return res.json({ success: true, message: "OTP verified successfully." });
+        } else {
+            return res.redirect('/otp?message=invalid');
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// reset password page
+const resetPasswordPage = async(req,res)=>{
+    try {
+        res.render('users/resetPassword.ejs')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//reset Password in user
+const resetPassword = async(req,res)=>{
+    try {
+        const email = req.session.email;
+        const { password, conformPassword } = req.body
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Session expired. Please try again." });
+        }
+
+
+        if(password === conformPassword){
+            const sPassword = await securePassword(password)
+            const response = await User.findOneAndUpdate({email:email},{ $set:{ password:sPassword } })
+
+            if(response){
+                return res.json({ success:true, message:"You'r Password Changed." })
+            }else{
+                return res.json({ success:false, message:"You'r password is not Changed .Please Try Again!" })
+            }
+
+        }else{
+            res.json({ success:false, message:"You'r Password is not Match" })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 //login Home
 const loginHome = async (req, res) => {
@@ -394,48 +551,81 @@ const loginHome = async (req, res) => {
 const productPage = async (req, res) => {
     try {
         const user = req.session.user_id;
-        let products;
+        const search = req.query.search || '';
+        let sort = {};
+        let filter = { delete: false };
 
-
-        if (req.query.sort === 'low_to_high') {
-            products = await Product.find({ delete:false }).sort({ price: 1 });
-        }else if (req.query.sort === 'high_to_low') {
-            products = await Product.find({ delete:false }).sort({ price: -1 })
-        }else if (req.query.sort === 'shirt') {
-            products = await Product.find({ delete:false, category:"Shirt" })
-        }else if (req.query.sort === 't_shirt') {
-            products = await Product.find({ delete:false, category:"T-Shirt" });
-        }else {
-            products = await Product.find({ delete:false })
+        switch (req.query.sort) {
+            case 'low_to_high':
+                sort.price = 1;
+                break;
+            case 'high_to_low':
+                sort.price = -1;
+                break;
+            case 'offer_low_to_high':
+                sort.offerprice = 1;
+                break;
+            case 'offer_high_to_low':
+                sort.offerprice = -1;
+                break;
         }
 
-        let cartProduct = await Cart.aggregate([
-            { $match:{ userId: mongoose.Types.ObjectId(user)  } },
-            { $unwind:"$cartItems" },
-            { $lookup:{
-                from:"products",
-                localField:"cartItems.productId",
-                foreignField:"_id",
-                as:"productDetails"
-            } }
-        ])
+        if (req.query.sort === 'shirt') {
+            filter.category = "Shirt";
+        } else if (req.query.sort === 't_shirt') {
+            filter.category = "T-Shirt";
+        }
 
-        let wishlistProduct = await Wishlist.aggregate([
-            { $match:{ userId: mongoose.Types.ObjectId(user) } },
-            { $unwind:"$wishlistItems" },
-            { $lookup:{
-                from:"products",
-                localField:"wishlistItems.productId",
-                foreignField:"_id",
-                as:"productDetails"
-            } }
-        ])
-        
-        res.render('users/product.ejs', { user, products, cartProduct, wishlistProduct })
+        // Search
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const products = await Product.find(filter)
+            .sort(sort)
+            .exec();
+
+        const cartProduct = await Cart.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(user) } },
+            { $unwind: "$cartItems" },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "cartItems.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            }
+        ]);
+
+        const wishlistProduct = await Wishlist.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId(user) } },
+            { $unwind: "$wishlistItems" },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "wishlistItems.productId",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            }
+        ]);
+
+        res.render('users/product.ejs', {
+            user,
+            products,
+            cartProduct,
+            wishlistProduct,
+            search
+        });
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
-}
+};
+
 
 //user single product details page
 const productDetails = async(req,res)=>{
@@ -508,6 +698,13 @@ export {
     verifyOtp,
     userLogout,
     resendOTP,
+
+    forgotPasswordPage,
+    forgotPassword,
+    forgotOtpPage,
+    forgotOtpVerification,
+    resetPasswordPage,
+    resetPassword,
 
     productPage,
     productDetails,

@@ -69,7 +69,7 @@ const payment = async (req,res)=>{
         })
         const saveOrder = await order.save();
 
-        await Cart.deleteOne();
+        await Cart.deleteOne({userId:user});
 
         delete req.session.cartProduct;
         delete req.session.address_data;
