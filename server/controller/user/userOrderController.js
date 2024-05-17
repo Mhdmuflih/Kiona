@@ -3,9 +3,9 @@ import Razorpay from "razorpay";
 
 // ----------------------------------------------
 
-import Product from "../model/productModel.js";
-import Cart from "../model/cartModel.js";
-import Order from "../model/orderModel.js";
+import Cart from "../../model/cartModel.js";
+import Order from "../../model/orderModel.js";
+import Product from "../../model/productModel.js";
 // ----------------------------------------------
 
 //razor pay instance
@@ -142,9 +142,10 @@ const orderSuccessPage = async(req,res)=>{
     }
 }
 
-export{
+export {
+
     payment,
     verifyPayment,
-
     orderSuccessPage
-}
+    
+};

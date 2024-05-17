@@ -1,5 +1,5 @@
-import Product from "../model/productModel.js";
-import Category from "../model/categoryModel.js";
+import Category from "../../model/categoryModel.js";
+import Product from "../../model/productModel.js";
 
 // --------------------------------------------------------------
 
@@ -243,15 +243,15 @@ const deleteImage = async (req, res) => {
 
 
 
-export{
-    productPage,
+export {
     addProduct,
-    productAdd,
-    deleteProduct,
-    deletedProductPage,
-    restoreProduct,
-    editProductPage,
-    editProduct,
     deleteImage,
-    deleted
-}
+    deleteProduct,
+    deleted,
+    deletedProductPage,
+    editProduct,
+    editProductPage,
+    productAdd,
+    productPage,
+    restoreProduct
+};

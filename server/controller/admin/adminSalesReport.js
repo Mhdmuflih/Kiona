@@ -1,5 +1,5 @@
-import Order from "../model/orderModel.js";
-import User from "../model/userModel.js";
+import Order from "../../model/orderModel.js";
+import User from "../../model/userModel.js";
 
 
 //sales report page
@@ -140,7 +140,7 @@ const salesReport = async(req,res)=>{
 }
 
 
-export{
-    salesReportPage,
+export {
     salesReport,
-}
+    salesReportPage
+};

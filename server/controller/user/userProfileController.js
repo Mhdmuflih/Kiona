@@ -1,8 +1,8 @@
-import User from "../model/userModel.js";
-import Address from "../model/addressModel.js";
-import Order from "../model/orderModel.js";
-import Product from "../model/productModel.js";
-import Wishlist from "../model/wishlistModel.js";
+import Address from "../../model/addressModel.js";
+import Order from "../../model/orderModel.js";
+import Product from "../../model/productModel.js";
+import User from "../../model/userModel.js";
+import Wishlist from "../../model/wishlistModel.js";
 
 // ------------------------------------
 
@@ -438,27 +438,23 @@ const remove = async(req,res)=>{
 
 
 export {
-    profilePage,
-    passwordChangePage,
-
+    addAddress,
+    addAddressPage,
     addressPage,
+    cancelOrder,
     deleteAddress,
 
     editAddresPage,
     editAddress,
-
-    addAddressPage,
-    addAddress,
-
-    updateProfile,
-    updatePassword,
-
-    orderPage,
+    
     orderDetailsPage,
-    cancelOrder,
+    orderPage,
+    
+    passwordChangePage,
+    profilePage,
+    remove,
     returnOrder,
-
-    wishlistPage,
-    remove
-
-}
+    updatePassword,
+    updateProfile,
+    wishlistPage
+};

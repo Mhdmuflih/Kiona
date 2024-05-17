@@ -1,9 +1,9 @@
-import CategoryOffer from "../model/categoryOfferModel.js";
-import ProductOffer from "../model/productOfferModel.js";
-import CouponOffer from "../model/couponModel.js";
+import CategoryOffer from "../../model/categoryOfferModel.js";
+import CouponOffer from "../../model/couponModel.js";
+import ProductOffer from "../../model/productOfferModel.js";
 
-import Category from "../model/categoryModel.js";
-import Product from "../model/productModel.js";
+import Category from "../../model/categoryModel.js";
+import Product from "../../model/productModel.js";
 
 // --------------------------------------------------------------
 
@@ -65,20 +65,39 @@ const addCategoryOffer = async(req,res)=>{
 }
 
 //delete Category offer
-const deleteCategoryOffer = async(req,res)=>{
+const deleteCategoryOffer = async (req, res) => {
     try {
-        const { id } = req.body
-        const response = await CategoryOffer.findOneAndDelete({ _id:id })
-        if(response){
-            res.json({ success:true, message:"Category Offer deleted" })
-        }else{
-            res.json({ success:false, message:"Category Offer is not delete. Please try again." })
+        const { id } = req.body;
+
+        const response = await CategoryOffer.findOneAndDelete({ _id: id });
+
+        if (!response) {
+            return res.json({ success: false, message: "Category Offer is not deleted. Please try again." });
         }
 
+        const category = await Category.findOne({ _id: response.categoryId });
+        if (!category) {
+            return res.json({ success: false, message: "Category not found." });
+        }
+
+        const products = await Product.find({ delete: false, category: category.name });
+
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].offer === response.offer) {
+                await Product.findOneAndUpdate(
+                    { _id: products[i]._id },
+                    { $unset: { offer: "", offerPrice: "" } }
+                );
+            }
+        }
+
+        res.json({ success: true, message: "Category Offer deleted" });
     } catch (error) {
         console.log(error.message);
+        res.status(500).send("Internal server error");
     }
-}
+};
+
 
 //product offer page
 const productOfferPage = async(req,res)=>{
@@ -139,11 +158,16 @@ const deleteProductOffer = async(req,res)=>{
         const { id } = req.body
 
         const response = await ProductOffer.findOneAndDelete({ _id:id })
-        if(response){
-            res.json({ success:true, message:"Product Offer Deleted." })
-        }else{
-            res.json({ success:false, message:"Product Offer is not Deleted. Please try Again! " })
+        if (!response) {
+            return res.json({ success: false, message: "Product Offer is not deleted. Please try again." });
         }
+
+        const product = await Product.findOneAndUpdate({ delete:false, _id: response.productId },{ $unset: { offer: "", offerPrice: "" } });
+        if (!product) {
+            return res.json({ success: false, message: "Product not found." });
+        }
+
+        res.json({ success: true, message: "Product Offer deleted" });
 
     } catch (error) {
         console.log(error.message);
@@ -209,20 +233,17 @@ const deleteCoupon = async(req,res)=>{
     }
 }
 
-export{
-    categoryOfferPage,
-    addCategoryOfferPage,
+export {
     addCategoryOffer,
-    deleteCategoryOffer,
-
-    productOfferPage,
-    addProductOfferPage,
-    addProductOffer,
-    deleteProductOffer,
-
-    couponOfferPage,
-    addCouponOfferPage,
+    addCategoryOfferPage,
     addCoupon,
-    deleteCoupon
-
-}
+    addCouponOfferPage,
+    addProductOffer,
+    addProductOfferPage,
+    categoryOfferPage,
+    couponOfferPage,
+    deleteCategoryOffer,
+    deleteCoupon,
+    deleteProductOffer,
+    productOfferPage
+};

@@ -1,5 +1,5 @@
-import Order from "../model/orderModel.js";
-import User from "../model/userModel.js";
+import Order from "../../model/orderModel.js";
+import User from "../../model/userModel.js";
 
 
 //order Page
@@ -61,8 +61,7 @@ const orderStatus = async (req, res) => {
 }
 
 export {
-    orderPage,
     orderDetailsPage,
-
+    orderPage,
     orderStatus
-}
+};

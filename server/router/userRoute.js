@@ -1,14 +1,14 @@
 import express from "express";
-import multer from "multer";                // multer is using in take a image store
-import path from "path";
 import session from "express-session";
+import multer from "multer"; // multer is using in take a image store
+import path from "path";
 
-import { isLogin,isLogout,Cache } from "../middleware/userAuth.js";
-import { login, register, insertUser, verifyLogin, loginHome, otp, verifyOtp, userLogout, resendOTP, productPage, productDetails, forgotPasswordPage, forgotPassword, forgotOtpPage, forgotOtpVerification, resetPasswordPage, resetPassword } from "../controller/userController.js";
-import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, wishlistPage } from "../controller/userProfileController.js";
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/userCartController.js";
-import { addToWishlist } from "../controller/userWishlist.js";
-import { orderSuccessPage, payment, verifyPayment } from "../controller/userOrderController.js";
+import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/user/userCartController.js";
+import { forgotOtpPage, forgotOtpVerification, forgotPassword, forgotPasswordPage, insertUser, login, loginHome, otp, productDetails, productPage, register, resendOTP, resetPassword, resetPasswordPage, userLogout, verifyLogin, verifyOtp } from "../controller/user/userController.js";
+import { orderSuccessPage, payment, verifyPayment } from "../controller/user/userOrderController.js";
+import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, wishlistPage } from "../controller/user/userProfileController.js";
+import { addToWishlist } from "../controller/user/userWishlist.js";
+import { Cache, isLogin, isLogout } from "../middleware/userAuth.js";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import User from "../model/userModel.js"
+import User from "../../model/userModel.js";
 
 // user handle page
 const userDetails = async (req,res)=>{
@@ -66,7 +66,7 @@ const userBlock = async (req,res)=>{
     }
 }
 
-export{
-    userDetails,
-    userBlock
-}
+export {
+    userBlock,
+    userDetails
+};

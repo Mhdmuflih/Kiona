@@ -1,4 +1,4 @@
-import Admin from "../model/adminModel.js";
+import Admin from "../../model/adminModel.js";
 
 // ----------------------------------------------
 
@@ -100,8 +100,8 @@ const adminLogout = async(req,res)=>{
 export {
     adminHome,
     adminLogin,
+    adminLogout,
     adminRegister,
     insertAdmin,
-    verifyAdminLogin,
-    adminLogout
-}
+    verifyAdminLogin
+};

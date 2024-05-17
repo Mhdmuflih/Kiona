@@ -1,20 +1,20 @@
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import mongoose from "mongoose";
+import nodemailer from "nodemailer";
 
 // ----------------------------------------------
 
-import User from "../model/userModel.js";
-import OTP from "../model/otpModel.js";
-import Product from "../model/productModel.js";
-import Category from "../model/categoryModel.js";
-import Cart from "../model/cartModel.js";
-import Wishlist from "../model/wishlistModel.js";
+import Cart from "../../model/cartModel.js";
+import Category from "../../model/categoryModel.js";
+import OTP from "../../model/otpModel.js";
+import Product from "../../model/productModel.js";
+import User from "../../model/userModel.js";
+import Wishlist from "../../model/wishlistModel.js";
 // ----------------------------------------------
 
-import ProductOffer from "../model/productOfferModel.js";
-import CategoryOffer from "../model/categoryOfferModel.js";
+import CategoryOffer from "../../model/categoryOfferModel.js";
+import ProductOffer from "../../model/productOfferModel.js";
 
 // ----------------------------------------------
 
@@ -481,6 +481,45 @@ const loginHome = async (req, res) => {
             }
         ]);
 
+
+        const categoryOffers = await CategoryOffer.aggregate([
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categoryId",
+                    foreignField: "_id",
+                    as: "categoryDetails"
+                }
+            },
+            {
+                $unwind: "$categoryDetails"
+            }
+        ]);
+
+        if (categoryOffers) {
+            const products = await Product.find({ delete: false });
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+
+                const matchingCategoryOffer = categoryOffers.find(
+                    offer => offer.categoryDetails.name === product.category
+                );
+
+                if (matchingCategoryOffer) {
+                    
+                    const discountRate = matchingCategoryOffer.offer / 100;
+                    const discountAmount = product.price * discountRate;
+                    const newOfferPrice = product.price - discountAmount;
+
+                    await Product.updateOne(
+                        { _id: product._id },
+                        { $set: { offerPrice: newOfferPrice, offer: matchingCategoryOffer.offer } }
+                    );
+                }
+            }
+        }
+
+
         for (let i = 0; i < productOffers.length; i++) {
             const productOffer = productOffers[i];
             const categoryName = productOffer.productDetails[0].category;
@@ -568,19 +607,19 @@ const productPage = async (req, res) => {
             case 'offer_high_to_low':
                 sort.offerprice = -1;
                 break;
-        }
-
-        if (req.query.sort === 'shirt') {
-            filter.category = "Shirt";
-        } else if (req.query.sort === 't_shirt') {
-            filter.category = "T-Shirt";
+            case 'shirt':
+                filter.category = "Shirt";
+                break;
+            case 't_shirt':
+                filter.category = "T-Shirt";
+                break;
         }
 
         // Search
         if (search) {
             filter.$or = [
                 { name: { $regex: search, $options: 'i' } },
-                { email: { $regex: search, $options: 'i' } }
+                { description: { $regex: search, $options: 'i' } }
             ];
         }
 
@@ -598,7 +637,8 @@ const productPage = async (req, res) => {
                     foreignField: "_id",
                     as: "productDetails"
                 }
-            }
+            },
+            { $unwind: "$productDetails" }
         ]);
 
         const wishlistProduct = await Wishlist.aggregate([
@@ -611,7 +651,8 @@ const productPage = async (req, res) => {
                     foreignField: "_id",
                     as: "productDetails"
                 }
-            }
+            },
+            { $unwind: "$productDetails" }
         ]);
 
         res.render('users/product.ejs', {
@@ -623,8 +664,10 @@ const productPage = async (req, res) => {
         });
     } catch (error) {
         console.error(error.message);
+        res.status(500).send('Server Error');
     }
 };
+
 
 
 //user single product details page
@@ -689,27 +732,21 @@ const userLogout = (req, res) => {
 
 
 export {
-    login,
-    register,
-    insertUser,
-    verifyLogin,
-    loginHome,
-    otp,
-    verifyOtp,
-    userLogout,
-    resendOTP,
-
-    forgotPasswordPage,
-    forgotPassword,
     forgotOtpPage,
     forgotOtpVerification,
-    resetPasswordPage,
-    resetPassword,
-
-    productPage,
+    forgotPassword,
+    forgotPasswordPage,
+    insertUser,
+    login,
+    loginHome,
+    otp,
     productDetails,
-
-
-    // notPage
-
-}
+    productPage,
+    register,
+    resendOTP,
+    resetPassword,
+    resetPasswordPage,
+    userLogout,
+    verifyLogin,
+    verifyOtp
+};

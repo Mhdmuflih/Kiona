@@ -1,18 +1,18 @@
 import express from "express";
+import session from "express-session";
 import multer from "multer";
 import path from "path";
-import session from "express-session";
 
 // -----------------------------
 
-import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/adminController.js";
-import { productPage, addProduct, productAdd, deleteProduct, deletedProductPage, restoreProduct, editProduct, editProductPage, deleted, deleteImage  } from "../controller/adminProductController.js";
-import { userDetails, userBlock } from "../controller/adminUserController.js";
-import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/adminCategoryController.js";
-import { isLogin, isLogout, Cache } from "../middleware/adminAuth.js";
-import { orderDetailsPage, orderPage, orderStatus } from "../controller/adminOrderController.js";
-import { addCategoryOffer, addCategoryOfferPage, addCoupon, addCouponOfferPage, addProductOffer, addProductOfferPage, categoryOfferPage, couponOfferPage, deleteCategoryOffer, deleteCoupon, deleteProductOffer, productOfferPage } from "../controller/adminOfferController.js";
-import { salesReport, salesReportPage } from "../controller/adminSalesReport.js";
+import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/admin/adminCategoryController.js";
+import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/admin/adminController.js";
+import { addCategoryOffer, addCategoryOfferPage, addCoupon, addCouponOfferPage, addProductOffer, addProductOfferPage, categoryOfferPage, couponOfferPage, deleteCategoryOffer, deleteCoupon, deleteProductOffer, productOfferPage } from "../controller/admin/adminOfferController.js";
+import { orderDetailsPage, orderPage, orderStatus } from "../controller/admin/adminOrderController.js";
+import { addProduct, deleteImage, deleteProduct, deleted, deletedProductPage, editProduct, editProductPage, productAdd, productPage, restoreProduct } from "../controller/admin/adminProductController.js";
+import { salesReport, salesReportPage } from "../controller/admin/adminSalesReport.js";
+import { userBlock, userDetails } from "../controller/admin/adminUserController.js";
+import { Cache, isLogin, isLogout } from "../middleware/adminAuth.js";
 
 
 // ------------------------------------------------------------------------------------------------------------------

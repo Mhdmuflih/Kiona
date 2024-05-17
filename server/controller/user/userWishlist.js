@@ -1,5 +1,5 @@
-import Wishlist from "../model/wishlistModel.js";
-import Product from "../model/productModel.js";
+import Product from "../../model/productModel.js";
+import Wishlist from "../../model/wishlistModel.js";
 
 //add to wishlist
 const addToWishlist = async(req,res)=>{
@@ -38,6 +38,6 @@ const addToWishlist = async(req,res)=>{
 
 
 
-export{
-    addToWishlist,
-}
+export {
+    addToWishlist
+};

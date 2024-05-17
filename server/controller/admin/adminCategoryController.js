@@ -1,4 +1,4 @@
-import Category from "../model/categoryModel.js";
+import Category from "../../model/categoryModel.js";
 
 // -----------------------------------------------------------------
 
@@ -190,13 +190,13 @@ const categoryDeleted = async(req,res)=>{
 }
 
 export {
-    categoryPage,
     addCategory,
+    categoryDeleted,
+    categoryPage,
     createCategory,
-    editCategoryPage,
-    editCategory,
     deleteCategory,
     deleteCategoryPage,
-    restoreCategory,
-    categoryDeleted
-}
+    editCategory,
+    editCategoryPage,
+    restoreCategory
+};

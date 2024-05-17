@@ -257,7 +257,7 @@
                 title: 'Success',
                 text: response.data.message
               }).then(()=>{
-                window.location.href = '/admin/categoryOffers'
+                window.location.reload()
               })
             }else{
               await Swal.fire({

@@ -2,12 +2,11 @@ import mongoose from "mongoose";
 
 // ----------------------------------------------
 
-import Cart from "../model/cartModel.js";
-import Product from "../model/productModel.js";
-import User from "../model/userModel.js";
-import Address from "../model/addressModel.js";
-import Order from "../model/orderModel.js";
-import Wishlist from "../model/wishlistModel.js";
+import Address from "../../model/addressModel.js";
+import Cart from "../../model/cartModel.js";
+import Product from "../../model/productModel.js";
+import User from "../../model/userModel.js";
+import Wishlist from "../../model/wishlistModel.js";
 
 // ----------------------------------------------
 
@@ -446,26 +445,19 @@ const checkoutPage = async(req,res)=>{
 }
 
 
-export{
-    cart,
+export {
     addToCart,
-    incrementQuantity,
-    decrementQuantity,
-    removeCart,
-
-    selectAddress,
-    checkoutDeleteAddress,
-    
-    checkoutAddAddressPage,
+    cart,
     checkoutAddAddress,
-
-    checkoutEditAddressPage,
+    checkoutAddAddressPage,
+    checkoutDeleteAddress,
     checkoutEditAddress,
-
-    summary,
-
+    checkoutEditAddressPage,
     checkoutPage,
+    decrementQuantity,
+    incrementQuantity,
+    removeCart,
+    selectAddress,
+    summary
+};
 
-
-
-}
