@@ -164,10 +164,10 @@
                 <div class="card bg-gradient-danger card-img-holder text-white">
                   <div class="card-body">
                     <img src="/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h4 class="font-weight-normal mb-3">Weekly Sales <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                    <h4 class="font-weight-normal mb-3"> Users <i class="mdi mdi-chart-line mdi-24px float-right"></i>
                     </h4>
-                    <h2 class="mb-5">$ 15,0000</h2>
-                    <h6 class="card-text">Increased by 60%</h6>
+                    <h2 class="mb-5"><%= usersCount %></h2>
+                    <h6 class="card-text"> Total Users </h6>
                   </div>
                 </div>
               </div>
@@ -175,10 +175,10 @@
                 <div class="card bg-gradient-info card-img-holder text-white">
                   <div class="card-body">
                     <img src="/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h4 class="font-weight-normal mb-3">Weekly Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                    <h4 class="font-weight-normal mb-3"> Orders <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                     </h4>
-                    <h2 class="mb-5">45,6334</h2>
-                    <h6 class="card-text">Decreased by 10%</h6>
+                    <h2 class="mb-5"> <%= orderCount[0].totalOrders %> </h2>
+                    <h6 class="card-text"> Total Orders </h6>
                   </div>
                 </div>
               </div>
@@ -186,10 +186,32 @@
                 <div class="card bg-gradient-success card-img-holder text-white">
                   <div class="card-body">
                     <img src="/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                    <h4 class="font-weight-normal mb-3">Visitors Online <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                    <h4 class="font-weight-normal mb-3"> Order Products <i class="mdi mdi-diamond mdi-24px float-right"></i>
                     </h4>
-                    <h2 class="mb-5">95,5741</h2>
-                    <h6 class="card-text">Increased by 5%</h6>
+                    <h2 class="mb-5"> <%= orderItemsCount[0].totalOrderItems %> </h2>
+                    <h6 class="card-text"> Total Ordered Products </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-dark card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3"> Total Products <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5"> <%= totalProducts %> </h2>
+                    <h6 class="card-text"> Total Products </h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-secondary card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3"> Total Categories <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                    </h4>
+                    <h2 class="mb-5"> <%= totalCategories %> </h2>
+                    <h6 class="card-text"> Total Categories </h6>
                   </div>
                 </div>
               </div>
@@ -220,29 +242,34 @@
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title"> Top Selling <code> Kiona Selling  </code> </h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h4 class="card-title"> Top Selling </h4>
+                        <p class="card-description"><code>Kiona Selling Details</code></p>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <button type="button" class="btn badge badge-dark" onclick="topSale('Category')">Category <i class="mdi mdi-chemical-weapon"></i></button>
+                        <div style="width: 20px;"></div>
+                        <button type="button" class="btn badge badge-dark" onclick="topSale('Product')">Product <i class="mdi mdi-chemical-weapon"></i></button>
+                      </div>
+                    </div>
                     <div class="table-responsive">
-                      <table class="table">
+                      <table class="table" id="top-sales-body">
                         <thead>
                           <tr>
                             <th> Sl No </th>
                             <th> Category Name </th>
                             <th> Count </th>
-
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              <img src="/admin/images/faces/face1.jpg" class="mr-2" alt="image"> David Grey
-                            </td>
-                            <td> Fund is not recieved </td>
-                            <td>
-                              <label class="badge badge-gradient-success">DONE</label>
-                            </td>
-
-                          </tr>
-                          
+                          <% for(let i=0 ; i<category.length ; i++){ %>
+                            <tr>
+                              <td><%= i+1 %></td>
+                              <td> <%= category[i]._id %> </td>
+                              <td> <%= category[i].count %> </td>
+                            </tr>
+                          <% } %>
                         </tbody>
                       </table>
                     </div>
@@ -250,6 +277,7 @@
                 </div>
               </div>
             </div>
+            
             
             
           </div>
@@ -284,6 +312,50 @@
     <script src="/admin/js/dashboard.js"></script>
     <script src="/admin/js/todolist.js"></script>
     <!-- End custom js for this page -->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+    <script>
+      async function topSale(value) {
+        try {
+          console.log(value, 'ith aa value');
+          const response = await axios.post('/admin/home', { value });
+          if (response.data.success) {
+            if (value === "Category") {
+              populateTable(response.data.category);
+            } else if (value === "Product") {
+              populateTable(response.data.product);
+            }
+          } else {
+            console.log('I am not ok in this situation');
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+  
+      function populateTable(items) {
+        const tableBody = document.getElementById('top-sales-body');
+        tableBody.innerHTML = '';
+  
+        items.forEach((item, index) => {
+          const row = document.createElement('tr');
+  
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item._id}</td>
+            <td>${item.count}</td>
+          `;
+  
+          tableBody.appendChild(row);
+        });
+      }
+  
+      window.onload = () => topSale('Category');
+    </script>
+
   </body>
 
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:42 GMT -->

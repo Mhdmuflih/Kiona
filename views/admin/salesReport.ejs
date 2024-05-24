@@ -276,22 +276,52 @@
         });
     </script>
 
-    <script>
-      async function reportType(value){
-        try {
-          const response = await axios.post('/admin/salesReport/type',{value})
-          if(response.data.success){
-            const orderItems = response.data.orderItems;
-            console.log(orderItems,'its order Item');
-            window.location.reload()
-          }else{
-            console.error('Failed to fetch sales report data');
-          }
-        } catch (error) {
-          console.log(error.message);
-        }
+<script>
+  async function reportType(value){
+    try {
+      const response = await axios.post('/admin/salesReport/type', { value });
+      if (response.data.success) {
+        const orderItems = response.data.orderItems;
+        console.log(orderItems, 'its order Item');
+        populateTable(orderItems);
+      } else {
+        console.error('Failed to fetch sales report data');
       }
-    </script>
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  function populateTable(orderItems) {
+    const tableBody = document.querySelector('.table tbody');
+    tableBody.innerHTML = '';
+
+    orderItems.forEach((item, index) => {
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+        <td style="font-size: 8px;">${index + 1}</td>
+        <td style="font-size: 8px;">${item.orderId}</td>
+        <td style="font-size: 8px;">${item.orderUser}</td>
+        <td style="font-size: 8px;">
+          ${item.address.name}, ${item.address.addressType},<br>
+          ${item.address.address},<br>
+          ${item.address.locality}, ${item.address.city}<br>
+          ${item.address.state} - ${item.address.pincode}<br>
+          Mobile: ${item.address.mobile}
+        </td>
+        <td style="font-size: 8px;">${new Date(item.orderDate).toDateString()}</td>
+        <td style="font-size: 8px;">${item.orderItems.productName}</td>
+        <td style="font-size: 8px;">${item.orderItems.productPrice}</td>
+        <td style="font-size: 8px;">${item.orderItems.cartQuantity}</td>
+        <td style="font-size: 8px;">${item.orderItems.totalPrice}</td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  }
+</script>
+
 </body>
 
 <!-- Mirrored from demo.bootstrapdash.com/purple-admin-free/pages/charts/chartjs.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Dec 2023 06:57:49 GMT -->

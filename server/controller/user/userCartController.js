@@ -7,6 +7,7 @@ import Cart from "../../model/cartModel.js";
 import Product from "../../model/productModel.js";
 import User from "../../model/userModel.js";
 import Wishlist from "../../model/wishlistModel.js";
+import Coupon from "../../model/couponModel.js";
 
 // ----------------------------------------------
 
@@ -22,12 +23,17 @@ const cart = async (req, res) => {
         let cartProduct = await Cart.aggregate([
             { $match:{ userId: mongoose.Types.ObjectId(user)  } },
             { $unwind:"$cartItems" },
-            { $lookup:{
-                from:"products",
-                localField:"cartItems.productId",
-                foreignField:"_id",
-                as:"productDetails"
-            } }
+            { $lookup:
+                {
+                    from:"products",
+                    localField:"cartItems.productId",
+                    foreignField:"_id",
+                    as:"productDetails"
+                }
+            },
+            {
+                $match: { 'productDetails.delete': false }
+            }
         ])
 
         let wishlistProduct = await Wishlist.aggregate([
@@ -41,9 +47,11 @@ const cart = async (req, res) => {
             } }
         ])
 
+        const coupon = await Coupon.find()
+
         let message;
 
-        res.render('users/shoping-cart.ejs', { user, cartProduct, wishlistProduct, message:message });
+        res.render('users/shoping-cart.ejs', { user, cartProduct, wishlistProduct, message:message, coupon });
         
     } catch (error) {
         console.log(error.message);
@@ -134,6 +142,35 @@ const addToCart = async (req,res)=>{
     }
 }
 
+//applay coupon
+const applyCoupon = async(req,res)=>{
+    try {
+        const { couponCode,totalPrice } = req.body
+
+        const coupon = await Coupon.findOne({ couponCode })
+        console.log(coupon);
+        if(!coupon){
+            return res.json({ success:false, message:"coupon is not there" })
+        }
+
+        if(totalPrice<coupon.minAmount){
+            return res.json({ success:false, message:"you not aligible for this coupon" })
+        }
+
+        const offerDiscound = (coupon.offer/100)
+        const discountAmount  = offerDiscound*totalPrice
+        const totalAmount = totalPrice - discountAmount
+        //sen
+        req.session.totalPrice = totalAmount
+
+        return res.json({ success:true, message:"Coupon Applyed", totalAmount, discountAmount })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 //remove cart products
 const removeCart = async(req,res)=>{
     try {
@@ -165,6 +202,9 @@ const selectAddress = async (req, res) => {
         const id = req.session.user_id;
         const user = await User.findOne({ _id: id });
 
+        console.log(req.session.totalPrice,'ioth njan anthyam session ll eathed');
+
+
         let cartProduct = await Cart.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(id) } },
             { $unwind: "$cartItems" },
@@ -183,6 +223,8 @@ const selectAddress = async (req, res) => {
         }
         
         let totalPrice = 0;
+        let subTotal = 0;
+        let discount = 0;
 
         for (let i = 0; i < cartProduct.length; i++) {
             const cartItem = cartProduct[i].cartItems;
@@ -197,18 +239,29 @@ const selectAddress = async (req, res) => {
                 }
 
                 let price;
+                let subPrice;
                 if (productDetails[j].offerPrice) {
                     price = productDetails[j].offerPrice;
+                    subPrice = productDetails[j].price
                 } else {
                     price = productDetails[j].price;
+                    subPrice = productDetails[j].price
                 }
-                const itemTotalPrice = quantity * price;
 
+                const itemTotalPrice = quantity * price;
                 totalPrice += itemTotalPrice;
+
+                subTotal += quantity * subPrice
+
+                discount = subTotal - totalPrice
             }
         }
 
-        req.session.totalPrice = totalPrice
+        if(req.session.totalPrice == undefined){
+            req.session.totalPrice = totalPrice
+        }else{
+            totalPrice = req.session.totalPrice
+        }
 
 
         let addressData = await Address.findOne({ userId: id });
@@ -216,7 +269,7 @@ const selectAddress = async (req, res) => {
             addressData = { addresses: [] };
         }
 
-        res.render('users/checkout/showAddress.ejs', { user, addressData, totalPrice });
+        res.render('users/checkout/showAddress.ejs', { user, addressData, totalPrice, subTotal, discount });
     } catch (error) {
         console.log(error.message);
     }
@@ -373,6 +426,7 @@ const summary = async(req,res)=>{
 
         const addressId = req.query.id
         const user = req.session.user_id
+        const totalAmount = req.session.totalPrice
 
         let cartProduct = await Cart.aggregate([
             { $match:{ userId: mongoose.Types.ObjectId(user)  } },
@@ -398,7 +452,7 @@ const summary = async(req,res)=>{
         req.session.address_data = address
         req.session.cartProduct = cartProduct
 
-        res.render('users/checkout/checkoutSummary.ejs',{ user, cartProduct, address })
+        res.render('users/checkout/checkoutSummary.ejs',{ user, cartProduct, address, totalAmount })
 
     } catch (error) {
         console.log(error.message);
@@ -447,6 +501,9 @@ const checkoutPage = async(req,res)=>{
 
 export {
     addToCart,
+
+    applyCoupon,
+
     cart,
     checkoutAddAddress,
     checkoutAddAddressPage,

@@ -309,22 +309,38 @@
 								<div class="header-cart-item-txt p-t-8">
 									<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
 										<%= cartProduct[i].productDetails[0].name %>
+										<% if(cartProduct[i].productDetails[0].offer){ %>
+											<span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+												<%= cartProduct[i].productDetails[0].offer %> %
+											</span>
+										<% } %>
 									</a>
-				
-									<span class="header-cart-item-info">
-										<%= cartProduct[i].productDetails[0].price %>
+
+									
+								<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+									<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
+									<span class="stext-105 cl3">
+										<strike> <%= cartProduct[i].productDetails[0].price  %> </strike>
 									</span>
+								<% }else{ %>
+									<span class="header-cart-item-info">
+										RS: <%= cartProduct[i].productDetails[0].price %>
+									</span>
+								<% } %>
 								</div>
 							</li>
-							<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+								<% totalAmount += cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %>
+							<% }else{ %>
+								<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% } %>
 						<% } %>
 					<% } %>
 				</ul>
 				
-
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $ <%= totalAmount %>
+						Total: Rs: <%= totalAmount %>
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -762,10 +778,10 @@
 
 							<div class="block2-txt-child2 flex-r p-t-3">
 								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-										alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l"
-										src="images/icons/icon-heart-02.png" alt="ICON">
+									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON" onclick="removeToWishlist('<%= products[i]._id %>')" >
+									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON" onclick="addToWishlist('<%= products[i]._id %>')">
+									<!-- <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON"> -->
+									<!-- <img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON"> -->
 								</a>
 							</div>
 						</div>
@@ -1070,6 +1086,39 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+	<script>
+		async function addToWishlist(productId){
+				try {
+					console.log(productId);
+					const response = await axios.post('/products/wishlist',{ productId })
+					if(response.data.success){
+						await Swal.fire({
+							icon:'success',
+							title:'success',
+							text:response.data.message
+						}).then(()=>{
+							window.location.href='/products';
+						})
+					}else{
+						await Swal.fire({
+							icon:'error',
+							title:'error',
+							text:response.data.message
+						})
+						window.location.href='/products'
+					}
+
+				} catch (error) {
+					console.log(error.message);
+				}
+			}
+	</script>
+
 
 <!-- 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

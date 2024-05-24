@@ -76,7 +76,39 @@
                           <h4 class="card-title">More Actions</h4>
                           <p class="card-description">Download Invoice </p>
                           <ul>
-                              <li></li>
+
+                              <li>
+                                <div class="container mt-5">
+                                    <% if(ordered.orderStatus == "Delivered" ){ %>
+                                        <button id="downloadInvoiceBtn" class="btn btn-sm btn-light" style="font-weight: bold;">Download Invoice</button>
+                                    <% } %>
+                            
+                                    <table class="table" style="display: none;">
+                                        <thead>
+                                            <tr>
+                                                <th>Product Name</th>
+                                                <th>Price (Rs)</th>
+                                                <th>Quantity</th>
+                                                <th>Discount (Rs)</th>
+                                                <th>Total (Rs)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><%= ordered.productName %></td>
+                                                <td><%= ordered.totalPrice %></td>
+                                                <td><%= ordered.cartQuantity %></td>
+                                                <td>
+                                                    <% if(ordered.offer){ %>
+                                                        <%= ordered.cartQuantity * ordered.offerPrice - ordered.cartQuantity * ordered.productPrice %>
+                                                    <% } %>
+                                                <td><%= ordered.totalPrice %></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            
+                              </li>
                               <li></li>
                               <li></li>
                               <li></li>
@@ -96,9 +128,25 @@
                         <div class="col-md-5" style="display: flex; align-items: center;">
                             <img src="/Photos/product/<%= ordered.image[0] %>" alt="Product Image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
                             <div style="margin-top: -5px; margin-bottom: -5px;">
-                                <p class="card-description" style="margin-bottom: 5px;"><%= ordered.productName %></p>
-                                <p class="card-description" style="margin-bottom: 5px;"><%= ordered.category %></p>
-                                <p class="card-description" style="margin-bottom: 0;"><%= ordered.productPrice %></p>
+                                <% if(ordered.offer){ %>
+                                    <div class="card-description-container" style="margin-bottom: 5px;">
+                                        <p class="card-description" style="margin-bottom: 5px;"><%= ordered.productName %></p>
+                                        <p class="card-description" style="margin-bottom: 0; display: flex; align-items: center;">
+                                            <span><%= ordered.category %></span>
+                                            <span style="margin-left: 10px; color: green; font-weight: 10px;" ><%= ordered.offer %>%</span>
+                                        </p>
+                                        <p class="card-description" style="margin-bottom: 0; display: flex; align-items: center;">
+                                            <span>Rs : <%= ordered.offerPrice %></span>
+                                            <strike style="margin-left: 10px;"><%= ordered.productPrice %></strike>
+                                        </p>
+                                    </div>
+                                    
+
+                                <% }else{ %>
+                                    <p class="card-description" style="margin-bottom: 5px;"><%= ordered.productName %></p>
+                                    <p class="card-description" style="margin-bottom: 5px;"><%= ordered.category %></p>
+                                    <p class="card-description" style="margin-bottom: 0;"><%= ordered.productPrice %></p>
+                                <% } %>
                             </div>
                         </div>
                         <div class="col-md-7 d-flex justify-content-between align-items-start" style="margin-top: -5px;">
@@ -213,7 +261,7 @@
   </div>
 </div>
 
-
+<!-- invoice -->
 
 
     <!-- Bootstrap and Custom JavaScript libraries -->
@@ -223,6 +271,86 @@
     <script src="../../admin/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        document.getElementById('downloadInvoiceBtn').addEventListener('click', downloadInvoice);
+
+        function downloadInvoice() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageCenter = doc.internal.pageSize.getWidth() / 2;
+
+            // Header
+            doc.setFontSize(25);
+            doc.setTextColor(228,0,124);
+            doc.text("K I O N A", pageCenter, 20, { align: 'center' });
+            doc.setFontSize(15);
+            doc.setTextColor(40, 40, 40);
+            doc.text("Invoice", pageCenter, 30, { align: 'center' });
+
+            // Order details
+            const orderId = "<%= orderItem._id %>";
+            const name = "<%= orderItem.address.name %>";
+            const mobile = "<%= orderItem.address.mobile %>";
+            const house = "<%= orderItem.address.house %>";
+            const locality = "<%= orderItem.address.locality %>";
+            const city = "<%= orderItem.address.city %>";
+            const state = "<%= orderItem.address.state %>";
+            const pin = "<%= orderItem.address.pincode %>";
+            const paymentMethod = "<%= orderItem.paymentMethod === 'cod' ? 'Cash on Delivery' : (orderItem.paymentMethod === 'Online Payment' ? 'Online Payment' : 'Wallet') %>";
+            const orderStatus = "<%= orderItem.orderStatus %>";
+
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Order ID: ${orderId}`, 20, 40);
+            doc.text("Shipping Address:", 20, 50);
+            doc.text(`Name: ${name}`, 30, 55);
+            doc.text(`Mobile: ${mobile}`, 30, 60);
+            doc.text(`House no.: ${house}`, 30, 65);
+            doc.text(`Locality: ${locality}`, 30, 70);
+            doc.text(`City: ${city}`, 30, 75);
+            doc.text(`State: ${state}`, 30, 80);
+            doc.text(`Pin: ${pin}`, 30, 85);
+            doc.text(`Payment Method: ${paymentMethod}`, 20, 95);
+            doc.text(`Order Status: ${orderStatus}`, 20, 100);
+
+            // Order items table
+            const table = document.querySelector(".table");
+            const tableData = Array.from(table.querySelectorAll('tbody tr')).map(row => {
+                return Array.from(row.querySelectorAll('td')).map(cell => cell.innerText.trim());
+            });
+
+            doc.autoTable({
+                head: [['Product Name', 'Price (Rs)', 'Quantity', 'Discount (Rs)', 'Total (Rs)']],
+                body: tableData,
+                startY: 110,
+                theme: 'striped',
+                headStyles: { fillColor: [40, 40, 40] },
+                styles: { halign: 'center' },
+            });
+
+            // Calculate total and grand total
+            let total = 0;
+            tableData.forEach(row => {
+                const totalPrice = parseFloat(row[4]); // row[4] is the correct index for Total (Rs)
+                if (!isNaN(totalPrice)) {
+                    total += totalPrice;
+                }
+            });
+
+            // Add total to PDF
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Grand Total: Rs ${total}`, doc.internal.pageSize.getWidth() - 20, finalY, { align: 'right' });
+
+            // Save the PDF
+            doc.save("order_invoice.pdf");
+        }
+    </script>
 
     <!-- Your custom JavaScript -->
     <script>

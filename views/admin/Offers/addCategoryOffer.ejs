@@ -141,7 +141,7 @@
                         <!-- category name -->
                         <div class="form-group">
                             <label>Categories</label>
-                            <select class="form-control my-custom-dropdown" name="name" id="category">
+                            <select class="form-control my-custom-dropdown" name="category" id="category">
                               <option value="">Select Category</option>
                               <% for(let i=0 ; i<category.length ; i++){ %>
                                 <% if(category[i].delete === false){ %>
@@ -230,6 +230,9 @@
     <script>
         document.getElementById('categoryOfferForm').addEventListener('submit', async(event)=>{
             event.preventDefault();
+
+            // const category = document.getElementById("category").value.trim();
+
 
             const formElement = document.getElementById("categoryOfferForm");
             const formData = new FormData(formElement);

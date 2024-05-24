@@ -13,7 +13,6 @@ const orderPage = async(req,res)=>{
             const user = await User.findOne({ _id:userId })
             users.push(user)
         }
-        console.log(orderData);
         
         res.render('admin/order/order.ejs',{ order:orderData, users });
 

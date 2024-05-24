@@ -183,6 +183,8 @@
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
 					<% let totalAmount = 0; %>
+					<% let subTotal = 0; %>
+					<% let discount = 0; %>
 				
 					<% if (cartProduct.length === 0) { %>
 						<img src="/empty%20cart.jpg" alt="Empty Cart" style="width: 200px; height: auto;">
@@ -207,7 +209,7 @@
 								<% if(cartProduct[i].productDetails[0].offerPrice){ %>
 									<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
 									<span class="stext-105 cl3">
-										<%= cartProduct[i].productDetails[0].price  %>
+										<strike> <%= cartProduct[i].productDetails[0].price  %> </strike>
 									</span>
 								<% }else{ %>
 									<span class="header-cart-item-info">
@@ -218,8 +220,11 @@
 							</li>
 							<% if(cartProduct[i].productDetails[0].offerPrice){ %>
 								<% totalAmount += cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %>
+								<% subTotal += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+								<%  discount = subTotal - totalAmount %>
 							<% }else{ %>
 								<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+								<% subTotal += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
 							<% } %>
 						<% } %>
 					<% } %>
@@ -227,7 +232,7 @@
 				
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $ <%= totalAmount %>
+						Total: Rs: <%= totalAmount %>
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -303,7 +308,7 @@
 												<% if(cartProduct[i].productDetails[0].offerPrice){ %>
 													<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
 													<span class="stext-105 cl3">
-														<%= cartProduct[i].productDetails[0].price  %>
+														<strike> <%= cartProduct[i].productDetails[0].price  %> </strike>
 													</span>
 												<% }else{ %>
 													<span class="header-cart-item-info">
@@ -345,21 +350,44 @@
 							</table>
 						</div>
 
-						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-							<div class="flex-w flex-m m-r-20 m-tb-5">
-								<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"
-									name="coupon" placeholder="Coupon Code">
-
-								<div
-									class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-									Apply coupon
+						<form id="couponForm">
+							<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+								<div class="flex-w flex-m m-r-20 m-tb-5">
+									<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" id="couponCode" placeholder="Coupon Code">
+									<button type="submit" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5"> Apply coupon </button>
 								</div>
-							</div>
+							</form>
 
-							<div
+							
+							<!-- <a href=""> View Coupons </a> -->
+
+							<!-- Link to toggle visibility -->
+							<div class="container mt-5">
+								<a href="#" id="toggleLink">View Coupons</a>
+						
+								<!-- Hidden data container initially hidden -->
+								<% for(let i=0 ; i<coupon.length ; i++){ %>
+									<div class="row justify-content-center mb-3 couponsContainer" id="couponsContainer<%= i %>" style="display: none;">
+										<div class="col-md-6">
+											<div class="card text-center" style="background-color: #21cc99;">
+												<div class="card-body">
+													<h3 class="text-danger font-weight-bold"> <%= coupon[i].offer %>% </h3>
+													<p class="text-white font-weight-bold" style="font-size: 14px;"> If Purchased Above <span style="font-size: large;">Rs. <%= coupon[i].minAmount %></span> </p>
+													<p class="text-white"> Use Coupon Code: <span style="color: black; font-weight: bold;"> <%= coupon[i].couponCode %> </span> </p>
+												</div>
+											</div>
+										</div>
+									</div>
+								<% } %>
+							</div>
+							
+							
+
+
+							<!-- <div
 								class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
 								Update Cart
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -378,8 +406,39 @@
 							</div>
 
 							<div class="size-209">
-								<span class="mtext-110 cl2" id="totalAmount">
-									$<%= totalAmount %>
+								<span class="mtext-110 cl2" id="subTotal">
+									Rs: <%= subTotal %>
+
+								</span>
+							</div>
+						</div>
+
+						<% if(!discount == 0){%>
+							<div class="flex-w flex-t bor12 p-b-13">
+								<div class="size-208">
+									<span class="stext-110 cl2">
+										Discount:
+									</span>
+								</div>
+	
+								<div class="size-209">
+									<span class="mtext-110 cl2" id="discountAmount" style="color: red;">
+										Rs: <%= discount %>
+									</span>
+								</div>
+							</div>
+						<% } %>
+
+						<div class="flex-w flex-t bor12 p-b-13">
+							<div class="size-208">
+								<span class="stext-110 cl2">
+									Delivery Charge:
+								</span>
+							</div>
+
+							<div class="size-209">
+								<span class="mtext-110 cl2" id="deliveryCharge" style="color: green;">
+									Rs: Free
 								</span>
 							</div>
 						</div>
@@ -431,6 +490,8 @@
 								</div>
 							</div>
 						</div> -->
+						
+
 
 						<div class="flex-w flex-t p-t-27 p-b-33">
 							<div class="size-208">
@@ -440,8 +501,8 @@
 							</div>
 
 							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2" id="totalAmount">
-									$<%= totalAmount %>
+								<span class="mtext-110 cl2" id="totalAmount" style="color: green;">
+									Rs: <%= totalAmount %>
 								</span>
 							</div>
 						</div>
@@ -508,6 +569,65 @@
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+		<script>
+			// Event listener for toggling coupon containers
+			document.getElementById('toggleLink').addEventListener('click', function(event) {
+				event.preventDefault(); // Prevent the default action of the link
+	
+				// Get all elements with class 'couponsContainer'
+				const couponContainers = document.querySelectorAll('.couponsContainer');
+	
+				// Toggle display property for each coupon container
+				couponContainers.forEach(function(container) {
+					if (container.style.display === 'none' || container.style.display === '') {
+						container.style.display = 'block';
+					} else {
+						container.style.display = 'none';
+					}
+				});
+			});
+	
+			document.getElementById('couponForm').addEventListener('submit', async (event) => {
+				event.preventDefault();
+				const couponCode = document.getElementById('couponCode').value;
+				const totalAmountElement = document.getElementById('totalAmount');
+				const totalAmountText = totalAmountElement.innerText.trim();
+				const totalAmountValue = totalAmountText.replace('Rs:', '').trim(); // Remove 'Rs:' prefix
+				console.log(totalAmountValue);
+
+				// console.log(totalAmount);
+				console.log(couponCode);
+	
+				try {
+					const response = await axios.post('/coupon', { couponCode: couponCode, totalPrice:totalAmountValue });
+					if(response.data.success){
+						Swal.fire({
+							icon:"success",
+							title:"success",
+							text:response.data.message
+						})
+						const newTotalAmount = response.data.totalAmount;
+            const newDiscountAmount = response.data.discountAmount;
+
+            // Update the total amount element
+            document.getElementById('totalAmount').innerText = `Rs: ${newTotalAmount.toFixed(2)}`; // Update with new total amount, formatted to 2 decimal places
+
+            // Update the discount amount element
+            document.getElementById('discountAmount').innerText = `Rs: ${newDiscountAmount.toFixed(2)}`; // Update with new discount amount, formatted to 2 decimal places
+					}else{
+						Swal.fire({
+							icon:"error",
+							title:"error",
+							text:response.data.message
+						})
+					}
+					console.log(response.data);
+				} catch (error) {
+					console.log(error.message);
+				}
+			});
+		</script>
+			
 
 
 		<script>

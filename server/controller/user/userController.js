@@ -513,7 +513,7 @@ const loginHome = async (req, res) => {
 
                     await Product.updateOne(
                         { _id: product._id },
-                        { $set: { offerPrice: newOfferPrice, offer: matchingCategoryOffer.offer } }
+                        { $set: { offerPrice: Math.round(newOfferPrice), offer: matchingCategoryOffer.offer } }
                     );
                 }
             }
@@ -548,7 +548,7 @@ const loginHome = async (req, res) => {
         
                 await Product.updateOne(
                     { _id: productOffer.productDetails[0]._id },
-                    { $set: { offerPrice: Math.min(offerPrice, categoryOfferPrice), offer: greaterOffer } }
+                    { $set: { offerPrice: Math.round(Math.min(offerPrice, categoryOfferPrice)), offer: greaterOffer } }
                 );
             }
         }
@@ -638,7 +638,9 @@ const productPage = async (req, res) => {
                     as: "productDetails"
                 }
             },
-            { $unwind: "$productDetails" }
+            {
+                $match: { 'productDetails.delete': false }
+            }
         ]);
 
         const wishlistProduct = await Wishlist.aggregate([
@@ -652,7 +654,6 @@ const productPage = async (req, res) => {
                     as: "productDetails"
                 }
             },
-            { $unwind: "$productDetails" }
         ]);
 
         res.render('users/product.ejs', {

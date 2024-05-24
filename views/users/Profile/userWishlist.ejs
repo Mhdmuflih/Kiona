@@ -86,6 +86,9 @@
                                             <a href="/wishlist"> <button type="button" class="btn btn-dark"
                                                     style="width: 280px;">Wishlist</button> </a>
                                         </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="width: 310px;">
+                                            <a href="/wallet"> <button type="button" class="btn btn-outline-dark" style="width: 280px;">Wallet</button> </a>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -95,13 +98,13 @@
                             <div class="wrap-table-shopping-cart">
                                 <table class="table-shopping-cart">
                                     <thead>
-                                        <tr>
+                                        <!-- <tr>
                                             <th class="column-1">Product Image</th>
                                             <th class="column-2">Product Name</th>
                                             <th class="column-3"> Price</th>
                                             <th class="column-4"> Offer Price</th>
                                             <th class="column-5">Remove</th>
-                                        </tr>
+                                        </tr> -->
                                     </thead>
                                     <tbody>
                                         <% if(wishlist.length === 0){ %>
@@ -117,14 +120,23 @@
                                                     </div>
                                                 </td>
                                                 <td class="column-2">
-                                                    <%= item.productDetails[0].name %>
+                                                    <%= item.productDetails[0].name %> <br>
                                                     <% if(item.productDetails[0].offer){ %>
                                                         <span style="color: green; font-weight: bold; font-size: 17px;">
                                                             <%= item.productDetails[0].offer %> %</span>
                                                     <% } %>
+
+                                                    <% if(item.productDetails[0].offerPrice){ %>
+                                                        Rs: <%= item.productDetails[0].offerPrice %><br>
+                                                        <strike><%= item.productDetails[0].price %></strike>
+                                                    <% }else{ %>
+                                                        Rs: <%= item.productDetails[0].price %>
+                                                    <% } %>
                                                 </td>
-                                                <td class="column-3"><%= item.productDetails[0].price %></td>
-                                                <td class="column-4">Rs: <%= item.productDetails[0].offerPrice %></td>
+                                                <td class="column-3"></td>
+                                                <td class="column-4">
+                                                    <button class="btn btn-info" onclick="addToCart('<%= item.productDetails[0]._id %>')">Add to Cart</button>
+                                                </td>
                                                 <td class="column-5">
                                                     <button class="btn btn-danger" onclick="removeItem('<%= item.productDetails[0]._id %>')">Remove</button>
                                                 </td>
@@ -172,6 +184,31 @@
                     })
                     window.location.href = '/wishlist'
                 }
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        async function addToCart(productId){
+            console.log(productId);
+            try {
+                const response = await axios.post('/wishlit/addToCart', { productId })
+                if (response.data.success) {
+                    await Swal.fire({
+						icon: "success",
+						title: "Success",
+						text: response.data.message
+					}).then(() => {
+                        window.location.href = '/shoping-cart'
+					})
+                } else {
+					await Swal.fire({
+						icon: "error",
+						title: "Error",
+						text: response.data.message
+					})
+					window.location.href = '/wishlist';
+				}
             } catch (error) {
                 console.log(error.message);
             }

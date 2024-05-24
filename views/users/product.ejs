@@ -301,21 +301,38 @@
 								<div class="header-cart-item-txt p-t-8">
 									<a href="/productDetails?productId=<%= cartProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
 										<%= cartProduct[i].productDetails[0].name %>
+										<% if(cartProduct[i].productDetails[0].offer){ %>
+											<span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+												<%= cartProduct[i].productDetails[0].offer %> %
+											</span>
+										<% } %>
 									</a>
-				
-									<span class="header-cart-item-info">
-										<%= cartProduct[i].productDetails[0].price %>
+
+									
+								<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+									<span> RS:  <%= cartProduct[i].productDetails[0].offerPrice %> </span>
+									<span class="stext-105 cl3">
+										<strike> <%= cartProduct[i].productDetails[0].price  %> </strike>
 									</span>
+								<% }else{ %>
+									<span class="header-cart-item-info">
+										RS: <%= cartProduct[i].productDetails[0].price %>
+									</span>
+								<% } %>
 								</div>
 							</li>
-							<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% if(cartProduct[i].productDetails[0].offerPrice){ %>
+								<% totalAmount += cartProduct[i].productDetails[0].offerPrice * cartProduct[i].cartItems.quantity %>
+							<% }else{ %>
+								<% totalAmount += cartProduct[i].productDetails[0].price * cartProduct[i].cartItems.quantity %>
+							<% } %>
 						<% } %>
 					<% } %>
 				</ul>
 				
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $ <%= totalAmount %>
+						Total: Rs: <%= totalAmount %>
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -998,7 +1015,7 @@
 							title:'success',
 							text:response.data.message
 						}).then(()=>{
-							window.location.href='/products';
+							window.location.href='/';
 						})
 					}else{
 						await Swal.fire({
@@ -1006,7 +1023,7 @@
 							title:'error',
 							text:response.data.message
 						})
-						window.location.href='/products'
+						window.location.href='/'
 					}
 
 				} catch (error) {

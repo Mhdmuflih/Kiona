@@ -57,8 +57,6 @@ const salesReport = async(req,res)=>{
             const yesterday = new Date(today);
             yesterday.setDate(today.getDate() - 1);
 
-            console.log(today,'todaty');
-            console.log(yesterday,'yeasterday');
 
             salesReport = await Order.aggregate([
                 {

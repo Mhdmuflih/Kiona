@@ -364,9 +364,8 @@
             // cropButton.innerHTML = 'Crop'
             // cropButton.className = 'cropButton position-absolute  start-0 translate-middle badge rounded-pill bg-success'; // Add a class for styling
 
-            // Add click event listener to the crop button
             cropButton.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent form submission
+                event.preventDefault();
                 openCropModal(inputFiles[i], img, i);
             });
 

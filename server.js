@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import colors from "colors";
 // import morgan from "morgan";
 
 // -----------------------------------------------------------------------
@@ -43,7 +44,7 @@ app.use('/admin',adminRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is starting.. http://localhost:${PORT}`);
+    console.log(`Server is starting.. http://localhost:${PORT}`.blue.bold);
 });
 
 // -----------------------------------------------------------------------

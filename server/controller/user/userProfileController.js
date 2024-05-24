@@ -3,13 +3,23 @@ import Order from "../../model/orderModel.js";
 import Product from "../../model/productModel.js";
 import User from "../../model/userModel.js";
 import Wishlist from "../../model/wishlistModel.js";
+import Wallet from "../../model/walletModel.js";
 
 // ------------------------------------
 
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import Razorpay from "razorpay";
 
 // ------------------------------------
+
+var razorpayInstance = new Razorpay({
+    key_id:"rzp_test_FRaUz1vihG1Qvx",
+    key_secret: "nuvwbLogUjNjYJEXtu5BR6dp"
+  });
+
+// ------------------------------------
+
 
 // password security function
 const securePassword = async (password) => {
@@ -244,9 +254,10 @@ const deleteAddress = async(req,res)=>{
     try {
         
         const id  = req.body.id;
+        const userId = req.session.user_id
 
         const response = await Address.updateOne(
-            { },
+            { userId:userId },
             { $pull: { addresses: { _id: id } } }
         );
 
@@ -312,14 +323,16 @@ const cancelOrder = async (req, res) => {
         
         let response;
         let cancelOrderItem;
+        let order;
         for (let i = 0; i < orders.length; i++) {
             const orderItems = orders[i].orderItems;
             for (let j = 0; j < orderItems.length; j++) {
                 if (orderItems[j]._id.toString() === id) {
                     cancelOrderItem = orderItems[j]
+                    order = orders[i]
                     response = await Order.findOneAndUpdate(
                         { userId: user, 'orderItems._id': id },
-                        { $set: { "orderItems.$.cancelReason": reason, "orderItems.$.orderStatus": "Cancelled" } }
+                        { $set: { "orderItems.$.cancelReason": reason, "orderItems.$.orderStatus": "Cancelled", "orderItems.$.paymentStatus":"Refound Completed" } }
                     );
                     break;
                 }
@@ -328,6 +341,35 @@ const cancelOrder = async (req, res) => {
         }
 
         await Product.findByIdAndUpdate({ _id:cancelOrderItem.productId },{ $inc: { quantity:cancelOrderItem.cartQuantity } }, { new:true })
+
+        if(order.paymentMethod === "Online Payment" || order.paymentMethod === "Wallet"){
+            const totalAmount = cancelOrderItem.totalPrice;
+            const description = `Refund for Cancel order item with ID ${id}`;
+
+            const walletData = await Wallet.findOne({ userId: user });
+
+            const refundAmount = totalAmount;
+            if (walletData) {
+                const walletBalance = walletData.balance + refundAmount;
+
+                await Wallet.updateOne(
+                    { userId: user },
+                    {
+                        $inc: { balance: refundAmount },
+                        $push: { walletHistory: { amount: refundAmount, description: description, date: new Date() } }
+                    }
+                );
+            } else {
+                await Wallet.updateOne(
+                    { userId: user },
+                    {
+                        $set: { balance: refundAmount },
+                        $push: { walletHistory: { amount: refundAmount, description: description, date: new Date() } }
+                    },
+                    { upsert: true }
+                );
+            }
+        }
         
         if (response) {
             res.json({ success: true, message: 'Your order item is successfully cancelled.' });
@@ -357,6 +399,8 @@ const returnOrder = async(req,res)=>{
             for(let j=0 ; j<orderItem.length ; j++){
                 if( orderItem[j]._id.toString() === id ){
                     returnOrderItem = orderItem[j]
+                    console.log(orderItem[j]);
+                    console.log(returnOrderItem,'return order item');
                     response = await Order.findOneAndUpdate({ userId:user, 'orderItems._id':id },{ $set:{ 'orderItems.$.returnReason':reason, "orderItems.$.orderStatus": "Returned", "orderItems.$.paymentStatus":"Refound Completed" } })
                 }
                 break;
@@ -365,6 +409,33 @@ const returnOrder = async(req,res)=>{
         }
 
         await Product.findByIdAndUpdate({ _id:returnOrderItem.productId },{ $inc:{ quantity:returnOrderItem.cartQuantity } },{ new:true })
+
+        const totalAmount = returnOrderItem.totalPrice;
+        const description = `Refund for returned order item with ID ${id}`;
+
+        const walletData = await Wallet.findOne({ userId: user });
+
+        const refundAmount = totalAmount;
+        if (walletData) {
+            const walletBalance = walletData.balance + refundAmount;
+
+            await Wallet.updateOne(
+                { userId: user },
+                {
+                    $inc: { balance: refundAmount },
+                    $push: { walletHistory: { amount: refundAmount, description: description, date: new Date() } }
+                }
+            );
+        } else {
+            await Wallet.updateOne(
+                { userId: user },
+                {
+                    $set: { balance: refundAmount },
+                    $push: { walletHistory: { amount: refundAmount, description: description, date: new Date() } }
+                },
+                { upsert: true }
+            );
+        }
 
         if(response){
             res.json({ success: true, message: "Your order item is successfully returned." });
@@ -398,8 +469,6 @@ const wishlistPage = async(req,res)=>{
                 as:"productDetails"
             } }
         ])
-
-        console.log(wishlist,'wosh');
         
         // const wishlist = await Wishlist.findOne({ userId: user._id }).populate('wishlistItems.productId');
         // console.log(wishlist);
@@ -422,7 +491,6 @@ const remove = async(req,res)=>{
             { $pull: { wishlistItems: { productId: id } } },
             { new: true }
         )
-        console.log(removeWishlist,'settt');
 
         if(removeWishlist){
             res.json({ success: true, message: "Wishlist item removed successfully" });
@@ -434,6 +502,157 @@ const remove = async(req,res)=>{
         console.log(error.message);
     }
 }
+
+//wallet page
+const walletPage = async(req,res)=>{
+    try {
+
+        const userId = req.session.user_id
+        const user = await User.findOne({ _id:userId })
+
+        const walletData = await Wallet.findOne({ userId:userId })
+
+        if (!walletData) {
+            return res.render('users/Profile/userWallet.ejs', {  user ,walletData: { balance: 0 } });
+        }
+
+        res.render('users/Profile/userWallet.ejs',{ user,walletData })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//add wallet Amount
+const addWalletAmount = async (req, res) => {
+    try {
+        const { amount } = req.body;
+        const userId = req.session.user_id;
+
+        const wallet = {
+            userId: userId,
+            balance: Number(amount),
+            walletHistory: [
+                {
+                    date: new Date(),
+                    description: "Credit",
+                    amount: Number(amount),
+                }
+            ]
+        };
+
+        req.session.walletData = wallet;
+        
+        const option = {
+            amount: amount * 100,
+            currency: "INR",
+            receipt: `order_rcption_${Date.now()}`,
+            payment_capture: 1
+        };
+
+        const razorpayOrder = await razorpayInstance.orders.create(option);
+
+        return res.status(200).json({
+            success: true,
+            message: "Order Created ready for Payment",
+            key_id: "rzp_test_FRaUz1vihG1Qvx",
+            walletAmount: amount,
+            razorpayOrderId: razorpayOrder.id
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+const verifyWalletAmount = async (req, res) => {
+    try {
+        // const { paymentId, walletId } = req.body;
+        const walletData = req.session.walletData;
+
+        if (walletData) {
+            let existingWallet = await Wallet.findOne({ userId: walletData.userId });
+
+            if (existingWallet) {
+
+                existingWallet.balance += walletData.balance;
+                existingWallet.walletHistory.push(...walletData.walletHistory);
+                await existingWallet.save();
+            } else {
+
+                const newWallet = new Wallet(walletData);
+                await newWallet.save();
+            }
+
+            req.session.walletData = null;
+
+            return res.json({ success: true });
+        } else {
+            return res.json({ success: false, message: 'No wallet data in session' });
+        }
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
+//withdraw
+const withdraw = async (req, res) => {
+    try {
+        const { amount } = req.body;
+        const userId = req.session.user_id;
+
+        if (amount <= 0) {
+            return res.status(400).json({ success: false, message: "Invalid withdrawal amount" });
+        }
+
+        const walletData = await Wallet.findOne({ userId: userId });
+
+        if (!walletData) {
+            return res.status(404).json({ success: false, message: "Wallet not found" });
+        }
+
+        if (walletData.balance < amount) {
+            return res.status(400).json({ success: false, message: "Insufficient balance" });
+        }
+
+        walletData.balance -= amount;
+
+        walletData.walletHistory.push({
+            date: new Date(),
+            description: "Debit",
+            amount: -amount
+        });
+
+        await walletData.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Withdrawal successful",
+            balance: walletData.balance
+        });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+//wallet History
+const walletHistoryPage = async(req,res)=>{
+    try {
+        const userId = req.session.user_id
+        const user = await User.findOne({ _id:userId })
+        const wallet = await Wallet.findOne({ userId:userId })
+        res.render('users/Profile/userWalletHistory.ejs',{ user, wallet })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 
 
 
@@ -456,5 +675,12 @@ export {
     returnOrder,
     updatePassword,
     updateProfile,
-    wishlistPage
+    wishlistPage,
+
+    walletPage,
+    addWalletAmount,
+    verifyWalletAmount,
+    withdraw,
+    walletHistoryPage
+
 };

@@ -6,7 +6,7 @@ import path from "path";
 // -----------------------------
 
 import { addCategory, categoryDeleted, categoryPage, createCategory, deleteCategory, deleteCategoryPage, editCategory, editCategoryPage, restoreCategory } from "../controller/admin/adminCategoryController.js";
-import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, verifyAdminLogin } from "../controller/admin/adminController.js";
+import { adminHome, adminLogin, adminLogout, adminRegister, insertAdmin, topSales, verifyAdminLogin } from "../controller/admin/adminController.js";
 import { addCategoryOffer, addCategoryOfferPage, addCoupon, addCouponOfferPage, addProductOffer, addProductOfferPage, categoryOfferPage, couponOfferPage, deleteCategoryOffer, deleteCoupon, deleteProductOffer, productOfferPage } from "../controller/admin/adminOfferController.js";
 import { orderDetailsPage, orderPage, orderStatus } from "../controller/admin/adminOrderController.js";
 import { addProduct, deleteImage, deleteProduct, deleted, deletedProductPage, editProduct, editProductPage, productAdd, productPage, restoreProduct } from "../controller/admin/adminProductController.js";
@@ -139,6 +139,9 @@ admin_route.delete('/couponOffers/delete',deleteCoupon)                         
 // ------------------------------------------------sales Report------------------------------------------------
 admin_route.get('/salesReport',isLogin,salesReportPage)
 admin_route.post('/salesReport/type',salesReport)
+
+// ------------------------------------------------ Top Sales ------------------------------------------------
+admin_route.post('/home',topSales)
 
 
 export default admin_route;

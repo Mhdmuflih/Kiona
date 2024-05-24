@@ -3,12 +3,13 @@ import session from "express-session";
 import multer from "multer"; // multer is using in take a image store
 import path from "path";
 
-import { addToCart, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/user/userCartController.js";
+import { addToCart, applyCoupon, cart, checkoutAddAddress, checkoutAddAddressPage, checkoutDeleteAddress, checkoutEditAddress, checkoutEditAddressPage, checkoutPage, decrementQuantity, incrementQuantity, removeCart, selectAddress, summary } from "../controller/user/userCartController.js";
 import { forgotOtpPage, forgotOtpVerification, forgotPassword, forgotPasswordPage, insertUser, login, loginHome, otp, productDetails, productPage, register, resendOTP, resetPassword, resetPasswordPage, userLogout, verifyLogin, verifyOtp } from "../controller/user/userController.js";
-import { orderSuccessPage, payment, verifyPayment } from "../controller/user/userOrderController.js";
-import { addAddress, addAddressPage, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, wishlistPage } from "../controller/user/userProfileController.js";
-import { addToWishlist } from "../controller/user/userWishlist.js";
+import { orderSuccessPage, payment, reVerificationPayment, retryPayment, verifyPayment } from "../controller/user/userOrderController.js";
+import { addAddress, addAddressPage, addWalletAmount, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, verifyWalletAmount, walletHistoryPage, walletPage, wishlistPage, withdraw } from "../controller/user/userProfileController.js";
+import { addToWishlist, wishlitAddToCart } from "../controller/user/userWishlist.js";
 import { Cache, isLogin, isLogout } from "../middleware/userAuth.js";
+import { userInfo } from "os";
 
 // import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
@@ -74,7 +75,6 @@ user_route.get('/',loginHome)                                           //home p
 user_route.get('/products',productPage)                                 //show the product page
 user_route.get('/productDetails',productDetails)                        //single product details
 
-
 //------------------------------------------------user Profile------------------------------------------------
 user_route.get('/userProfile',isLogin,profilePage)                              //user profile page
 user_route.put('/userProfile',updateProfile)                            //update user profile
@@ -98,6 +98,12 @@ user_route.get('/orderDetails',isLogin,orderDetailsPage)                //single
 user_route.patch('/orderDetails/cancelOrder',cancelOrder)      //cancel the order
 user_route.patch('/orderDetails/returnOrder',returnOrder)       //retuen order status
 
+user_route.get('/wallet',isLogin,walletPage)                    //wallet page
+user_route.post('/addWalletAmount',addWalletAmount)             //add wallet amount
+user_route.post('/verifyWalletAmount',verifyWalletAmount)       //verify wallet amount
+user_route.post('/withdraw',withdraw)                           //withdraw wallet amount
+user_route.get('/wallet/walletHistory',isLogin,walletHistoryPage)   //wallet history
+
 
 //------------------------------------------------shoping carts------------------------------------------------
 user_route.get('/shoping-cart',cart)                                    //user cart page
@@ -105,6 +111,8 @@ user_route.post('/productDetails/cart',addToCart)                       //add to
 user_route.post('/shoping-cart/increment',incrementQuantity)            //increment quantity
 user_route.post('/shoping-cart/decrement',decrementQuantity)            //decrement quantity
 user_route.delete('/shoping-cart/remove',removeCart)                    //remove from cart
+
+user_route.post('/coupon',applyCoupon)
 
 //------------------------------------------------select Address in order ,checkout, order------------------------------------------------
 user_route.get('/shoping-cart/selectAddress',isLogin,selectAddress)             //checkout address select page
@@ -125,10 +133,15 @@ user_route.post('/paymentSuccess',verifyPayment)
 
 user_route.get('/orderSuccess',isLogin,orderSuccessPage)                                //order succes page
 
+//reTry payment in order page
+user_route.post('/retryPayment',retryPayment)
+user_route.post('/reVerification',reVerificationPayment)
+
 //------------------------------------------------Wishlist------------------------------------------------
-user_route.get('/wishlist',isLogin,wishlistPage)
-user_route.post('/products/wishlist',addToWishlist)
-user_route.delete('/wishlist/remove',remove)
+user_route.get('/wishlist',isLogin,wishlistPage)                                //wishlist Page
+user_route.post('/products/wishlist',addToWishlist)                             //add wishlist
+user_route.delete('/wishlist/remove',remove)                                    //remove wishlist
+user_route.post('/wishlit/addToCart',wishlitAddToCart)
 
 
 

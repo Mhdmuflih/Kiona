@@ -260,11 +260,8 @@
 						});
 					}
 				}else if(payment === "Online Payment"){
-					console.log('hloo');
 					const response = await axios.post('/checkout/payment', {payment});
 					const { totalPrice, orderId, key_id, razorpayOrderId } = response.data
-					console.log(response.data,'ith response data');
-					// console.log(orderId,'ordre isddfd');
 					if(response.data.success){
 						var options = {
 							"key": key_id,
@@ -302,6 +299,23 @@
 							window.location.href = "/order"
 						})
 					}
+				}else if(payment === "Wallet"){
+					const response = await axios.post('/checkout/payment', {payment});
+					if (response.data.success) {
+						Swal.fire({
+							icon: 'success',
+							title: 'Confirmed!',
+							text: response.data.message
+						}).then(()=>{
+							window.location.href = '/orderSuccess'
+						})
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Failed!',
+							text: response.data.message || 'Unable to process the order.'
+						});
+					}
 				}
 			} catch (error) {
 				console.error('Error during the transaction:', error);
@@ -314,13 +328,9 @@
 		}
 	}
 	async function verifyPayment(paymentId, orderId) {
-		console.log(paymentId);
-		console.log(orderId);
-		// console.log(signature);
 		try {
 			const response = await axios.post('/paymentSuccess', { paymentId, orderId });
 			if (response.data.success) {
-				console.log('kooioii');
 				Swal.fire({
 					title: "Order Placed",
 					text: "Your Order is Confirmed",
