@@ -140,7 +140,8 @@ const adminHome = async (req, res) => {
         //total Category
         const totalCategories = await Category.countDocuments({ delete: false });
 
-        const statuses = ['Ordered', 'Shipped', 'Delivered', 'Canceled', 'Returned'];
+        //traffic chart data. all order status count
+        const statuses = ['Ordered', 'Shipped', 'Delivered', 'Cancelled', 'Returned'];
         const counts = {};
       
         for (const status of statuses) {
@@ -152,15 +153,70 @@ const adminHome = async (req, res) => {
       
           counts[status] = countResult[0]?.count || 0;
         }
-      
 
-        // console.log(orderedCount,'orderedcount');
-        // console.log(shippedCount,'shipped count');
-        // console.log(deliveredCount,'delivery count');
-        // console.log(canceledCount,"cancel");
-        // console.log(returnedCount,'returned count');
+        //sales amount in using graph
+        const today = new Date();
+        const weeklySales = [];
 
+        for (let i = 0; i < 4; i++) {
+            const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (7 * (i + 1)));
+            const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (7 * i) - 1);
 
+            const weeklyTotalResults = await Order.aggregate([
+                { $match: { orderDate: { $gte: startOfWeek, $lte: endOfWeek } } },
+                { $unwind: "$orderItems" },
+                { $match: { 'orderItems.orderStatus': { $in: ['Ordered', 'Shipped', 'Delivered'] } } },
+                {
+                    $group: {
+                        _id: null,
+                        totalPrice: {
+                            $sum: {
+                                $cond: {
+                                    if: "$orderItems.offerPrice",
+                                    then: "$orderItems.offerPrice",
+                                    else: "$orderItems.productPrice"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            const totalOrderPriceWeekly = weeklyTotalResults.length > 0 ? weeklyTotalResults[0].totalPrice : 0;
+            weeklySales.push(totalOrderPriceWeekly);
+        }
+
+        // Calculate monthly sales for the last 12 months
+        const monthlySales = [];
+        
+        for (let i = 0; i < 12; i++) {
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() - i + 1, 0);
+
+            const monthlyTotalResults = await Order.aggregate([
+                { $match: { orderDate: { $gte: firstDayOfMonth, $lte: lastDayOfMonth } } },
+                { $unwind: "$orderItems" },
+                { $match: { 'orderItems.orderStatus': { $in: ['Ordered', 'Shipped', 'Delivered'] } } },
+                {
+                    $group: {
+                        _id: null,
+                        totalPrice: {
+                            $sum: {
+                                $cond: {
+                                    if: "$orderItems.offerPrice",
+                                    then: "$orderItems.offerPrice",
+                                    else: "$orderItems.productPrice"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            const totalOrderPriceMonthly = monthlyTotalResults.length > 0 ? monthlyTotalResults[0].totalPrice : 0;
+            monthlySales.push(totalOrderPriceMonthly);
+        }
+        
         res.render('admin/index.ejs',{
             admin: adminData,
             category: categoryCount,
@@ -169,12 +225,15 @@ const adminHome = async (req, res) => {
             orderItemsCount,
             totalProducts,
             totalCategories,
-            counts
+            counts,
+            weeklySales,
+            monthlySales
         })
     } catch (error) {
         console.log(error.message)
     }
 }
+
 
 //top sales count
 const topSales = async (req, res) => {
@@ -273,6 +332,6 @@ export {
     insertAdmin,
     verifyAdminLogin,
 
-    topSales
+    topSales,
 
 };

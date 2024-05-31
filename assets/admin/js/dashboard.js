@@ -512,7 +512,7 @@
         data: trafficChartData,
         options: trafficChartOptions
       });
-      $("#traffic-chart-legend").html(trafficChart.generateLegend());      
+      $("#traffic-chart-legend").html(trafficChart.generateLegend());
     }
     if ($("#inline-datepicker").length) {
       $('#inline-datepicker').datepicker({

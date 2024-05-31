@@ -115,9 +115,11 @@
                                             <% wishlist.forEach(function(item) { %>
                                             <tr class="table_row">
                                                 <td class="column-1">
-                                                    <div class="how-itemcart1">
-                                                        <img src="/Photos/product/<%= item.productDetails[0].image[0] %>" alt="IMG" style="max-width: 100px; max-height: 100px;">
-                                                    </div>
+                                                    <a href="/productDetails?productId=<%= item.wishlistItems.productId %>">
+                                                        <div class="how-itemcart1">
+                                                            <img src="/Photos/product/<%= item.productDetails[0].image[0] %>" alt="IMG" style="max-width: 100px; max-height: 100px;">
+                                                        </div>
+                                                    </a>
                                                 </td>
                                                 <td class="column-2">
                                                     <%= item.productDetails[0].name %> <br>

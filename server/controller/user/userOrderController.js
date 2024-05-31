@@ -146,6 +146,7 @@ const payment = async (req,res)=>{
         req.session.cartProduct = null;
         req.session.address_data = null;
         req.session.cartAllProduct = null;
+        req.session.totalPrice = null;
 
         return res.json({ success: true, message: "Order placed successfully", order: saveOrder });
 
@@ -178,7 +179,7 @@ const verifyPayment = async (req, res) => {
 //retry payment in order page
 const retryPayment = async(req,res)=>{
     try {
-        const { orderId, itemId, totalPrice } = req.body
+        const { orderId, totalPrice } = req.body
 
         const option = {
             amount: Math.round(totalPrice),
@@ -195,7 +196,6 @@ const retryPayment = async(req,res)=>{
             key_id: "rzp_test_FRaUz1vihG1Qvx",
             totalAmount:Math.round(totalPrice),
             orderedId: orderId,
-            ItemId:itemId,
             razorpayOrderId:razorpayOrder._id
         });
 
@@ -212,15 +212,15 @@ const retryPayment = async(req,res)=>{
 //reVerify payment
 const reVerificationPayment = async(req,res)=>{
     try {
-        const { paymentId, orderId, itemId } = req.body
+        const { paymentId, orderId } = req.body
 
-        const orderData = await Order.findOne({ _id:orderId })
+        const orderData = await Order.findOneAndUpdate({ _id:orderId },{ $set:{ paymentStatus:"Payment Completed" } })
 
-        for(let i=0 ; i<orderData.orderItems.length ; i++){
-            if (orderData.orderItems[i]._id.toString() === itemId) {
-                orderData.orderItems[i].paymentStatus = "Payment Completed"
-            }
-        }
+        // for(let i=0 ; i<orderData.length ; i++){
+        //     if (orderData.orderItems[i]._id.toString() === orderId) {
+        //         orderData.orderItems[i].paymentStatus = "Payment Completed"
+        //     }
+        // }
 
         await orderData.save();
 

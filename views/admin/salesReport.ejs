@@ -175,43 +175,57 @@
                     </div>
         
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="font-size: 8px; padding: 5px;">No</th>
-                                    <th style="font-size: 8px; padding: 5px;">Order Id</th>
-                                    <th style="font-size: 8px; padding: 5px;">User Name</th>
-                                    <th style="font-size: 8px; padding: 5px;">Address</th>
-                                    <th style="font-size: 8px; padding: 5px;">Date</th>
-                                    <th style="font-size: 8px; padding: 5px;">Product Name</th>
-                                    <th style="font-size: 8px; padding: 5px;">Price</th>
-                                    <th style="font-size: 8px; padding: 5px;">Quantity</th>
-                                    <th style="font-size: 8px; padding: 5px;">Total Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% for(let i=0 ; i<orderItems.length ; i++){ %>
-                                    <tr>
-                                        <td style="font-size: 8px;"><%= i+1 %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderId %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderUser %></td>
-                                        <td style="font-size: 8px;">
-                                            <%= orderItems[i].address.name %>, <%= orderItems[i].address.addressType %>,<br>
-                                            <%= orderItems[i].address.address %>,<br>
-                                            <%= orderItems[i].address.locality %>, <%= orderItems[i].address.city %><br>
-                                            <%= orderItems[i].address.state %> - <%= orderItems[i].address.pincode %><br>
-                                            Mobile: <%= orderItems[i].address.mobile %>
-                                        </td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderDate.toDateString() %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.productName %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.productPrice %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.cartQuantity %></td>
-                                        <td style="font-size: 8px;"><%= orderItems[i].orderItems.totalPrice %></td>
-                                    </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
+                      <table class="table table-bordered">
+                          <thead>
+                              <tr>
+                                  <th style="font-size: 8px; padding: 5px;">No</th>
+                                  <th style="font-size: 8px; padding: 5px;">Order Id</th>
+                                  <th style="font-size: 8px; padding: 5px;">User Name</th>
+                                  <th style="font-size: 8px; padding: 5px;">Address</th>
+                                  <th style="font-size: 8px; padding: 5px;">Date</th>
+                                  <th style="font-size: 8px; padding: 5px;">Product Name</th>
+                                  <th style="font-size: 8px; padding: 5px;">Price</th>
+                                  <th style="font-size: 8px; padding: 5px;">Quantity</th>
+                                  <th style="font-size: 8px; padding: 5px;">Total Price</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <% let totalSales = 0; %>
+                              <% for(let i = 0; i < orderItems.length; i++){ %>
+                                  <tr>
+                                      <td style="font-size: 8px;"><%= i + 1 %></td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderId %></td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderUser %></td>
+                                      <td style="font-size: 8px;">
+                                          <%= orderItems[i].address.name %>, <%= orderItems[i].address.addressType %>,<br>
+                                          <%= orderItems[i].address.address %>,<br>
+                                          <%= orderItems[i].address.locality %>, <%= orderItems[i].address.city %><br>
+                                          <%= orderItems[i].address.state %> - <%= orderItems[i].address.pincode %><br>
+                                          Mobile: <%= orderItems[i].address.mobile %>
+                                      </td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderDate.toDateString() %></td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderItems.productName %></td>
+                                      <td style="font-size: 8px;">
+                                          <% if(orderItems[i].orderItems.offerPrice){ %>
+                                              <%= orderItems[i].orderItems.offerPrice %>
+                                              <% totalSales += orderItems[i].orderItems.offerPrice * orderItems[i].orderItems.cartQuantity %>
+                                          <% } else { %>
+                                              <%= orderItems[i].orderItems.productPrice %>
+                                              <% totalSales += orderItems[i].orderItems.productPrice * orderItems[i].orderItems.cartQuantity %>
+                                          <% } %>
+                                      </td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderItems.cartQuantity %></td>
+                                      <td style="font-size: 8px;"><%= orderItems[i].orderItems.totalPrice %></td>
+                                  </tr>
+                              <% } %>
+                              <tr>
+                                  <td colspan="8" style="font-size: 8px; text-align: right; color: red;"><strong>Total Sales Amount</strong></td>
+                                  <td style="font-size: 8px; color: green;"><strong><%= totalSales %></strong></td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  
                 </div>
             </div>
         </div>
@@ -259,22 +273,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <script>
-          document.getElementById("downloadPdfBtn").addEventListener("click", function () {
+      document.getElementById("downloadPdfBtn").addEventListener("click", function () {
           let doc = new window.jspdf.jsPDF();
           let pageCenter = doc.internal.pageSize.getWidth() / 2;
-
+  
+          // Set the document title and subtitle
           doc.setFontSize(25);
+          doc.setTextColor(237, 45, 154); // Color #ed2d9a
           doc.text("KIONA", pageCenter, 10, { align: 'center' });
           doc.setFontSize(15);
+          doc.setTextColor(255, 0, 0); // Example: Red color
           doc.text("Sales Report", pageCenter, 20, { align: 'center' });
-
+  
+          // Select the table element
           let table = document.querySelector(".table");
-
-          doc.autoTable({ html: table, startY: 35 });
-
+  
+          // Generate the PDF with autoTable
+          doc.autoTable({
+              html: table,
+              startY: 35,
+              styles: {
+                  fontSize: 8, // Reduce font size
+                  cellPadding: 1, // Reduce cell padding
+                  lineWidth: 0.1, // Reduce line width
+              },
+              headStyles: {
+                  fillColor: [240, 240, 240], // Light gray background for header
+                  textColor: [0, 0, 0], // Black text color for header
+                  fontSize: 8, // Reduce font size for header
+              },
+              bodyStyles: {
+                  fillColor: [255, 255, 255], // White background for body
+                  textColor: [0, 0, 0], // Black text color for body
+                  fontSize: 8, // Reduce font size for body
+              },
+          });
+  
+          // Save the PDF
           doc.save("sales_report.pdf");
-        });
-    </script>
+      });
+  </script>
+  
 
 <script>
   async function reportType(value){

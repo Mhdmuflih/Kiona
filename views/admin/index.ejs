@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
+    <title>Kiona Admin</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
@@ -221,8 +221,14 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="clearfix">
-                      <h4 class="card-title float-left">Visit And Sales Statistics</h4>
+                      <h4 class="card-title float-left">Total Order Sales Details</h4>
+                      <select id="dataSelector" class="form-control">
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                      </select>
                       <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-right"></div>
+                        <div id="weeklySalesData" style="display: none;"> <%= JSON.stringify(weeklySales) %> </div>
+                        <div id="monthlySalesData" style="display: none;"> <%= JSON.stringify(monthlySales) %> </div>
                     </div>
                     <canvas id="visit-sale-chart" class="mt-4"></canvas>
                   </div>
@@ -231,7 +237,7 @@
               <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Traffic Sources</h4>
+                    <h4 class="card-title"> Order Status Details </h4>
                     <canvas id="traffic-chart"></canvas>
                     <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
                   </div>
@@ -277,9 +283,8 @@
                 </div>
               </div>
             </div>
-            
-            
-            
+            <!-- graph count in order. all data -->
+            <div id="counts-data" style="display: none;"><%= JSON.stringify(counts) %></div>
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
@@ -315,12 +320,107 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- sales weekly monthly graph -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+
+        const weeklySales = JSON.parse(document.getElementById('weeklySalesData').innerText);
+        const monthlySales = JSON.parse(document.getElementById('monthlySalesData').innerText);
+
+    
+        const ctx = document.getElementById('visit-sale-chart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [{
+              label: 'Sales Amount',
+              data: [],
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Sales Amount'
+                }
+              }
+            }
+          }
+        });
+    
+        function updateChart() {
+          var select = document.getElementById('dataSelector').value;
+          if (select === 'Weekly') {
+            salesChart.data.labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4']; // Assuming weekly labels
+            salesChart.data.datasets[0].data = weeklySales;
+          } else if (select === 'Monthly') {
+            salesChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // Assuming monthly labels
+            salesChart.data.datasets[0].data = monthlySales;
+          }
+          salesChart.update();
+        }
+    
+        document.getElementById('dataSelector').addEventListener('change', updateChart);
+    
+        // Initial chart load
+        updateChart();
+      });
+    </script>
+    
+
+<!-- graph in orders -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+      const counts = JSON.parse(document.getElementById('counts-data').textContent);
+  
+        const ctx = document.getElementById('traffic-chart').getContext('2d');
+        const trafficChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(counts),
+            datasets: [{
+              label: 'Order Status',
+              data: Object.values(counts),
+              backgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#FF9F40',
+                '#4BC0C0'
+              ],
+              hoverBackgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#FF9F40',
+                '#4BC0C0'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          }
+        });
+      });
+    </script>
 
 
+<!-- top sales table -->
     <script>
       async function topSale(value) {
         try {
-          console.log(value, 'ith aa value');
           const response = await axios.post('/admin/home', { value });
           if (response.data.success) {
             if (value === "Category") {

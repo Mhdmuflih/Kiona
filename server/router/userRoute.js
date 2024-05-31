@@ -9,9 +9,7 @@ import { orderSuccessPage, payment, reVerificationPayment, retryPayment, verifyP
 import { addAddress, addAddressPage, addWalletAmount, addressPage, cancelOrder, deleteAddress, editAddresPage, editAddress, orderDetailsPage, orderPage, passwordChangePage, profilePage, remove, returnOrder, updatePassword, updateProfile, verifyWalletAmount, walletHistoryPage, walletPage, wishlistPage, withdraw } from "../controller/user/userProfileController.js";
 import { addToWishlist, wishlitAddToCart } from "../controller/user/userWishlist.js";
 import { Cache, isLogin, isLogout } from "../middleware/userAuth.js";
-import { userInfo } from "os";
 
-// import { forgot, forgotOTP } from "../controller/forgotPassword.js";
 // -----------------------------------------------------------------------
 
 const user_route = express();   //express connection

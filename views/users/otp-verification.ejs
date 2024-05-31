@@ -15,7 +15,7 @@
         <form  method="post" class="form" id="otpForm"  onsubmit="verifyOTP(event);">
             <% if(message){%>
                 <p class="text-danger" id="ok" style="color: red;">
-                  <%= message %>
+                <%= message %>
                 </p>
             <% } %>
             <div class="input_field_box">
@@ -39,12 +39,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
-
     const OTPinputs = document.querySelectorAll("input");
     const button = document.querySelector('button#verify');
     const resendButton = document.querySelector('button#resend');
     const otpTimerElement = document.getElementById('otpTimer');
+    let isSubmitting = false; // Flag to prevent multiple submissions
 
     window.addEventListener("load", () => OTPinputs[0].focus());
 
@@ -81,7 +80,7 @@
     let otpTimer;
 
     function startOTPTimer() {
-        const otpValidityDuration = 1 * 60 * 1000; // 3 minutes
+        const otpValidityDuration = 1 * 60 * 1000; // 1 minute
         clearTimeout(otpTimer);
         let remainingTime = otpValidityDuration;
         otpTimer = setInterval(() => {
@@ -121,18 +120,24 @@
     // Function to verify OTP
     function verifyOTP(event) {
         event.preventDefault();
+        if (isSubmitting) return; // Prevent multiple submissions
+        isSubmitting = true;
+        button.disabled = true; // Disable button to prevent further clicks
+
         const otp = Array.from(OTPinputs).map(input => input.value).join('');
         axios.post('/otp', { otp })
             .then(response => {
                 if (!response.data.success) {
-                    otpMessage.innerText = "Invalid OTP. Please try again.";
-                    otpMessage.style.color = 'red';
+                    document.getElementById('otpMessage').innerText = "Invalid OTP. Please try again.";
+                    document.getElementById('otpMessage').style.color = 'red';
                     setTimeout(() => {
-                        otpMessage.innerText = "";
+                        document.getElementById('otpMessage').innerText = "";
+                        isSubmitting = false;
+                        button.disabled = false; // Re-enable the button
                     }, 3000); // Clear message after 3 seconds
                 } else {
-                    otpMessage.innerText = "OTP verified successfully!";
-                    otpMessage.style.color = 'green';
+                    document.getElementById('otpMessage').innerText = "OTP verified successfully!";
+                    document.getElementById('otpMessage').style.color = 'green';
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 1000); // Redirect after 1 second
@@ -141,9 +146,10 @@
             .catch(error => {
                 console.error('Error verifying OTP:', error);
                 document.getElementById('otpMessage').innerText = "An error occurred while verifying OTP.";
+                isSubmitting = false;
+                button.disabled = false; // Re-enable the button in case of error
             });
     }
 </script>
 </body>
-
 </html>

@@ -12,6 +12,13 @@ import Product from "../../model/productModel.js";
 // category offer page
 const categoryOfferPage = async(req,res)=>{
     try {
+
+        // Delete expired category offers
+        const autoDeleteOffer = await CategoryOffer.deleteMany({ expaireDate: { $lt: new Date() } });
+        // if(autoDeleteOffer){
+
+        // }
+
         const categoryOffer = await CategoryOffer.aggregate([
             { $lookup: {
                 from:"categories",
@@ -41,12 +48,12 @@ const addCategoryOfferPage = async(req,res)=>{
 //add Category offer in post
 const addCategoryOffer = async(req,res)=>{
     try {
-        const { name, offer, date } = req.body
+        const { category, offer, date } = req.body
 
-        const category = await Category.findOne({name:name})
+        const categoryData = await Category.findOne({name:category})
 
         const categoryOffer = new CategoryOffer({
-            categoryId:category._id,
+            categoryId:categoryData._id,
             offer:offer,
             expaireDate:date
         })
@@ -102,6 +109,10 @@ const deleteCategoryOffer = async (req, res) => {
 //product offer page
 const productOfferPage = async(req,res)=>{
     try {
+
+        // Delete expired product offers
+        await ProductOffer.deleteMany({ expaireDate: { $lt: new Date() } });
+
         const productOffer = await ProductOffer.aggregate([
             { $lookup: {
                 from:"products",
@@ -177,6 +188,9 @@ const deleteProductOffer = async(req,res)=>{
 //coupons Offer Page
 const couponOfferPage = async(req,res)=>{
     try {
+
+        await CouponOffer.deleteMany({ expaireDate: { $lt: new Date() } });
+
         const coupons = await CouponOffer.find()
         res.render('admin/Offers/coupon.ejs', { coupons });
     } catch (error) {
@@ -222,7 +236,9 @@ const addCoupon = async(req,res)=>{
 const deleteCoupon = async(req,res)=>{
     try {
         const { id } = req.body
+
         const response = await CouponOffer.findOneAndDelete({ _id:id })
+
         if(response){
             res.json({ success:true, message:"Coupon Offer Deleted Successfully." })
         }else{

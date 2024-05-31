@@ -290,6 +290,13 @@
 						};
 						var paymentGateway = new Razorpay(options);
 						paymentGateway.open();
+						paymentGateway.on('payment.failed', (response) => {
+							setTimeout(() => {
+								paymentGateway.close();
+								window.location.href = "/order";
+							}, 3000);
+						});
+
 					}else{
 						Swal.fire({
 							icon: 'error',
@@ -338,6 +345,14 @@
 				}).then(() => {
 					window.location.href = '/orderSuccess';
 				});
+			}else{
+				Swal.fire({
+					icon:"error",
+					text:"Your Payment is Failed",
+					icon:"error"
+				}).then(()=>{
+					window.location.href = '/order';
+				})
 			}
 		} catch (error) {
 			console.log(error.message);
@@ -348,37 +363,6 @@
 			});
 		}
 	}
-
-		
-		// fetch('/verifyPayment', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify({
-		// 		paymentId: paymentId,
-		// 		orderId: orderId,
-		// 		razorpaySignature: signature
-		// 	})
-		// })
-		// .then(response => response.json())
-		// .then(data => {
-		// 	if (data.success) {
-		// 		Swal.fire({
-		// 			title: "Order Placed",
-		// 			text: "Your Order is Confirmed",
-		// 			icon: "success"
-		// 		}).then(() => {
-		// 			window.location.href = /orderDetails?orderId=${orderId};
-		// 		});
-		// 	} else {
-		// 		Swal.fire('Error', 'Payment verification failed. Please try again.', 'error');
-		// 	}
-		// })
-		// .catch(error => {
-		// 	console.error('Error:', error);
-		// 	Swal.fire('Error', 'Network Error. Try again.', 'error');
-		// });
 
 	</script>
 

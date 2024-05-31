@@ -146,10 +146,10 @@
 							<% wishlistCount++; %>
 						<% } %>
 
-						<a href="#" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
+						<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
 							data-notify="<%= wishlistCount %>">
 							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
+						</div>
 					</div>
 				</nav>
 			</div>
@@ -269,6 +269,76 @@
 			</div>
 		</div>
 	</header>
+
+
+
+<!-- Wishlist modal  -->
+<div class="wrap-header-cart js-panel-wishlist">
+    <div class="s-full js-hide-wishlist"></div>
+
+    <div class="header-cart flex-col-l p-l-65 p-r-25">
+        <div class="header-cart-title flex-w flex-sb-m p-b-8">
+            <span class="mtext-103 cl2">
+                Your Wishlist
+            </span>
+
+            <div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-wishlist">
+                <i class="zmdi zmdi-close"></i>
+            </div>
+        </div>
+
+        <div class="header-cart-content flex-w js-pscroll">
+            <ul class="header-cart-wrapitem w-full">
+                <% if (wishlistProduct.length === 0) { %>
+                    <img src="/empty%20wishlist.jpg" alt="Empty Wishlist" style="width: 200px; height: auto;">
+                <% } else { %>
+                    <% for (let i = 0; i < wishlistProduct.length; i++) { %>
+                        <li class="header-cart-item flex-w flex-t m-b-12">
+                            <div class="header-cart-item-img">
+                                <img src="/Photos/product/<%= wishlistProduct[i].productDetails[0].image[0] %>" alt="IMG">
+                            </div>
+
+                            <div class="header-cart-item-txt p-t-8">
+                                <a href="/productDetails?productId=<%= wishlistProduct[i].productDetails[0]._id %>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                    <%= wishlistProduct[i].productDetails[0].name %>
+                                    <% if(wishlistProduct[i].productDetails[0].offer){ %>
+                                        <span style="color: green; font-weight: bold; font-size: larger; margin-left: 10px;">
+                                            <%= wishlistProduct[i].productDetails[0].offer %> %
+                                        </span>
+                                    <% } %>
+                                </a>
+
+                                <% if(wishlistProduct[i].productDetails[0].offerPrice){ %>
+                                    <span> RS:  <%= wishlistProduct[i].productDetails[0].offerPrice %> </span>
+                                    <span class="stext-105 cl3">
+                                        <strike> <%= wishlistProduct[i].productDetails[0].price  %> </strike>
+                                    </span>
+                                <% }else{ %>
+                                    <span class="header-cart-item-info">
+                                        RS: <%= wishlistProduct[i].productDetails[0].price %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </li>
+                    <% } %>
+                <% } %>
+            </ul>
+			<div class="w-full">
+				<div class="header-cart-buttons flex-w w-full">
+					<a href="/wishlist"
+						class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+						View Wishlist
+					</a>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 	<!-- Cart -->
 	<div class="wrap-header-cart js-panel-cart">
@@ -849,8 +919,13 @@
 				
             <% } %>
 		</div>
+		<!-- Pagination controls -->
+		<div class="pagination" style="margin-top:20px;text-align:center;"> <% if (currentPage > 1) { %> <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" style="display:inline-block;padding:8px 16px;text-decoration:none;color:black;border:1px solid #ddd;margin:0 4px;border-radius:4px;">Previous</a> <% } %> <% for (let i = 1; i <= totalPages; i++) { %> <a href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>" class="<%= i === currentPage ? 'active' : '' %>" style="display:inline-block;padding:8px 16px;text-decoration:none;color:black;border:1px solid #ddd;margin:0 4px;border-radius:4px;"> <%= i %> </a> <% } %> <% if (currentPage < totalPages) { %> <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" style="display:inline-block;padding:8px 16px;text-decoration:none;color:black;border:1px solid #ddd;margin:0 4px;border-radius:4px;">Next</a> <% } %> </div>
+
+
 
 		<!-- Back to top -->
+
 		<div class="btn-back-to-top" id="myBtn">
 			<span class="symbol-btn-back-to-top">
 				<i class="zmdi zmdi-chevron-up"></i>
@@ -985,6 +1060,20 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+		<!-- wishlist modal working code -->
+		<script>
+			document.querySelector('.icon-header-noti[data-notify="<%= wishlistCount %>"]').addEventListener('click', () => {
+				document.querySelector('.js-panel-wishlist').classList.add('show-header-cart');
+			});
+
+			document.querySelectorAll('.js-hide-wishlist').forEach((element) => {
+				element.addEventListener('click', () => {
+					document.querySelector('.js-panel-wishlist').classList.remove('show-header-cart');
+				});
+			});
+
+		</script>
 
 		<script>
 			async function sortLowToHigh() {

@@ -89,123 +89,139 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8">
-                            <div class="wrap-table-shopping-cart">
-                                <table class="table-shopping-cart">
-                                    <thead>
-                                        <!-- <tr>
-                                            <th class="column-1"></th>
-                                            <th></th>
-                                            <th class="column-2"></th>
-                                            <th class="column-3"></th>
-                                            <th class="column-4"></th>
-                                            <th class="column-5"></th>
-                                        </tr> -->
-                                    </thead>
-                                    <tbody>
-                                        <% if (order.length === 0) { %>
-                                        <tr>
-                                            <td colspan="7" class="text-center"><img style="width: 500px; height: 450px;"
-                                                    src="/empty order.png" alt=""></td>
-                                        </tr>
-                                        <% } else { %>
-                                        <% order.forEach(orderItem => { %>
-                                        <% if (orderItem.orderItems.length === 0) { %>
-                                        <tr>
-                                            <td colspan="7" class="text-center">No items in this order.</td>
-                                        </tr>
-                                        <% } else { %>
-                                        <% orderItem.orderItems.forEach(item => { %>
-                                        <tr class="table_row">
-                                            <td class="column-1">
-                                                <% if (item.image && item.image.length > 0) { %>
-                                                    <div class="how-itemcart1">
-                                                        <img src="/Photos/product/<%= item.image[0] %>" alt="<%= item.productName %>" style="max-width: 100px; max-height: 80px;">
+
+                    <!-- My Orders Section Begin -->
+                    <div class="col-lg-8">
+                        <div class="container mt-5">
+                            <div class="row d-flex justify-content-center">
+                                <!-- Orders Column -->
+                                <div class="col-md-12">
+                                    <div class="list-group">
+                                        <!-- Loop through orders here -->
+                                        <% let totalAmount = 0; %>
+                                        <% for(let i=0 ; i<orders.length ; i++){ %>
+                                            <% for(let j=0  ; j<orders[i].orderItems.length ; j++){ %>
+                                                <% if(orders[i].orderItems[j].offer){ %>
+                                                    <% totalAmount += orders[i].orderItems[j].offerPrice %>
+                                                <% }else{ %>
+                                                    <% totalAmount += orders[i].orderItems[j].productPrice %>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+                    
+                                        <% if(orders.length == 0){ %>
+                                            <img style="width: 300px; height: 300px; margin: auto;" src="/empty order.png" alt="">
+                                        <% }else{ %>
+                                            <% for(let i = orders.length - 1; i >= 0; i--){ %>
+                                                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3" style="border: 0.5px solid;">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <h5 class="mb-1">Order ID: <%= orders[i]._id %></h5>
+                                                        <div>
+                                                            <h6> Payment Method: <span class="text-info small mb-0"> <%= orders[i].paymentMethod %> </span></h6>
+                                                        </div>
+                                                        <div>
+                                                            <h6>Payment Status:
+                                                                <% if(orders[i].paymentMethod === "Online Payment"){ %>
+                                                                    <% if(orders[i].paymentStatus === 'Payment Completed' ){ %>
+                                                                        <p class="text-success small mb-0">Payment Completed</p>
+                                                                    <% }else { %>
+                                                                        <div style="display: flex; align-items: center;">
+                                                                            <p class="text-danger small mb-0" style="margin-right: 10px;"><%= orders[i].paymentStatus %></p>
+                                                                            <button type="button" style="background-color: green; border: none; color: white; padding: 4px 6px; text-align: center; text-decoration: none; display: inline-block; font-size: 7px; margin: 4px 2px; cursor: pointer; border-radius: 5px;" onclick="payment('<%= orders[i]._id %>', '<%= totalAmount %>')">Try Again</button>
+                                                                        </div>
+                                                                    <% } %>
+                                                                <% }else if(orders[i].paymentMethod === "Wallet"){ %>
+                                                                    <% if(orders[i].paymentStatus === 'Payment Completed'){ %>
+                                                                        <p class="text-success small mb-0">Payment Completed</p>
+                                                                    <% } %>
+                                                                <% }else{ %>
+                                                                    
+                                                                <% } %>
+                                                            </h6>
+                                                        </div>
                                                     </div>
-                                                <% } %>
-                                            </td>
-                                            <td class="column-2">
-                                                <% if(item.offer){ %>
-                                                    <%= item.productName %>
-                                                    <span style="color: green; font-weight: bold; font-size: 16px;"> <%= item.offer %>% </span><br>
-                                                <% }else{ %>
-                                                    <%= item.productName %><br>
-                                                <% } %>
-
-                                                <% if(item.offerPrice){ %>
-                                                    Rs: <%= item.offerPrice %>
-                                                    <strike> <%= item.productPrice %> </strike>
-                                                <% }else{ %>
-                                                    <%= item.productPrice %>
-                                                <% } %>
-
-                                            </td>
-                                            <!-- <td class="column-3 pb-5 text-danger">Rs<%= item.totalPrice %></td> -->
-                                            <td>
-                                                <%= orderItem.paymentMethod %>
-                                                <% if(orderItem.paymentMethod == "Online Payment"){ %>
-                                                    <% if( orderItem.paymentStatus == "Payment Completed" ){ %>
-                                                        <p class="text-success small mb-0"> <%= orderItem.paymentStatus %> </p>
-                                                    <% }else if(item.paymentStatus == "Payment Completed") { %>
-                                                        <p class="text-success small mb-0" ><%= item.paymentStatus %></p>
-                                                    <% }else{ %>
-                                                        <div style="display: flex; align-items: center;">
-                                                            <p class="text-danger small mb-0" style="margin-right: 10px;"><%= item.paymentStatus %></p>
-                                                            <button type="button" style="background-color: green; border: none; color: white; padding: 4px 6px; text-align: center; text-decoration: none; display: inline-block; font-size: 7px; margin: 4px 2px; cursor: pointer; border-radius: 5px;" onclick="payment( '<%= orderItem._id %>' ,'<%= item._id %>', '<%= item.totalPrice %>')" >Try Again</button>
+                                                    <!-- Loop through items in the order -->
+                                                    <% for(let j = 0; j < orders[i].orderItems.length; j++){ %>
+                                                        <div class="d-flex justify-content-between align-items-center mt-4" style="border-top: 1px solid #eee; padding-top: 20px;">
+                                                            <!-- Item Image -->
+                                                            <a href="/productDetails?productId=<%= orders[i].orderItems[j].productId %>"> <img src="/Photos/product/<%= orders[i].orderItems[j].image[0] %>" alt="" class="img-thumbnail mr-3" width="100"> </a>
+                                                            <!-- Item Details -->
+                                                            <div class="flex-grow-1 ml-3">
+                                                                <h6 class="mb-1"><%= orders[i].orderItems[j].productName %></h6>
+                                                                <% if(orders[i].orderItems[j].offerPrice){ %>
+                                                                    <p class="mb-1">Offer: <span style="color: green; font-weight: bold; font-size: large;"><%= orders[i].orderItems[j].offer %>%</span></p>
+                                                                    <p class="mb-1">Price: Rs <%= orders[i].orderItems[j].offerPrice %> <strike>Rs <%= orders[i].orderItems[j].productPrice %></strike></p>
+                                                                <% }else{ %>
+                                                                    <p class="mb-1">Price: Rs <%= orders[i].orderItems[j].productPrice %></p>
+                                                                <% } %>
+                                                                <p class="mb-1">Category: <%= orders[i].orderItems[j].category %></p>
+                                                                <p class="mb-1">Quantity: <%= orders[i].orderItems[j].cartQuantity %></p>
+                                                                <p class="mb-1">Status:
+                                                                    <% if (orders[i].orderItems[j].orderStatus === "Ordered") { %>
+                                                                        <label class="badge bg-dark p-2 text-white mb-1 mr-4"><%= orders[i].orderItems[j].orderStatus %></label>
+                                                                        <% } else if (orders[i].orderItems[j].orderStatus === "Shipped") { %>
+                                                                        <label class="badge bg-info p-2 text-white mb-1 mr-4"><%= orders[i].orderItems[j].orderStatus %></label>
+                                                                        <% } else if (orders[i].orderItems[j].orderStatus === "Delivered") { %>
+                                                                        <label class="badge bg-success p-2 text-white mb-1 mr-4"><%= orders[i].orderItems[j].orderStatus %></label>
+                                                                        <% } else if (orders[i].orderItems[j].orderStatus === "Cancelled") { %>
+                                                                        <label class="badge bg-danger p-2 text-white mb-1 mr-4"><%= orders[i].orderItems[j].orderStatus %></label>
+                                                                        <% } else if (orders[i].orderItems[j].orderStatus === "Returned") { %>
+                                                                        <label class="badge bg-warning p-2 text-white mb-1 mr-4"><%= orders[i].orderItems[j].orderStatus %></label>
+                                                                        <% } %>
+                                                                </p>
+                                                            </div>
+                                                            <!-- Action Buttons -->
+                                                            <div>
+                                                                <% if(orders[i].paymentMethod == "Online Payment" && orders[i].paymentStatus == "Pending") { %>
+                                                                    <p class="text-danger"> Payment Pending </p>
+                                                                <% }else { %>
+                                                                <button class="btn btn-success mb-2" onclick="details('<%= orders[i].orderItems[j]._id %>')">Details</button>
+                                                                <% } %>
+                                                                <!-- <button class="btn btn-danger btn-block" onclick="cancelOrder('')">Cancel</button> -->
+                                                            </div>
                                                         </div>
                                                     <% } %>
-                                                <% }else if(orderItem.paymentMethod == "Wallet") { %>
-                                                    <% if(orderItem.paymentStatus == "Payment Completed"){ %>
-                                                        <p class="text-success small mb-0"> <%= orderItem.paymentStatus %> </p>
-                                                    <% }else if(item.paymentStatus == "Payment Completed"){ %>
-                                                        <p class="text-success small mb-0" ><%= item.paymentStatus %></p>
-                                                    <% } %>
-
-                                                <% }else{ %>
-                                                    <% if (item.orderStatus === "Ordered") { %>
-                                                        <p class="text-danger small mb-0"><%= item.paymentStatus %></p>
-                                                    <% } else if (item.orderStatus === "Shipped") { %>
-                                                        <p class="text-danger small mb-0"><%= item.paymentStatus %></p>
-                                                    <% } else if (item.orderStatus === "Delivered") { %>
-                                                        <p class="text-success small mb-0"><%= item.paymentStatus %></p>
-                                                    <% } else if (item.orderStatus === "Cancelled") { %>
-                                                        <p class="text-danger small mb-0"><%= item.paymentStatus %></p>
-                                                    <% } else if (item.orderStatus === "Returned") { %>
-                                                        <p class="small mb-0" style="color: orange;"><%= item.paymentStatus %></p>
-                                                    <% } %>
-                                                 <% } %>
-                                            </td>
-                                            <td class="column-4">
-                                                <div class="d-flex justify-content-between align-items-end flex-column">
-                                                    <% if (item.orderStatus === "Ordered") { %>
-                                                    <label class="badge bg-dark p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                    <% } else if (item.orderStatus === "Shipped") { %>
-                                                    <label class="badge bg-info p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                    <% } else if (item.orderStatus === "Delivered") { %>
-                                                    <label class="badge bg-success p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                    <% } else if (item.orderStatus === "Cancelled") { %>
-                                                    <label class="badge bg-danger p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                    <% } else if (item.orderStatus === "Returned") { %>
-                                                    <label class="badge bg-warning p-2 text-white mb-1 mr-4"><%= item.orderStatus %></label>
-                                                    <% } %>
                                                 </div>
-                                            </td>
-                                            <td class="pr-5"><button class="btn btn-success" onclick="details('<%= item._id %>')">Details</button></td>
-                                        </tr>
-                                        <% }); %>
+                                            <% } %>
                                         <% } %>
-                                        <% }); %>
-                                        <% } %>
-                                    </tbody>
-                                </table>
+                                        <!-- End order loop -->
+                                    </div>
+                                    <!-- Pagination controls -->
+                                    <% if(totalPages > 1) { %>
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center mt-4">
+                                                <% if(currentPage > 1) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                                <% for(let i = 1; i <= totalPages; i++) { %>
+                                                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                                    </li>
+                                                <% } %>
+                                                <% if(currentPage < totalPages) { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                <% } %>
+                                            </ul>
+                                        </nav>
+                                    <% } %>
+                                </div>
                             </div>
                         </div>
-
                     </div>
+                    <!-- End My Orders Section -->
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -224,9 +240,8 @@
             window.location.href = `/orderDetails?id=${orderId}`
         }
 
-        async function payment(orderId, itemId, totalPrice){
+        async function payment(orderId, totalPrice){
             console.log(orderId,'itd order id');
-            console.log(itemId,'its item id');
             const confirmation = await Swal.fire({
                 title: 'Confirm Payment',
                 text: "Are you sure you want to proceed with Cash On Delivery?",
@@ -238,9 +253,9 @@
             });
             if (confirmation.isConfirmed) {
                 try {
-                    const response = await axios.post('/retryPayment', { orderId, itemId, totalPrice })
+                    const response = await axios.post('/retryPayment', { orderId, totalPrice })
 
-                    const { totalAmount, orderedId, key_id, razorpayOrderId, ItemId } = response.data
+                    const { totalAmount, orderedId, key_id, razorpayOrderId } = response.data
                     console.log(totalAmount,'ith nthan');
                     if(response.data.success){
 						var options = {
@@ -254,7 +269,7 @@
 
 							"handler":function (response){
 								console.log('Razorpay payment success', response);
-								verifyPayment(response.razorpay_payment_id, orderedId, ItemId);
+								verifyPayment(response.razorpay_payment_id, orderedId);
 							},
 							"prefill": {
 								"name": "Customer Name",
@@ -270,6 +285,12 @@
 						};
 						var paymentGateway = new Razorpay(options);
 						paymentGateway.open();
+                        paymentGateway.on('payment.failed', (response) => {
+							setTimeout(() => {
+								paymentGateway.close();
+								window.location.href = "/order";
+							}, 3000);
+						});
 					}else{
 						Swal.fire({
 							icon: 'error',
@@ -286,14 +307,15 @@
                         title: 'Error',
                         text: 'Something went wrong!'
                     });
+                    window.location.href = '/order'
                 }
             }
         }
 
         //verify payment
-        async function verifyPayment(paymentId, orderId, itemId) {
+        async function verifyPayment(paymentId, orderId) {
 		try {
-			const response = await axios.post('/reVerification', { paymentId, orderId, itemId });
+			const response = await axios.post('/reVerification', { paymentId, orderId });
 			if (response.data.success) {
 				Swal.fire({
 					title: "Order Placed",
@@ -302,6 +324,14 @@
 				}).then(() => {
 					window.location.href = '/order';
 				});
+			}else{
+				Swal.fire({
+					icon:"error",
+					text:"Your Payment is Failed",
+					icon:"error"
+				}).then(()=>{
+					window.location.href = '/order';
+				})
 			}
 		} catch (error) {
 			console.log(error.message);
@@ -310,6 +340,7 @@
 				title: 'Error',
 				text: 'Something went wrong!'
 			});
+            window.location.href = '/order'
 		}
 	}
 

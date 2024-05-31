@@ -36,10 +36,10 @@ const OtpGenerator = () => {
 }
 
 // otp send to mail
-const sendOpt = async (req, res) => {
+const sendOtp = async (req, res) => {
 
     let otp = OtpGenerator();    //otp taken
-    console.log(otp);
+    console.log(otp, " first send otp ");
 
     const transporter = nodemailer.createTransport({     // transporter
         service: "gmail",
@@ -48,8 +48,6 @@ const sendOpt = async (req, res) => {
             pass: process.env.AUTH_PASSWORD
         }
     })
-
-
 
     const MailGenerator = new Mailgen({
         theme: "default",
@@ -91,10 +89,11 @@ const sendOpt = async (req, res) => {
             expaireAt: Date.now() + 60000
         })
         const data = await newOtp.save()
+        console.log(data,'its data from otp');
         req.session.otpId = data._id
         await transporter.sendMail(message)
     } catch (error) {
-        console.log(error.message,)
+        console.log(error.message)
     }
 }
 
@@ -118,6 +117,7 @@ const insertUser = async (req, res) => {
                 return res.json({ success:false, message:'Already existing this Email.' })
             }
         }
+        
         req.session.email = req.body.email
 
         const password = req.body.password
@@ -134,9 +134,20 @@ const insertUser = async (req, res) => {
         })
 
         req.session.userData = user
-        console.log(req.session.userData)
+        console.log(req.session.userData,'this is session user data')
 
-        await sendOpt(req, res)
+        const existingOtp = await OTP.findOne({
+            email: req.body.email,
+            expaireAt: { $gt: Date.now() } // Find OTPs that haven't expired yet
+        });
+
+        if (!existingOtp) {
+            await sendOtp(req, res);
+        } else {
+            console.log('OTP already sent, waiting for expiration');
+        }
+
+        // await sendOtp(req, res)
         return res.json({ success:true })
 
     } catch (error) {
@@ -241,7 +252,7 @@ const verifyOtp = async (req, res) => {
             console.log(userData);
             await userData.save()
 
-            await OTP.deleteOne({ email: req.session.email })
+            await OTP.deleteMany({ email: req.session.email })
             return res.json({success:true})
         }else{
             return res.redirect('/otp?message=invalid');
@@ -319,7 +330,7 @@ const forgotPassword = async(req,res)=>{
     try {
 
         let otp = OtpGenerator()
-        console.log(otp);
+        console.log(otp,'forgot otp');
 
         const { email } = req.body
         const user = await User.findOne({ email:email })
@@ -413,7 +424,7 @@ const forgotOtpVerification = async(req,res)=>{
         }
 
         if (otpData.OTP == otp) {
-            await OTP.deleteOne({ email: req.session.email })
+            await OTP.deleteMany({ email: req.session.email })
             return res.json({ success: true, message: "OTP verified successfully." });
         } else {
             return res.redirect('/otp?message=invalid');
@@ -591,6 +602,8 @@ const productPage = async (req, res) => {
     try {
         const user = req.session.user_id;
         const search = req.query.search || '';
+
+        
         let sort = {};
         let filter = { delete: false };
 
@@ -623,9 +636,18 @@ const productPage = async (req, res) => {
             ];
         }
 
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const limit = parseInt(req.query.limit) || 8; // Default to 10 items per page
+        const skip = (page - 1) * limit;
+
+        const totalProducts = await Product.countDocuments(filter);
+
         const products = await Product.find(filter)
             .sort(sort)
+            .skip(skip)
+            .limit(limit)
             .exec();
+
 
         const cartProduct = await Cart.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(user) } },
@@ -661,7 +683,10 @@ const productPage = async (req, res) => {
             products,
             cartProduct,
             wishlistProduct,
-            search
+            search,
+            currentPage: page,
+            totalPages: Math.ceil(totalProducts / limit),
+            limit
         });
     } catch (error) {
         console.error(error.message);
@@ -677,6 +702,10 @@ const productDetails = async(req,res)=>{
 
         const { productId } = req.query
         const user = req.session.user_id
+
+        if(!productId){
+            return res.status(400).render('error', { message: 'Product ID is required' });
+        }
 
         const product = await Product.findOne({ _id:productId})
 
@@ -709,7 +738,7 @@ const productDetails = async(req,res)=>{
     }
 }
 
-//404 page
+// 404 page
 // const notPage = async(req,res)=>{
 //     try {
 //         res.render('users/404.ejs');
@@ -749,5 +778,6 @@ export {
     resetPasswordPage,
     userLogout,
     verifyLogin,
-    verifyOtp
+    verifyOtp,
+    
 };

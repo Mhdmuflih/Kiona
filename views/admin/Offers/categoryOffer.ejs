@@ -178,7 +178,13 @@
                               <td> <%= categoryOffer[i].offer %> % </td>
                               <td> <%= categoryOffer[i].createDate.toDateString() %> </td>
                               <td> <%= categoryOffer[i].expaireDate.toDateString() %> </td>
-                              <td> <span style="color: green;"> Active </span> </td>
+                              <td>
+                                <% if (new Date(categoryOffer[i].expaireDate) < new Date()) { %>
+                                  <span style="color: red;"> Inactive </span>
+                                <% } else { %>
+                                  <span style="color: green;"> Active </span>
+                                <% } %>
+                              </td>
                               <td>
                                 <button type="button" class=" btn badge btn-gradient-dark" onclick="editCategory('<%= categoryOffer[i]._id %>')" aria-label="Edit Category"> Edit <i class="mdi mdi-file-check" style="font-size: 15px; width: 15px; height: 15px; color: white;"></i></button>
                               </td>
@@ -187,7 +193,7 @@
                               </td>
                             </tr>
                           <% } %>
-                          </tbody>
+                        </tbody>
                       </table>
                     </div>
                   </div>

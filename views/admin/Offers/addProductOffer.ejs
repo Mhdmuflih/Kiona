@@ -227,46 +227,90 @@
 
     <script>
       document.getElementById('productOfferForm').addEventListener("submit", async (event)=>{
-        event.preventDefault();
-
-        const formElement = document.getElementById("productOfferForm");
-        const formData = new FormData(formElement);
-        
-        const formValues = {};
-
-        for (const entry of formData.entries()) {
-            const [key, value] = entry;
-            formValues[key] = value;
-        }
-        try {
-          const response = await axios.post('/admin/add_product_offer', formValues)
-          if(response.data.success){
-            Swal.fire({
-              icon:"success",
-              title:"success",
-              text:response.data.message
-            }).then(()=>{
-              window.location.href = '/admin/productOffers'
-            })
-          }else{
-            Swal.fire({
-              icon:"error",
-              title:"error",
-              text:response.data.message
-            })
-            window.location.href = "/admin/add_product_offer";
+          event.preventDefault();
+  
+          // Reset error messages
+          document.getElementById('productErr').innerHTML = '';
+          document.getElementById('offerErr').innerHTML = '';
+          document.getElementById('dateErr').innerHTML = '';
+  
+          // Get form data
+          const formElement = document.getElementById("productOfferForm");
+          const formData = new FormData(formElement);
+          
+          // Convert form data to object
+          const formValues = {};
+  
+          for (const entry of formData.entries()) {
+              const [key, value] = entry;
+              formValues[key] = value;
           }
-        } catch (error) {
-          console.log(error.message);
-          Swal.fire({
-            icon:"error",
-            title:"error",
-            text:error.message
-          })
-        }
-
+  
+          // Validation
+          let isValid = true;
+  
+          // Product selection validation
+          if (!formValues.name) {
+              document.getElementById('productErr').innerHTML = "Please select a product";
+              isValid = false;
+          }
+  
+          // Offer percentage validation
+          if (!formValues.offer) {
+              document.getElementById('offerErr').innerHTML = "Please enter the offer percentage";
+              isValid = false;
+          } else if (isNaN(formValues.offer) || formValues.offer <= 0 || formValues.offer > 100) {
+              document.getElementById('offerErr').innerHTML = "Please enter a valid offer percentage (between 1 and 100)";
+              isValid = false;
+          }
+  
+          // Validity date validation
+          if (!formValues.date) {
+              document.getElementById('dateErr').innerHTML = "Please select a validity date";
+              isValid = false;
+          } else {
+              const currentDate = new Date();
+              const selectedDate = new Date(formValues.date);
+  
+              if (selectedDate < currentDate) {
+                  document.getElementById('dateErr').innerHTML = "Please select a future date";
+                  isValid = false;
+              }
+          }
+  
+          // Submit form if valid
+          if (isValid) {
+              try {
+                  const response = await axios.post('/admin/add_product_offer', formValues);
+                  if(response.data.success){
+                      Swal.fire({
+                          icon: "success",
+                          title: "Success",
+                          text: response.data.message
+                      }).then(() => {
+                          window.location.href = '/admin/productOffers'
+                      })
+                  } else {
+                      Swal.fire({
+                          icon: "error",
+                          title: "Error",
+                          text: response.data.message
+                      })
+                      window.location.href = "/admin/add_product_offer";
+                  }
+              } catch (error) {
+                  console.log(error.message);
+                  Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: error.message
+                  })
+              }
+          }
+  
       })
-    </script>
+  </script>
+  
 
 </body>
 

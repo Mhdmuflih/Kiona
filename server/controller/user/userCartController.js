@@ -202,7 +202,7 @@ const selectAddress = async (req, res) => {
         const id = req.session.user_id;
         const user = await User.findOne({ _id: id });
 
-        console.log(req.session.totalPrice,'ioth njan anthyam session ll eathed');
+        // console.log(req.session.totalPrice,'ioth njan anthyam session ll eathed');
 
 
         let cartProduct = await Cart.aggregate([
@@ -257,7 +257,7 @@ const selectAddress = async (req, res) => {
             }
         }
 
-        if(req.session.totalPrice == undefined){
+        if(req.session.totalPrice == undefined || req.session.totalPrice == null){
             req.session.totalPrice = totalPrice
         }else{
             totalPrice = req.session.totalPrice

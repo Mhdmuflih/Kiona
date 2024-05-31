@@ -154,8 +154,8 @@
 
                         <div class="form-group">
                             <label for="exampleInputUsername1">Min Purchase Amount </label>
-                            <input type="number" name="minAmount" class="form-control" id="offer" placeholder="Minimum Purchase Amount">
-                            <p style="color: red;" id="offerErr"></p>
+                            <input type="number" name="minAmount" class="form-control" id="minAmount" placeholder="Minimum Purchase Amount">
+                            <p style="color: red;" id="minAmountErr"></p>
                         </div>
 
                         <!-- description -->
@@ -170,7 +170,7 @@
                         <div class="d-flex">
                           <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
                           <div style="width: 20px;"></div>
-                          <a href="/admin/categoryOffers"> <button type="button"
+                          <a href="/admin/couponOffers"> <button type="button"
                               class="btn btn-gradient-info mr-2">Cancel</button> </a>
                         </div>
 
@@ -223,6 +223,11 @@
     <script>
         document.getElementById("couponForm").addEventListener("submit",async(event)=>{
             event.preventDefault();
+
+            document.getElementById("couponErr").innerHTML = '';
+            document.getElementById('offerErr').innerHTML = '';
+            document.getElementById('minAmountErr').innerHTML = '';
+            document.getElementById('validityDateErr').innerHTML = '';
             
             const formElement = document.getElementById('couponForm')
             const formData = new FormData(formElement);
@@ -233,31 +238,74 @@
                 const [key, value] = entry;
                 formValues[key] = value;
             }
-            try {
-                const response = await axios.post('/admin/add_coupon_offer',formValues)
-                if(response.data.success){
-                    Swal.fire({
-                        icon:"success",
-                        title:"success",
-                        text:response.data.message
-                    }).then(()=>{
-                        window.location.href = "/admin/couponOffers";
-                    })
-                }else{
-                    Swal.fire({
-                        icon:"error",
-                        title:"error",
-                        text:response.data.message
-                    })
-                    window.location.href = '/admin/add_coupon_offer';
+
+            let isValid = true;
+
+            if (!formValues.couponCode || formValues.couponCode.trim() === '') {
+              document.getElementById('couponErr').innerHTML = "Please enter a coupon code";
+              isValid = false;
+            }
+
+            if (!formValues.offer) {
+              document.getElementById('offerErr').innerHTML = "Please enter the offer percentage";
+              isValid = false;
+            } else if (isNaN(formValues.offer) || formValues.offer <= 0 || formValues.offer > 100) {
+                document.getElementById('offerErr').innerHTML = "Please enter a valid offer percentage (between 1 and 100)";
+                isValid = false;
+            }
+
+            if (!formValues.minAmount) {
+              document.getElementById('minAmountErr').innerHTML = "Please enter the minimum amount";
+              isValid = false;
+            } else if (isNaN(formValues.minAmount) || formValues.minAmount <= 0) {
+                document.getElementById('minAmountErr').innerHTML = "Please enter a valid minimum amount (greater than 0)";
+                isValid = false;
+            }
+
+            if (!formValues.date) {
+              document.getElementById('validityDateErr').innerHTML = "Please select a validity date";
+              isValid = false;
+            } else {
+                const enteredDate = new Date(formValues.date);
+                const currentDate = new Date();
+    
+                if (isNaN(enteredDate.getTime())) {
+                    document.getElementById('validityDateErr').innerHTML = "Please enter a valid date";
+                    isValid = false;
+                } else if (enteredDate < currentDate) {
+                    document.getElementById('validityDateErr').innerHTML = "Please select a future date";
+                    isValid = false;
                 }
-            } catch (error) {
-                console.log(error.message);
-                Swal.fire({
-                    icon:"error",
-                    title:"error",
-                    text:error.message
-                })
+            }
+
+            if(isValid){
+                try {
+                  console.log(formValues, "form values");
+                  const response = await axios.post('/admin/add_coupon_offer',formValues)
+                  if(response.data.success){
+                      Swal.fire({
+                          icon:"success",
+                          title:"success",
+                          text:response.data.message
+                      }).then(()=>{
+                          window.location.href = "/admin/couponOffers";
+                      })
+                  }else{
+                      Swal.fire({
+                          icon:"error",
+                          title:"error",
+                          text:response.data.message
+                      })
+                      window.location.href = '/admin/add_coupon_offer';
+                  }
+              } catch (error) {
+                  console.log(error.message);
+                  Swal.fire({
+                      icon:"error",
+                      title:"error",
+                      text:error.message
+                  })
+              }
             }
 
         })

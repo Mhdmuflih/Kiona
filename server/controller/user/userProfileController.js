@@ -279,9 +279,21 @@ const orderPage = async (req,res)=>{
         const userId = req.session.user_id
 
         const user = await User.findOne({_id:userId})
-        const order = await Order.find({ userId })
 
-        res.render('users/Profile/userOrderDetails',{ user, order })
+        const page = parseInt(req.query.page) || 1;
+        const limit = 4;
+        const skip = (page - 1) * limit;
+
+        const totalOrders = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const orders = await Order.find({ userId }).skip(skip).limit(limit);
+
+
+
+        // const order = await Order.find({ userId })
+
+        res.render('users/Profile/userOrderDetails',{ user, orders, currentPage: page, totalPages })
 
     } catch (error) {
         console.log(error.message);
@@ -292,13 +304,13 @@ const orderPage = async (req,res)=>{
 const orderDetailsPage = async(req,res)=>{
     try {
         const id = req.session.user_id
-        const orderId = req.query.id
+        const itemId = req.query.id
 
-        const orderItem = await Order.findOne({ 'orderItems._id':orderId })
+        const orderItem = await Order.findOne({ 'orderItems._id':itemId })
         
         let ordered = null;
         for (let i = 0; i < orderItem.orderItems.length; i++) {
-            if (orderItem.orderItems[i]._id.toString() === orderId) {
+            if (orderItem.orderItems[i]._id.toString() === itemId) {
                 ordered = orderItem.orderItems[i];
                 break;
             }

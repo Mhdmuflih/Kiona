@@ -180,7 +180,13 @@
                                     <td> <%= coupons[i].minAmount %> </td>
                                     <td> <%= new Date(coupons[i].createDate).toLocaleDateString() %> </td>
                                     <td> <%= new Date(coupons[i].expaireDate).toLocaleDateString() %> </td>
-                                    <td> <span style="color: green;"> Active </span> </td>
+                                    <td>
+                                      <% if (new Date(coupons[i].expaireDate) < new Date()) { %>
+                                        <span style="color: red;"> Inactive </span>
+                                      <% } else { %>
+                                        <span style="color: green;"> Active </span>
+                                      <% } %>
+                                    </td>
                                     <td>
                                         <button type="button" class=" btn badge btn-gradient-dark" onclick="editCouponOffer('<%= coupons[i]._id %>')" > Edit <i class="mdi mdi-file-check" style="font-size: 15px; width: 15px; height: 15px; color: white;"></i></button>
                                     </td>

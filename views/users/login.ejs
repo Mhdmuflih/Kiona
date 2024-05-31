@@ -84,9 +84,14 @@
                     <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required aria-required="true">
                     <p style="color: red;" id="emailErr"></p>
   
-                    <label for="password">Enter Your Password</label>
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required aria-required="true">
-                    <p style="color: red;" id="passwordErr"></p>
+                    <div class="position-relative">
+                      <label for="password">Enter Your Password</label>
+                      <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required aria-required="true" style="padding-right: 40px;">
+                      <button class="btn toggle-password position-absolute mt-3" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                          <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                      </button>
+                  </div>
+                  <p style="color: red;" id="passwordErr"></p>
   
                     <div class="checkbox form-group">
                       <div class="form-check">
@@ -120,7 +125,21 @@
   
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+			const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 
+			togglePasswordButtons.forEach(button => {
+				button.addEventListener('click', function (e) {
+					e.preventDefault();
+					const passwordInput = this.previousElementSibling; // Assuming the button is right after the input field
+					const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+					passwordInput.setAttribute('type', type);
+					this.innerHTML = type === 'password' ? '<i class="fa fa-eye-slash" aria-hidden="true"></i>' : '<i class="fa fa-eye" aria-hidden="true"></i>';
+				});
+			});
+		});
+</script>
 
 
 
