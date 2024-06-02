@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     filename:(req,file,callback)=>{
         const extention = file.originalname.substring(file.originalname.lastIndexOf('.'));
         callback(null,`${file.fieldname}-${Date.now()}${extention}`);
-    }
+    } 
 })
 
 export default multer({storage})
