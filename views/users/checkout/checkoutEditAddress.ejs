@@ -180,17 +180,17 @@
                                         </div>
                                         
                                         <div class="mb-3 container">
-                                            <label class="small mb-1" for="inputAddressType">Address Type</label>
-                                                <div class="col-md-6">
-                                                    <input class="form-check-input" type="radio" id="home" name="addressType" value="Home">
-                                                    <label class="form-check-label" for="home">Home</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input class="form-check-input" type="radio" id="work" name="addressType" value="Work">
-                                                    <label class="form-check-label" for="work">Work</label>
-                                                </div>
-                                        </div>
-
+											<label class="small mb-1" for="inputAddressType">Address Type</label>
+											<div class="col-md-6">
+												<input class="form-check-input" type="radio" id="home" name="addressType" value="Home" <%= address.addressType === 'Home' ? 'checked' : '' %>>
+												<label class="form-check-label" for="home">Home</label>
+											</div>
+											<div class="col-md-6">
+												<input class="form-check-input" type="radio" id="work" name="addressType" value="Work" <%= address.addressType === 'Work' ? 'checked' : '' %>>
+												<label class="form-check-label" for="work">Work</label>
+											</div>
+										</div>
+										
                                         <input type="text" name="" id="addressId" value="<%= address._id %>" hidden>
 
                                         <a href="/shoping-cart/selectAddress"> <button class="btn btn-danger" type="button">Back</button> </a>

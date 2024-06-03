@@ -102,9 +102,9 @@
                                         <% for(let i=0 ; i<orders.length ; i++){ %>
                                             <% for(let j=0  ; j<orders[i].orderItems.length ; j++){ %>
                                                 <% if(orders[i].orderItems[j].offer){ %>
-                                                    <% totalAmount += orders[i].orderItems[j].offerPrice %>
+                                                    <% totalAmount += orders[i].orderItems[j].offerPrice * orders[i].orderItems[j].cartQuantity  %>
                                                 <% }else{ %>
-                                                    <% totalAmount += orders[i].orderItems[j].productPrice %>
+                                                    <% totalAmount += orders[i].orderItems[j].productPrice * orders[i].orderItems[j].cartQuantity %>
                                                 <% } %>
                                             <% } %>
                                         <% } %>
@@ -241,7 +241,6 @@
         }
 
         async function payment(orderId, totalPrice){
-            console.log(orderId,'itd order id');
             const confirmation = await Swal.fire({
                 title: 'Confirm Payment',
                 text: "Are you sure you want to proceed with Cash On Delivery?",
@@ -289,7 +288,7 @@
 							setTimeout(() => {
 								paymentGateway.close();
 								window.location.href = "/order";
-							}, 3000);
+							}, 2000);
 						});
 					}else{
 						Swal.fire({

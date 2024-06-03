@@ -227,7 +227,7 @@
 
 			if (confirmation.isConfirmed) {
 				try {
-					const response = await axios.delete('http://localhost:8000/address/delete', { data: { id } });
+					const response = await axios.delete('/address/delete', { data: { id } });
 					if (response.data.success) {
 						await Swal.fire({
 							icon: 'success',

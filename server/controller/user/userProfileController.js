@@ -411,8 +411,6 @@ const returnOrder = async(req,res)=>{
             for(let j=0 ; j<orderItem.length ; j++){
                 if( orderItem[j]._id.toString() === id ){
                     returnOrderItem = orderItem[j]
-                    console.log(orderItem[j]);
-                    console.log(returnOrderItem,'return order item');
                     response = await Order.findOneAndUpdate({ userId:user, 'orderItems._id':id },{ $set:{ 'orderItems.$.returnReason':reason, "orderItems.$.orderStatus": "Returned", "orderItems.$.paymentStatus":"Refound Completed" } })
                 }
                 break;

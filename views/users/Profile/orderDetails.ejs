@@ -419,7 +419,7 @@
                     text: response.data.message
                 });
                 setTimeout(() => {
-                    window.location.href = `http://localhost:8000/orderDetails?id=${orderId}`;
+                    window.location.href = `/orderDetails?id=${orderId}`;
                 }, 1000);
               } else {
                 Swal.fire({
@@ -464,7 +464,7 @@
                     text: response.data.message
                 });
                 setTimeout(() => {
-                    window.location.href = `http://localhost:8000/orderDetails?id=${orderId}`;
+                    window.location.href = `/orderDetails?id=${orderId}`;
                 }, 1000);
               } else {
                 Swal.fire({
