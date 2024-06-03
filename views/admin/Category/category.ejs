@@ -282,7 +282,7 @@
 
       async function deleteCategory(id) {
 
-        const responce = await axios.post('http://localhost:8000/admin/category/delete', { id })
+        const responce = await axios.post('/admin/category/delete', { id })
 
         if (responce.data.success) {
           await Swal.fire({

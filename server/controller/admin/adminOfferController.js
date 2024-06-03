@@ -39,7 +39,7 @@ const categoryOfferPage = async(req,res)=>{
 const addCategoryOfferPage = async(req,res)=>{
     try {
         const category = await Category.find({ delete:false });
-        res.render('admin/offers/addCategoryOffer.ejs', { category });
+        res.render('admin/Offers/addCategoryOffer.ejs', { category });
     } catch (error) {
         console.log(error.message);
     }

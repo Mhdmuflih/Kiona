@@ -273,7 +273,7 @@
         }
 
         async function deleteProduct(id) {
-          const responce = await axios.post('http://localhost:8000/admin/product/delete', { id })
+          const responce = await axios.post('/admin/product/delete', { id })
           if (responce.data.success) {
             await Swal.fire({
               icon: 'success',

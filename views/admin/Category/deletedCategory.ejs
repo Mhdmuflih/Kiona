@@ -228,7 +228,7 @@
         <script>
 
             async function restoreCategory(id) {
-                const responce = await axios.post('http://localhost:8000/admin/category/restore', { id })
+                const responce = await axios.post('/admin/category/restore', { id })
                 if (responce.data.success) {
                     await Swal.fire({
                         icon: 'success',
@@ -247,7 +247,7 @@
             }
 
             async function Delete(id) {
-                const responce = await axios.post('http://localhost:8000/admin/category/deleted', { id })
+                const responce = await axios.post('/admin/category/deleted', { id })
                 if (responce.data.success) {
                     await Swal.fire({
                         icon: 'success',

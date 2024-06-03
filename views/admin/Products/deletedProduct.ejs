@@ -237,7 +237,7 @@
     <script>
 
       async function restoreProduct(id) {
-        const responce = await axios.post('http://localhost:8000/admin/product/restore', { id })
+        const responce = await axios.post('/admin/product/restore', { id })
         if (responce.data.success) {
           await Swal.fire({
             icon: 'success',
@@ -256,7 +256,7 @@
       }
 
       async function Delete(id) {
-        const responce = await axios.post('http://localhost:8000/admin/product/deleted', { id })
+        const responce = await axios.post('/admin/product/deleted', { id })
         if (responce.data.success) {
           await Swal.fire({
             icon: 'success',
