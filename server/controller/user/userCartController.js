@@ -283,7 +283,7 @@ const checkoutAddAddressPage = async(req,res)=>{
         const id = req.session.user_id
         const user = await User.findOne({ _id:id })
 
-        res.render("users/checkout/checkoutAddAddress.ejs", { user })
+        res.render("users/checkout/CheckoutAddAddress", { user })
 
     } catch (error) {
         console.log(error.message);
