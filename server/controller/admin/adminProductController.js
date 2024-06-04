@@ -4,170 +4,182 @@ import Product from "../../model/productModel.js";
 // --------------------------------------------------------------
 
 // product page
-const productPage = async (req,res)=>{
+const productPage = async (req, res, next) => {
     try {
-        
-    var search = '';
-    if(req.query.search){
-        search = req.query.search;
-    }
 
-    var page = 1;
-    if(req.query.page){
-        page = req.query.page
-    }
+        var search = '';
+        if (req.query.search) {
+            search = req.query.search;
+        }
 
-    const limit = 5
+        var page = 1;
+        if (req.query.page) {
+            page = req.query.page
+        }
 
-    const productData = await Product.find({
-        $and: [
-            { delete: false },
-            { $or:[
-                { name: { $regex: ".*" + search + ".*", $options: "i" } },
-                { email: { $regex: ".*" + search + ".*", $options: "i" } }
-            ]}
-        ]
-    }).limit(limit*1)
-    .skip((page - 1) * limit)
-    .exec();
+        const limit = 5
 
-    const count = await Product.find({
-        $and: [
-            { delete: false },
-            { $or:[
-                { name: { $regex: ".*" + search + ".*", $options: "i" } },
-                { email: { $regex: ".*" + search + ".*", $options: "i" } }
-            ]}
-        ]
-    }).countDocuments();
+        const productData = await Product.find({
+            $and: [
+                { delete: false },
+                {
+                    $or: [
+                        { name: { $regex: ".*" + search + ".*", $options: "i" } },
+                        { email: { $regex: ".*" + search + ".*", $options: "i" } }
+                    ]
+                }
+            ]
+        }).limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
 
-    res.render('admin/Products/product.ejs', {
-        product: productData,
-        totalPages: Math.ceil(count/limit),
-        currentPage: page
-    });
+        const count = await Product.find({
+            $and: [
+                { delete: false },
+                {
+                    $or: [
+                        { name: { $regex: ".*" + search + ".*", $options: "i" } },
+                        { email: { $regex: ".*" + search + ".*", $options: "i" } }
+                    ]
+                }
+            ]
+        }).countDocuments();
+
+        res.render('admin/Products/product.ejs', {
+            product: productData,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page
+        });
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 // add product page
-const addProduct = async(req,res)=>{
+const addProduct = async (req, res, next) => {
     try {
         const category = await Category.find();
         console.log(category);
-        res.render('admin/Products/addProduct.ejs',{category})
+        res.render('admin/Products/addProduct.ejs', { category })
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message);
     }
 }
 
 //add product
-const productAdd = async(req,res)=>{
+const productAdd = async (req, res, next) => {
     try {
 
-        const images = req.files.map((file)=>file.filename);
+        const images = req.files.map((file) => file.filename);
 
         const product = new Product({
-            name:req.body.name,
-            category:req.body.category,
-            quantity:req.body.quantity,
-            price:req.body.price,
-            image:images,
-            description:req.body.description
+            name: req.body.name,
+            category: req.body.category,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            image: images,
+            description: req.body.description
         })
         const productData = await product.save();
-        if(productData){
+        if (productData) {
             res.status(200).json({ success: true, message: 'Product added successfully.' });
-        }else{
+        } else {
             res.status(400).json({ success: false, error: 'Failed to add product. Please try again.' });
         }
-    
+
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         res.status(500).json({ success: false, error: 'An error occurred while adding the product.' });
     }
 }
 
 //soft delete product
-const deleteProduct = async (req,res)=>{
+const deleteProduct = async (req, res, next) => {
     try {
-        const {id} = req.body
-        const responce = await Product.updateOne({_id:id},{ $set:{ delete: true } })
-        if(responce){
-            res.json({success:true, message:"Product deleted"})
-        }else{
-            res.json({success:false, message:"Server Error"})
+        const { id } = req.body
+        const responce = await Product.updateOne({ _id: id }, { $set: { delete: true } })
+        if (responce) {
+            res.json({ success: true, message: "Product deleted" })
+        } else {
+            res.json({ success: false, message: "Server Error" })
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //deleted product page
-const deletedProductPage = async(req,res)=>{
+const deletedProductPage = async (req, res, next) => {
     try {
-        const deletedProduct = await Product.find({delete:true})
-        res.render("admin/Products/deletedProduct.ejs",{product:deletedProduct})
+        const deletedProduct = await Product.find({ delete: true })
+        res.render("admin/Products/deletedProduct.ejs", { product: deletedProduct })
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //resote the product
-const restoreProduct = async(req,res)=>{
+const restoreProduct = async (req, res, next) => {
     try {
-        const {id} = req.body
-        
-        const restore = await Product.updateOne({_id:id},{ $set: { delete:false } })
-        if(restore){
-            res.json({success:true,message:"Restore success"})
-        }else{
-            res.json({ success:false,message:"Server Error" })
+        const { id } = req.body
+
+        const restore = await Product.updateOne({ _id: id }, { $set: { delete: false } })
+        if (restore) {
+            res.json({ success: true, message: "Restore success" })
+        } else {
+            res.json({ success: false, message: "Server Error" })
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //product delete the db.
-const deleted = async(req,res)=>{
+const deleted = async (req, res, next) => {
 
     try {
-        const {id} = req.body
+        const { id } = req.body
 
-        const response = await Product.deleteOne({_id: id})
-        if(response){
-            res.json({success:true,message:"Product Deleted Success"})
-        }else{
-            res.json({success:false,message:"Product Delete Failed"})
+        const response = await Product.deleteOne({ _id: id })
+        if (response) {
+            res.json({ success: true, message: "Product Deleted Success" })
+        } else {
+            res.json({ success: false, message: "Product Delete Failed" })
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //edit product page
-const editProductPage = async(req,res)=>{
+const editProductPage = async (req, res, next) => {
     try {
         const id = req.query.id;
-        const product = await Product.findOne({_id:id})
+        const product = await Product.findOne({ _id: id })
         const category = await Category.find();
-        
-        res.render("admin/Products/editProduct.ejs",{product, category})
+
+        res.render("admin/Products/editProduct.ejs", { product, category })
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //edit Product
-const editProduct = async (req, res) => {
+const editProduct = async (req, res, next) => {
     try {
 
-        let updatedProduct ;
-        
+        let updatedProduct;
+
         if (req.files && req.files.length > 0) {
             const newImages = req.files.map((file) => file.filename); // Extract filenames from uploaded files
             console.log(newImages);
@@ -184,21 +196,21 @@ const editProduct = async (req, res) => {
                         image: mergedImages,
                         name: req.body.name,
                         price: req.body.price,
-                        quantity:req.body.quantity,
+                        quantity: req.body.quantity,
                         category: req.body.category,
                         description: req.body.description
                     }
                 }
             );
 
-        }else{
+        } else {
             updatedProduct = await Product.findByIdAndUpdate(
                 { _id: req.body.product_id },
                 {
                     $set: {
                         name: req.body.name,
                         price: req.body.price,
-                        quantity:req.body.quantity,
+                        quantity: req.body.quantity,
                         category: req.body.category,
                         description: req.body.description
                     }
@@ -213,11 +225,12 @@ const editProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 };
 
 //delete single single images
-const deleteImage = async (req, res) => {
+const deleteImage = async (req, res, next) => {
     try {
 
         const { id, imageId } = req.query;
@@ -227,7 +240,7 @@ const deleteImage = async (req, res) => {
             { $pull: { image: imageId } },
             { new: true }
         );
-    
+
         if (response) {
             res.json({ success: true, message: "Image deleted successfully" });
         } else {
@@ -236,6 +249,7 @@ const deleteImage = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 }

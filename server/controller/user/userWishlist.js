@@ -3,7 +3,7 @@ import Wishlist from "../../model/wishlistModel.js";
 import Cart from "../../model/cartModel.js";
 
 //add to wishlist
-const addToWishlist = async(req,res)=>{
+const addToWishlist = async(req, res, next)=>{
     try {
 
         const userId = req.session.user_id
@@ -34,11 +34,12 @@ const addToWishlist = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //wishlist product to add to cart
-const wishlitAddToCart = async(req,res)=>{
+const wishlitAddToCart = async(req, res, next)=>{
     try {
         const { productId } = req.body
         const userId = req.session.user_id
@@ -69,6 +70,7 @@ const wishlitAddToCart = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

@@ -9,6 +9,7 @@ import colors from "colors";
 import connectDB from "./server/database/connection.js";
 import userRoute from "./server/router/userRoute.js"
 import adminRoute from "./server/router/adminRoute.js"
+import { internalServerError, pageNotFount } from "./server/middleware/errorHandler.js";
 
 // -----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ app.set('view engine','ejs')                                    //page convertin
 app.use(express.static(path.join(__dirname, 'assets')))         //assets is public field
 app.set('views', path.join(__dirname, 'views'));
 
+
 // -----------------------------------------------------------------------
 
 //user route
@@ -39,6 +41,14 @@ app.use('/',userRoute);
 
 // admin route
 app.use('/admin',adminRoute)
+
+// -----------------------------------------------------------------------
+
+//pageNotFound 404
+app.use(pageNotFount);
+
+//Internal serverError
+app.use(internalServerError);
 
 // -----------------------------------------------------------------------
 

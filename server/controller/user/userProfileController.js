@@ -29,6 +29,7 @@ const securePassword = async (password) => {
         return passwordHarsh
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         throw error;
     }
 }
@@ -36,7 +37,7 @@ const securePassword = async (password) => {
 
 
 //user Profile Page
-const profilePage = async (req,res)=>{
+const profilePage = async (req, res, next)=>{
     try {
 
         const id = req.session.user_id
@@ -46,11 +47,12 @@ const profilePage = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user Profile Update
-const updateProfile = async(req,res)=>{
+const updateProfile = async(req, res, next)=>{
     try {
 
         const id = req.session.user_id;
@@ -66,11 +68,12 @@ const updateProfile = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user Password Changing Page
-const passwordChangePage = async (req,res)=>{
+const passwordChangePage = async (req, res, next)=>{
     try {
      
         const id = req.session.user_id
@@ -80,11 +83,12 @@ const passwordChangePage = async (req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user Password Update
-const updatePassword = async(req,res)=>{
+const updatePassword = async(req, res, next)=>{
     try {
 
         const id = req.session.user_id;
@@ -105,11 +109,12 @@ const updatePassword = async(req,res)=>{
                 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user Address Management Page
-const addressPage = async(req,res)=>{
+const addressPage = async(req, res, next)=>{
     try {
         
         const id = req.session.user_id
@@ -124,11 +129,12 @@ const addressPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add Address Page
-const addAddressPage = async(req,res)=>{
+const addAddressPage = async(req, res, next)=>{
     try {
         
         const id = req.session.user_id
@@ -137,11 +143,12 @@ const addAddressPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add address
-const addAddress = async(req,res)=>{
+const addAddress = async(req, res, next)=>{
     try {
 
         const id = req.session.user_id;
@@ -193,7 +200,7 @@ const addAddress = async(req,res)=>{
 }
 
 //edit Address Page
-const editAddresPage = async(req,res)=>{
+const editAddresPage = async(req, res, next)=>{
     try {
         const id = req.session.user_id
         const addressId = req.query.id
@@ -214,11 +221,12 @@ const editAddresPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //edit Address
-const editAddress = async(req,res)=>{
+const editAddress = async(req, res, next)=>{
     try {
 
         const { addressId } = req.query
@@ -246,11 +254,12 @@ const editAddress = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //delete address
-const deleteAddress = async(req,res)=>{
+const deleteAddress = async(req, res, next)=>{
     try {
         
         const id  = req.body.id;
@@ -269,11 +278,12 @@ const deleteAddress = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user order details page
-const orderPage = async (req,res)=>{
+const orderPage = async (req, res, next)=>{
     try {
         
         const userId = req.session.user_id
@@ -297,11 +307,12 @@ const orderPage = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //order details page
-const orderDetailsPage = async(req,res)=>{
+const orderDetailsPage = async(req, res, next)=>{
     try {
         const id = req.session.user_id
         const itemId = req.query.id
@@ -322,6 +333,7 @@ const orderDetailsPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
@@ -391,12 +403,13 @@ const cancelOrder = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 };
 
 // return user ordered Product
-const returnOrder = async(req,res)=>{
+const returnOrder = async(req, res, next)=>{
     try {
         
         const user = req.session.user_id
@@ -455,11 +468,12 @@ const returnOrder = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //user wishlist page
-const wishlistPage = async(req,res)=>{
+const wishlistPage = async(req, res, next)=>{
     try {
         
         const id = req.session.user_id
@@ -487,11 +501,12 @@ const wishlistPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //remove wishlist item
-const remove = async(req,res)=>{
+const remove = async(req, res, next)=>{
     try {
         const { id }  = req.body
         const user = req.session.user_id
@@ -510,11 +525,12 @@ const remove = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //wallet page
-const walletPage = async(req,res)=>{
+const walletPage = async(req, res, next)=>{
     try {
 
         const userId = req.session.user_id
@@ -529,6 +545,7 @@ const walletPage = async(req,res)=>{
         res.render('users/Profile/userWallet.ejs',{ user,walletData })
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
@@ -571,10 +588,7 @@ const addWalletAmount = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        return res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -605,6 +619,7 @@ const verifyWalletAmount = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         return res.status(500).json({ success: false, message: 'Server error' });
     }
 };
@@ -651,7 +666,7 @@ const withdraw = async (req, res) => {
 };
 
 //wallet History
-const walletHistoryPage = async(req,res)=>{
+const walletHistoryPage = async(req, res, next)=>{
     try {
         const userId = req.session.user_id
         const user = await User.findOne({ _id:userId })
@@ -659,6 +674,7 @@ const walletHistoryPage = async(req,res)=>{
         res.render('users/Profile/userWalletHistory.ejs',{ user, wallet })
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

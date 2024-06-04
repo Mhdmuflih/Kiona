@@ -12,25 +12,27 @@ import { login } from "../user/userController.js";
 // ----------------------------------------------
 
 //admin login page
-const adminLogin = async (req, res) => {
+const adminLogin = async (req, res, next) => {
     try {
         res.render('admin/login.ejs')
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message)
     }
 }
 
 //admin register page
-const adminRegister = async (req, res) => {
+const adminRegister = async (req, res, next) => {
     try {
         res.render('admin/adminRegister.ejs');
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message)
     }
 }
 
 //registration admin details
-const insertAdmin = async (req, res) => {
+const insertAdmin = async (req, res, next) => {
     try {
         const admin = new Admin({
             name: req.body.name,
@@ -46,11 +48,12 @@ const insertAdmin = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //verify admin login
-const verifyAdminLogin = async (req, res) => {
+const verifyAdminLogin = async (req, res, next) => {
     try {
 
         const { email, password } = req.body
@@ -70,12 +73,13 @@ const verifyAdminLogin = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message)
     }
 }
 
 //admin home page
-const adminHome = async (req, res) => {
+const adminHome = async (req, res, next) => {
     try {
 
         const adminData = await Admin.findById({ _id: req.session.admin_id });
@@ -230,13 +234,14 @@ const adminHome = async (req, res) => {
             monthlySales
         })
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message)
     }
 }
 
 
 //top sales count
-const topSales = async (req, res) => {
+const topSales = async (req, res, next) => {
     try {
         const { value } = req.body
 
@@ -299,12 +304,13 @@ const topSales = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 
 //admin Logout
-const adminLogout = async (req, res) => {
+const adminLogout = async (req, res, next) => {
     req.session.destroy((err) => {
         if (err) {
             res.redirect('/admin/home')

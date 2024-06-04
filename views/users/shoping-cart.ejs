@@ -356,7 +356,8 @@
 									<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" id="couponCode" placeholder="Coupon Code">
 									<button type="submit" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5"> Apply coupon </button>
 								</div>
-							</form>
+						</form>
+						<button type="submit" class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5" id="removeCoupon" onclick="remove()"> Remove coupon </button>
 
 							
 							<!-- <a href=""> View Coupons </a> -->
@@ -570,14 +571,17 @@
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		<script>
-			// Event listener for toggling coupon containers
+			document.getElementById('removeCoupon').addEventListener('click', (event) => {
+        		event.preventDefault();
+				window.location.reload()
+			})
+		</script>
+		<script>
 			document.getElementById('toggleLink').addEventListener('click', function(event) {
-				event.preventDefault(); // Prevent the default action of the link
+				event.preventDefault();
 	
-				// Get all elements with class 'couponsContainer'
 				const couponContainers = document.querySelectorAll('.couponsContainer');
 	
-				// Toggle display property for each coupon container
 				couponContainers.forEach(function(container) {
 					if (container.style.display === 'none' || container.style.display === '') {
 						container.style.display = 'block';
@@ -592,7 +596,7 @@
 				const couponCode = document.getElementById('couponCode').value;
 				const totalAmountElement = document.getElementById('totalAmount');
 				const totalAmountText = totalAmountElement.innerText.trim();
-				const totalAmountValue = totalAmountText.replace('Rs:', '').trim(); // Remove 'Rs:' prefix
+				const totalAmountValue = totalAmountText.replace('Rs:', '').trim();
 				console.log(totalAmountValue);
 
 				// console.log(totalAmount);
@@ -609,11 +613,10 @@
 						const newTotalAmount = response.data.totalAmount;
             const newDiscountAmount = response.data.discountAmount;
 
-            // Update the total amount element
-            document.getElementById('totalAmount').innerText = `Rs: ${newTotalAmount.toFixed(2)}`; // Update with new total amount, formatted to 2 decimal places
+            document.getElementById('totalAmount').innerText = `Rs: ${newTotalAmount.toFixed(2)}`;
 
-            // Update the discount amount element
-            document.getElementById('discountAmount').innerText = `Rs: ${newDiscountAmount.toFixed(2)}`; // Update with new discount amount, formatted to 2 decimal places
+            document.getElementById('discountAmount').innerText = `Rs: ${newDiscountAmount.toFixed(2)}`;
+
 					}else{
 						Swal.fire({
 							icon:"error",
@@ -621,7 +624,7 @@
 							text:response.data.message
 						})
 					}
-					console.log(response.data);
+					// console.log(response.data);
 				} catch (error) {
 					console.log(error.message);
 				}

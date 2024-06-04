@@ -3,7 +3,7 @@ import User from "../../model/userModel.js";
 
 
 //order Page
-const orderPage = async(req,res)=>{
+const orderPage = async(req, res, next)=>{
     try {
         const orderData = await Order.find()
         let users = [] ;
@@ -18,11 +18,12 @@ const orderPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //order Details page
-const orderDetailsPage = async(req,res)=>{
+const orderDetailsPage = async(req, res, next)=>{
     try {
         
         const {id} = req.query
@@ -32,11 +33,12 @@ const orderDetailsPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //order status update
-const orderStatus = async (req, res) => {
+const orderStatus = async (req, res, next) => {
     try {
 
         const { id, value } = req.body;
@@ -56,6 +58,7 @@ const orderStatus = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

@@ -3,7 +3,7 @@ import Category from "../../model/categoryModel.js";
 // -----------------------------------------------------------------
 
 //category page
-const categoryPage = async(req,res)=>{
+const categoryPage = async(req, res, next)=>{
     try {
 
         var search = '';
@@ -44,12 +44,13 @@ const categoryPage = async(req,res)=>{
             currentPage:page
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
 //add category page
-const addCategory = async (req,res)=>{
+const addCategory = async (req, res, next)=>{
     try {
         res.render('admin/Category/addCategory.ejs');
     } catch (error) {
@@ -84,7 +85,7 @@ const createCategory = async (req, res) => {
 };
 
 //edit category page
-const editCategoryPage = async (req,res)=>{
+const editCategoryPage = async (req, res, next)=>{
     try {
 
         const { id } = req.query
@@ -98,11 +99,12 @@ const editCategoryPage = async (req,res)=>{
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
-const editCategory = async (req,res)=>{
+const editCategory = async (req, res, next)=>{
     try {
 
         const existingCategory = await Category.findOne({ name:req.body.name });
@@ -120,11 +122,12 @@ const editCategory = async (req,res)=>{
         res.json({success:true, message:"Category Updated Succedfully."})
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
-const deleteCategory = async(req,res)=>{
+const deleteCategory = async(req, res, next)=>{
     try {
 
         const { id } = req.body
@@ -138,11 +141,12 @@ const deleteCategory = async(req,res)=>{
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
-const deleteCategoryPage = async(req,res)=>{
+const deleteCategoryPage = async(req, res, next)=>{
     try {
 
         const deletedCategory = await Category.find({delete:true})
@@ -150,11 +154,12 @@ const deleteCategoryPage = async(req,res)=>{
         res.render("admin/Category/deletedCategory.ejs",{category:deletedCategory})
         
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
-const restoreCategory = async (req,res)=>{
+const restoreCategory = async (req, res, next)=>{
     try {
         
         const { id } = req.body
@@ -168,11 +173,12 @@ const restoreCategory = async (req,res)=>{
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 
-const categoryDeleted = async(req,res)=>{
+const categoryDeleted = async(req, res, next)=>{
     try {
         
         const { id } = req.body
@@ -185,7 +191,8 @@ const categoryDeleted = async(req,res)=>{
         }
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
+        next(error.message);
     }
 }
 

@@ -10,7 +10,7 @@ import Product from "../../model/productModel.js";
 
 
 // category offer page
-const categoryOfferPage = async(req,res)=>{
+const categoryOfferPage = async(req, res, next)=>{
     try {
 
         // Delete expired category offers
@@ -32,21 +32,23 @@ const categoryOfferPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add Categoroy offer Page
-const addCategoryOfferPage = async(req,res)=>{
+const addCategoryOfferPage = async(req, res, next)=>{
     try {
         const category = await Category.find({ delete:false });
         res.render('admin/Offers/addCategoryOffer.ejs', { category });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add Category offer in post
-const addCategoryOffer = async(req,res)=>{
+const addCategoryOffer = async(req, res, next)=>{
     try {
         const { category, offer, date } = req.body
 
@@ -68,11 +70,12 @@ const addCategoryOffer = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //delete Category offer
-const deleteCategoryOffer = async (req, res) => {
+const deleteCategoryOffer = async (req, res, next) => {
     try {
         const { id } = req.body;
 
@@ -101,13 +104,14 @@ const deleteCategoryOffer = async (req, res) => {
         res.json({ success: true, message: "Category Offer deleted" });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         res.status(500).send("Internal server error");
     }
 };
 
 
 //product offer page
-const productOfferPage = async(req,res)=>{
+const productOfferPage = async(req, res, next)=>{
     try {
 
         // Delete expired product offers
@@ -124,21 +128,23 @@ const productOfferPage = async(req,res)=>{
         res.render('admin/Offers/productOffer.ejs', { productOffer })
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add Product offer Page
-const addProductOfferPage = async(req,res)=>{
+const addProductOfferPage = async(req, res, next)=>{
     try {
         const product = await Product.find({ delete:false })
         res.render('admin/Offers/addProductOffer.ejs',{ product });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add the procuct offer
-const addProductOffer = async(req,res)=>{
+const addProductOffer = async(req, res, next)=>{
     try {
         const { name, offer, date } = req.body
 
@@ -160,11 +166,12 @@ const addProductOffer = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //delete Product Offer
-const deleteProductOffer = async(req,res)=>{
+const deleteProductOffer = async(req, res, next)=>{
     try {
         const { id } = req.body
 
@@ -182,11 +189,12 @@ const deleteProductOffer = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //coupons Offer Page
-const couponOfferPage = async(req,res)=>{
+const couponOfferPage = async(req, res, next)=>{
     try {
 
         await CouponOffer.deleteMany({ expaireDate: { $lt: new Date() } });
@@ -195,20 +203,22 @@ const couponOfferPage = async(req,res)=>{
         res.render('admin/Offers/coupon.ejs', { coupons });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add coupon offer page
-const addCouponOfferPage = async(req,res)=>{
+const addCouponOfferPage = async(req, res, next)=>{
     try {
         res.render('admin/Offers/addCoupon.ejs')
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //add coupon in post
-const addCoupon = async(req,res)=>{
+const addCoupon = async(req, res, next)=>{
     try {
         const { couponCode, offer, minAmount, date } = req.body
 
@@ -229,11 +239,12 @@ const addCoupon = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //delete the coupon
-const deleteCoupon = async(req,res)=>{
+const deleteCoupon = async(req, res, next)=>{
     try {
         const { id } = req.body
 
@@ -246,6 +257,7 @@ const deleteCoupon = async(req,res)=>{
         }
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

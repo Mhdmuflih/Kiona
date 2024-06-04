@@ -1,7 +1,7 @@
 import User from "../../model/userModel.js";
 
 // user handle page
-const userDetails = async (req,res)=>{
+const userDetails = async (req, res, next)=>{
     try {
 
         var search = '';
@@ -43,12 +43,13 @@ const userDetails = async (req,res)=>{
 
 
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        next(error.message);
     }
 }
 
 //user block
-const userBlock = async (req,res)=>{
+const userBlock = async (req, res, next)=>{
     try {
         const {userId} = req.body;
         const responce = await User.findOne({_id:userId} )
@@ -63,6 +64,7 @@ const userBlock = async (req,res)=>{
       
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

@@ -18,7 +18,7 @@ var razorpayInstance = new Razorpay({
 
 
 //payment
-const payment = async (req,res)=>{
+const payment = async (req, res, next)=>{
     try {
         const user = req.session.user_id
         const cart = req.session.cartProduct
@@ -177,7 +177,7 @@ const verifyPayment = async (req, res) => {
 };
 
 //retry payment in order page
-const retryPayment = async(req,res)=>{
+const retryPayment = async(req, res, next)=>{
     try {
         const { orderId, totalPrice } = req.body
 
@@ -210,7 +210,7 @@ const retryPayment = async(req,res)=>{
 
 
 //reVerify payment
-const reVerificationPayment = async(req,res)=>{
+const reVerificationPayment = async(req, res, next)=>{
     try {
         const { paymentId, orderId } = req.body
 
@@ -231,17 +231,19 @@ const reVerificationPayment = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //order success
-const orderSuccessPage = async(req,res)=>{
+const orderSuccessPage = async(req, res, next)=>{
     try {
         
         res.render('users/checkout/orderSuccess.ejs')
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

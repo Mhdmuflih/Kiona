@@ -13,7 +13,7 @@ import Coupon from "../../model/couponModel.js";
 
 
 //user shoping cat
-const cart = async (req, res) => {
+const cart = async (req, res, next) => {
     try {
         const user = req.session.user_id;
         if (!user) {
@@ -55,12 +55,13 @@ const cart = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
         res.status(500).send('Internal server error');
     }
 }
 
 //cart prodcut quantity increment.
-const incrementQuantity = async(req,res)=>{
+const incrementQuantity = async(req, res, next)=>{
     try {
         
         const { cartItemsId } = req.body;
@@ -79,11 +80,12 @@ const incrementQuantity = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //cart Product Quantity decrement
-const decrementQuantity = async (req,res)=>{
+const decrementQuantity = async (req, res, next)=>{
     try {
      
         const { cartItemsId } = req.body;
@@ -98,12 +100,13 @@ const decrementQuantity = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 
 }
 
 //add to cart in product details page
-const addToCart = async (req,res)=>{
+const addToCart = async (req, res, next)=>{
     try {
 
         const userId = req.session.user_id
@@ -139,16 +142,16 @@ const addToCart = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //applay coupon
-const applyCoupon = async(req,res)=>{
+const applyCoupon = async(req, res, next)=>{
     try {
         const { couponCode,totalPrice } = req.body
 
         const coupon = await Coupon.findOne({ couponCode })
-        console.log(coupon);
         if(!coupon){
             return res.json({ success:false, message:"coupon is not there" })
         }
@@ -167,12 +170,13 @@ const applyCoupon = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 
 //remove cart products
-const removeCart = async(req,res)=>{
+const removeCart = async(req, res, next)=>{
     try {
         
         const { id } = req.body;
@@ -192,18 +196,16 @@ const removeCart = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 
 //checkout address showing page
-const selectAddress = async (req, res) => {
+const selectAddress = async (req, res, next) => {
     try {
         const id = req.session.user_id;
         const user = await User.findOne({ _id: id });
-
-        // console.log(req.session.totalPrice,'ioth njan anthyam session ll eathed');
-
 
         let cartProduct = await Cart.aggregate([
             { $match: { userId: mongoose.Types.ObjectId(id) } },
@@ -272,12 +274,13 @@ const selectAddress = async (req, res) => {
         res.render('users/checkout/showAddress.ejs', { user, addressData, totalPrice, subTotal, discount });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 
 //checkout add address page
-const checkoutAddAddressPage = async(req,res)=>{
+const checkoutAddAddressPage = async(req, res, next)=>{
     try {
         
         const id = req.session.user_id
@@ -287,11 +290,12 @@ const checkoutAddAddressPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout add Address
-const checkoutAddAddress = async(req,res)=>{
+const checkoutAddAddress = async(req, res, next)=>{
     try {
 
         const id = req.session.user_id;
@@ -339,11 +343,12 @@ const checkoutAddAddress = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout Address edit
-const checkoutEditAddressPage = async(req,res)=>{
+const checkoutEditAddressPage = async(req, res, next)=>{
     try {
 
         const id = req.session.user_id
@@ -365,11 +370,12 @@ const checkoutEditAddressPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout edit address
-const checkoutEditAddress = async(req,res)=>{
+const checkoutEditAddress = async(req, res, next)=>{
     try {
 
         const { addressId } = req.query
@@ -395,11 +401,12 @@ const checkoutEditAddress = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout Delete Address
-const checkoutDeleteAddress = async(req,res)=>{
+const checkoutDeleteAddress = async(req, res, next)=>{
     try {
 
         const { id } = req.body
@@ -417,11 +424,12 @@ const checkoutDeleteAddress = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout Summary
-const summary = async(req,res)=>{
+const summary = async(req, res, next)=>{
     try {
 
         const addressId = req.query.id
@@ -456,11 +464,12 @@ const summary = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
 //checkout page
-const checkoutPage = async(req,res)=>{
+const checkoutPage = async(req, res, next)=>{
     try {
         
         const user = req.session.user_id;
@@ -495,6 +504,7 @@ const checkoutPage = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 

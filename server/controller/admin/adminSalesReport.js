@@ -3,7 +3,7 @@ import User from "../../model/userModel.js";
 
 
 //sales report page
-const salesReportPage = async (req, res) => {
+const salesReportPage = async (req, res, next) => {
     try {
 
         const salesReport = await Order.aggregate([
@@ -40,11 +40,12 @@ const salesReportPage = async (req, res) => {
         res.render('admin/salesReport.ejs', { orderItems });
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 };
 
 //take in dayly, weekly, monthly, yearly
-const salesReport = async(req,res)=>{
+const salesReport = async(req, res, next)=>{
     try {
         const { value } = req.body
 
@@ -134,6 +135,7 @@ const salesReport = async(req,res)=>{
         return res.json({success:true, orderItems})
     } catch (error) {
         console.log(error.message);
+        next(error.message);
     }
 }
 
