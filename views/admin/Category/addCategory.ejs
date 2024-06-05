@@ -302,8 +302,10 @@
 
           if (image.size > 5242880) { // 5 * 1024 * 1024
             imageErr.innerHTML += "<br>File size must not exceed 5MB.";
+            console.log("File size exceeds 5MB");
             isValid = false;
           }
+
         }
 
         if (categoryName === '') {
@@ -324,6 +326,7 @@
 
         if (isValid) {
           const formData = new FormData();
+          console.log(formData);
           formData.append('image', image);
           formData.append('categoryName', categoryName);
           formData.append('description', description);
