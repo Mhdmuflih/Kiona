@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Mailgen from "mailgen";
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";

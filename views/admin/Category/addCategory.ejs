@@ -326,13 +326,13 @@
 
         if (isValid) {
           const formData = new FormData();
-          console.log(formData);
+          console.log(formData, 'form dataaaaaa');
           formData.append('image', image);
           formData.append('categoryName', categoryName);
           formData.append('description', description);
 
           const url = '/admin/add_category';
-          axios.post(url, formData)
+          axios.post(url, {formData})
             .then(function (response) {
               Swal.fire({
                 icon: 'success',
