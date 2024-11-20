@@ -7,7 +7,7 @@ import Wallet from "../../model/walletModel.js";
 
 // ------------------------------------
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import Razorpay from "razorpay";
 
