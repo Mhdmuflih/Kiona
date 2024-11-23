@@ -1,20 +1,20 @@
-# Use the official Node.js image as the base
+# node js image
 FROM node:20
 
-# Set the working directory
+# this is working directry
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# this is the copy of the package.json & package.lock.json
 COPY package*.json ./
 
-# Install dependencies
+
 RUN npm install
 
-# Copy the application files
+# copy of the entire application
 COPY . .
 
-# Expose the application port
+# expose the application port(main server port)
 EXPOSE 8000
 
-# Start the application
+# start the application
 CMD ["node", "server.js"]

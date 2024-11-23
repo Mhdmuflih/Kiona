@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kiona
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kiona
+  template:
+    metadata:
+      labels:
+        app: kiona
+    spec:
+      containers:
+        - name: kiona
+          image: mhdmuflih/kiona:latest
+          ports:
+            - containerPort: 8000
+---
